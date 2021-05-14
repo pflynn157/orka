@@ -7,3 +7,7 @@ set(SRC
 
 add_executable(qkc ${SRC})
 
+target_link_libraries(qkc
+    qkparser
+)
+

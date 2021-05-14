@@ -5,6 +5,6 @@ add_compile_options(-std=c++14)
 
 include_directories(frontend)
 
+add_subdirectory(frontend)
 add_subdirectory(src)
-#add_subdirectory(frontend)
 
