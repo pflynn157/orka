@@ -1,0 +1,6 @@
+
+func _start
+begin
+    return 3;
+end
+
