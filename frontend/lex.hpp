@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <string>
+#include <stack>
 
 // Represents a token
 enum TokenType {
@@ -16,7 +17,11 @@ enum TokenType {
     
     // Literals
     Id,
-    Int32
+    Int32,
+    
+    // Symbols
+    Nl,
+    SemiColon
 };
 
 struct Token {
@@ -40,11 +45,15 @@ public:
 private:
     std::ifstream reader;
     bool error = false;
+    std::stack<Token> token_stack;
     
     // Control variables for the scanner
     std::string buffer = "";
     
     // Functions
+    bool isSymbol(char c);
     TokenType getKeyword();
+    TokenType getSymbol(char c);
+    bool isInt();
 };
 

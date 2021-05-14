@@ -23,6 +23,9 @@ void Token::print() {
         case Id: std::cout << "ID "; break;
         case Int32: std::cout << "I32 "; break;
         
+        case Nl: std::cout << "\\n "; break;
+        case SemiColon: std::cout << "; "; break;
+        
         default: {}
     }
     
@@ -46,6 +49,12 @@ Scanner::~Scanner() {
 
 // The main scanning function
 Token Scanner::getNext() {
+    if (token_stack.size() > 0) {
+        Token top = token_stack.top();
+        token_stack.pop();
+        return top;
+    }
+
     Token token;
     if (reader.eof()) {
         token.type = Eof;
@@ -60,8 +69,15 @@ Token Scanner::getNext() {
             break;
         }
         
-        if (next == ' ' || next == '\n') {
-            if (buffer.length() == 0) continue;
+        if (next == ' ' || isSymbol(next)) {
+            if (buffer.length() == 0) {
+                if (isSymbol(next)) {
+                    Token sym;
+                    sym.type = getSymbol(next);
+                    return sym;
+                }
+                continue;
+            }
             
             token.type = getKeyword();
             if (token.type != EmptyToken) {
@@ -69,8 +85,24 @@ Token Scanner::getNext() {
                 break;
             }
             
+            if (isInt()) {
+                token.type = Int32;
+                token.i32_val = std::stoi(buffer);
+            } else {
+                token.type = Id;
+                token.id_val = buffer;
+            }
+            
+            // Check if we have a symbol
+            if (isSymbol(next)) {
+                Token sym;
+                sym.type = getSymbol(next);
+                token_stack.push(sym);
+            }
+            
             // Reset everything
             buffer = "";
+            break;
         } else {
             buffer += next;
         }
@@ -79,11 +111,34 @@ Token Scanner::getNext() {
     return token;
 }
 
+bool Scanner::isSymbol(char c) {
+    switch (c) {
+        case '\n':
+        case ';': return true;
+    }
+    return false;
+}
+
 TokenType Scanner::getKeyword() {
     if (buffer == "func") return Func;
     else if (buffer == "begin") return Begin;
     else if (buffer == "end") return End;
     else if (buffer == "return") return Return;
     return EmptyToken;
+}
+
+TokenType Scanner::getSymbol(char c) {
+    switch (c) {
+        case '\n': return Nl;
+        case ';': return SemiColon;
+    }
+    return EmptyToken;
+}
+
+bool Scanner::isInt() {
+    for (char c : buffer) {
+        if (!isdigit(c)) return false;
+    }
+    return true;
 }
 
