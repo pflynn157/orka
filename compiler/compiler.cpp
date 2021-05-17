@@ -1,6 +1,7 @@
 #include <compiler.hpp>
 
 #include <ltac.hpp>
+#include <amd64/amd64.hpp>
 
 void compile(LLirFile *file, std::string output_path) {
 
@@ -27,5 +28,8 @@ void compile(LLirFile *file, std::string output_path) {
     
     
     ltac->print();
+    
+    Amd64Writer writer;
+    writer.write(ltac);
 }
 

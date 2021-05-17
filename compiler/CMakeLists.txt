@@ -4,6 +4,8 @@ project(quik4_compiler)
 set(SRC
     compiler.cpp
     ltac_debug.cpp
+    
+    amd64/amd64.cpp
 )
 
 add_library(qkcompiler STATIC ${SRC})

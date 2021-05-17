@@ -35,6 +35,7 @@ public:
     }
     
     std::vector<LtacInstr *> getCode() { return code; }
+    std::string getPath() { return output; }
     void print();
 private:
     std::string output = "";
