@@ -46,8 +46,35 @@ void Frontend::buildFunction() {
     do {
         token = scanner->getNext();
         
-        if (token.type != End) token.print();
+        switch (token.type) {
+            case Return: buildReturn(func); break;
+            
+            case End: 
+            case Nl: break;
+            default: token.print();
+        }
     } while (token.type != Eof && token.type != End);
+}
+
+void Frontend::buildReturn(AstFunction *func) {
+    AstReturnStmt *stmt = new AstReturnStmt;
+    func->addStatement(stmt);
+    
+    buildExpression(stmt);
+}
+
+void Frontend::buildExpression(AstStatement *stmt) {
+    Token token;
+    do {
+        token = scanner->getNext();
+        
+        switch (token.type) {
+            case Int32: {
+                AstInt *i32 = new AstInt(token.i32_val);
+                stmt->addExpression(i32);
+            } break;
+        }
+    } while (token.type != Eof && token.type != SemiColon);
 }
 
 // The debug function for the scanner

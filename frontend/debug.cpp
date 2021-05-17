@@ -13,5 +13,23 @@ void AstTree::print() {
 
 void AstFunction::print() {
     std::cout << "FUNC: " << name << std::endl;
+    
+    for (auto stmt : code) {
+        stmt->print();
+        for (auto expr : stmt->getExpressions()) expr->print();
+        std::cout << std::endl;
+    }
+}
+
+void AstReturnStmt::print() {
+    std::cout << "    ";
+    std::cout << "RETURN ";
+    
+    std::cout << std::endl;
+}
+
+void AstInt::print() {
+    for (int i = 0; i<8; i++) std::cout << " ";
+    std::cout << val;
 }
 

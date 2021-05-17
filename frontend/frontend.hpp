@@ -21,6 +21,8 @@ public:
     void debugScanner();
 protected:
     void buildFunction();
+    void buildReturn(AstFunction *func);
+    void buildExpression(AstStatement *stmt);
 private:
     std::string input = "";
     Scanner *scanner;
