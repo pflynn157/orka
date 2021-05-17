@@ -5,6 +5,8 @@
 #include <ast.hpp>
 #include <llir.hpp>
 
+#include <compiler.hpp>
+
 int main(int argc, char **argv) {
     if (argc == 1) {
         std::cerr << "Error: No input file specified." << std::endl;
@@ -19,7 +21,7 @@ int main(int argc, char **argv) {
     //frontend->debugScanner();
     delete frontend;
     
-    tree->print();
+    //tree->print();
     
     // Test LLIR
     LLirFile *file = new LLirFile("first.qk");
@@ -31,6 +33,9 @@ int main(int argc, char **argv) {
     def->addCode(ret);
     
     file->writeOut("first.asm");
+    
+    // Test compile
+    compile(file, "first_x86.asm");
     
     return 0;
 }
