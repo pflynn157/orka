@@ -3,6 +3,7 @@
 
 #include <frontend.hpp>
 #include <ast.hpp>
+#include <llir.hpp>
 
 int main(int argc, char **argv) {
     if (argc == 1) {
@@ -19,6 +20,17 @@ int main(int argc, char **argv) {
     delete frontend;
     
     tree->print();
+    
+    // Test LLIR
+    LLirFile *file = new LLirFile("first.qk");
+    LLirFuncDefinition *def = new LLirFuncDefinition("main");
+    file->addFunctionDefinition(def);
+    
+    LLirReturn *ret = new LLirReturn;
+    ret->setOperand(new LLirInt32(10), 1);
+    def->addCode(ret);
+    
+    file->writeOut("first.asm");
     
     return 0;
 }

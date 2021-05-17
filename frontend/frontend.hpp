@@ -4,6 +4,7 @@
 
 #include <lex.hpp>
 #include <ast.hpp>
+#include <llir.hpp>
 
 // The frontend class
 // The frontend is in charge of performing all parsing and AST-building tasks
