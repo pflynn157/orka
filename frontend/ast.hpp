@@ -3,8 +3,9 @@
 #include <string>
 #include <vector>
 
-enum AstType {
-    EmptyAst
+enum class AstType {
+    EmptyAst,
+    Func
 };
 
 class AstGlobalStatement;
@@ -37,7 +38,23 @@ public:
     }
     
     AstType getType() { return type; }
+    
+    virtual void print() {}
 private:
-    AstType type = EmptyAst;
+    AstType type = AstType::EmptyAst;
+};
+
+// Represents a function
+class AstFunction : public AstGlobalStatement {
+public:
+    explicit AstFunction(std::string name) : AstGlobalStatement(AstType::Func) {
+        this->name = name;
+    }
+    
+    std::string getName() { return name; }
+    
+    void print() override;
+private:
+    std::string name = "";
 };
 

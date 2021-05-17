@@ -19,6 +19,8 @@ public:
     AstTree *getTree() { return tree; }
     
     void debugScanner();
+protected:
+    void buildFunction();
 private:
     std::string input = "";
     Scanner *scanner;
