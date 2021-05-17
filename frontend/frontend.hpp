@@ -3,6 +3,7 @@
 #include <string>
 
 #include <lex.hpp>
+#include <ast.hpp>
 
 // The frontend class
 // The frontend is in charge of performing all parsing and AST-building tasks
@@ -13,9 +14,14 @@ public:
     explicit Frontend(std::string input);
     ~Frontend();
     
+    void parse();
+    
+    AstTree *getTree() { return tree; }
+    
     void debugScanner();
 private:
     std::string input = "";
     Scanner *scanner;
+    AstTree *tree;
 };
 

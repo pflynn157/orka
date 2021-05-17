@@ -5,10 +5,16 @@
 Frontend::Frontend(std::string input) {
     this->input = input;
     scanner = new Scanner(input);
+    
+    tree = new AstTree(input);
 }
 
 Frontend::~Frontend() {
     delete scanner;
+}
+
+void Frontend::parse() {
+
 }
 
 // The debug function for the scanner
