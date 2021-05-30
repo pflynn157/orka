@@ -5,7 +5,6 @@ set(SRC
     debug.cpp
     frontend.cpp
     lex.cpp
-    llir_writer.cpp
 )
 
 add_library(qkparser STATIC ${SRC})

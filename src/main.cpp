@@ -3,7 +3,6 @@
 
 #include <frontend.hpp>
 #include <ast.hpp>
-#include <llir.hpp>
 
 #include <compiler.hpp>
 
@@ -21,21 +20,13 @@ int main(int argc, char **argv) {
     //frontend->debugScanner();
     delete frontend;
     
-    //tree->print();
-    
-    // Test LLIR
-    LLirFile *file = new LLirFile("first.qk");
-    LLirFuncDefinition *def = new LLirFuncDefinition("main");
-    file->addFunctionDefinition(def);
-    
-    LLirReturn *ret = new LLirReturn;
-    ret->setOperand(new LLirInt32(10), 1);
-    def->addCode(ret);
-    
-    file->writeOut("first.asm");
-    
-    // Test compile
-    compile(file, "first_x86.asm");
+    tree->print();
+    std::cout << "====================" << std::endl << std::endl;
+
+    //test
+    Compiler *compiler = new Compiler(tree);
+    compiler->compile();
+    compiler->debug();
     
     return 0;
 }

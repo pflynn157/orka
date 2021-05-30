@@ -1,8 +1,24 @@
 #pragma once
 
-#include <string>
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
 
-#include <llir.hpp>
+using namespace llvm;
 
-void compile(LLirFile *file, std::string output_path);
+#include <ast.hpp>
+
+class Compiler {
+public:
+    explicit Compiler(AstTree *tree);
+    void compile();
+    void debug();
+private:
+    AstTree *tree;
+
+    // LLVM stuff
+    std::unique_ptr<LLVMContext> context;
+    std::unique_ptr<Module> mod;
+    std::unique_ptr<IRBuilder<>> builder;
+};
 
