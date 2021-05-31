@@ -53,6 +53,17 @@ void Frontend::buildFunction() {
     token = scanner->getNext();
     while (token.type != Eof && token.type != End) {
         switch (token.type) {
+            case Id: {
+                Token idToken = token;
+                token = scanner->getNext();
+                
+                if (token.type == Assign) {
+                    buildVariableAssign(func, idToken);
+                } else {
+                    std::cerr << "Invalid ID" << std::endl;
+                }
+            } break;
+            
             case Return: buildReturn(func); break;
             
             case End: 
@@ -86,6 +97,18 @@ void Frontend::buildVariableDec(AstFunction *func, Token idToken) {
     func->addStatement(vd);
     
     buildExpression(vd);
+}
+
+// Builds a variable assignment
+void Frontend::buildVariableAssign(AstFunction *func, Token idToken) {
+    AstVarAssign *va = new AstVarAssign(idToken.id_val);
+    func->addStatement(va);
+    
+    buildExpression(va);
+    
+    if (va->getExpressionCount() == 0) {
+        std::cerr << "Error: Invalid variable assignment." << std::endl;
+    }
 }
 
 void Frontend::buildReturn(AstFunction *func) {

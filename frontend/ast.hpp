@@ -9,6 +9,7 @@ enum class AstType {
     Return,
     
     VarDec,
+    VarAssign,
     
     IntL
 };
@@ -124,6 +125,20 @@ public:
 private:
     std::string name = "";
     DataType dataType = DataType::Void;
+};
+
+// Represents a variable assignment
+class AstVarAssign : public AstStatement {
+public:
+    explicit AstVarAssign(std::string name) : AstStatement(AstType::VarAssign) {
+        this->name = name;
+    }
+    
+    std::string getName() { return name; }
+    
+    void print();
+private:
+    std::string name = "";
 };
 
 // Represents an AST expression

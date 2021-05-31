@@ -57,6 +57,19 @@ void Compiler::compileStatement(AstStatement *stmt) {
             symtable[vd->getName()] = var;
         } break;
         
+        // A variable assignment
+        case AstType::VarAssign: {
+            AstVarAssign *va = static_cast<AstVarAssign *>(stmt);
+            Value *ptr = symtable[va->getName()];
+            
+            if (stmt->getExpressionCount() == 1) {
+                Value *val = compileValue(stmt->getExpressions().at(0));
+                builder->CreateStore(val, ptr);
+            } else {
+            
+            }
+        } break;
+        
         // A return statement
         case AstType::Return: {
             if (stmt->getExpressionCount() == 0) {

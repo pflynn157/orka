@@ -23,7 +23,8 @@ enum TokenType {
     // Symbols
     Nl,
     SemiColon,
-    Colon
+    Colon,
+    Assign
 };
 
 struct Token {

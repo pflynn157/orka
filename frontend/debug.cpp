@@ -44,6 +44,12 @@ void AstVarDec::print() {
     std::cout << std::endl;
 }
 
+void AstVarAssign::print() {
+    std::cout << "    ";
+    std::cout << "VAR= " << name;
+    std::cout << std::endl;
+}
+
 void AstInt::print() {
     for (int i = 0; i<8; i++) std::cout << " ";
     std::cout << val;
