@@ -6,6 +6,9 @@
 
 using namespace llvm;
 
+#include <string>
+#include <map>
+
 #include <ast.hpp>
 
 class Compiler {
@@ -23,5 +26,8 @@ private:
     std::unique_ptr<LLVMContext> context;
     std::unique_ptr<Module> mod;
     std::unique_ptr<IRBuilder<>> builder;
+    
+    // Symbol table
+    std::map<std::string, Value *> symtable;
 };
 

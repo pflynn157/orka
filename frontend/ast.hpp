@@ -112,7 +112,7 @@ public:
 // Represents a variable declaration
 class AstVarDec : public AstStatement {
 public:
-    explicit AstVarDec(std::string name, DataType dataType) {
+    explicit AstVarDec(std::string name, DataType dataType) : AstStatement(AstType::VarDec) {
         this->name = name;
         this->dataType = dataType;
     }

@@ -2,6 +2,8 @@
 
 using namespace llvm;
 
+#include <iostream>
+
 #include <compiler.hpp>
 
 Compiler::Compiler(AstTree *tree) {
@@ -41,6 +43,20 @@ void Compiler::debug() {
 // Compiles an individual statement
 void Compiler::compileStatement(AstStatement *stmt) {
     switch (stmt->getType()) {
+        // A variable declaration (alloca) statement
+        case AstType::VarDec: {
+            AstVarDec *vd = static_cast<AstVarDec *>(stmt);
+            Type *type;
+            
+            switch (vd->getDataType()) {
+                case DataType::Int32: type = Type::getInt32Ty(*context); break;
+                default: type = Type::getVoidTy(*context);
+            }
+            
+            Value *var = builder->CreateAlloca(type);
+            symtable[vd->getName()] = var;
+        } break;
+        
         // A return statement
         case AstType::Return: {
             if (stmt->getExpressionCount() == 0) {
