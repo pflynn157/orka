@@ -16,6 +16,9 @@ public:
     explicit Compiler(AstTree *tree);
     void compile();
     void debug();
+    void writeAssembly();
+    void assemble();
+    void link();
 protected:
     void compileStatement(AstStatement *stmt);
     Value *compileValue(AstExpression *expr);

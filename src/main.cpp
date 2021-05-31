@@ -28,6 +28,10 @@ int main(int argc, char **argv) {
     compiler->compile();
     compiler->debug();
     
+    compiler->writeAssembly();
+    compiler->assemble();
+    compiler->link();
+    
     return 0;
 }
 
