@@ -83,6 +83,10 @@ public:
         expressions.push_back(expr);
     }
     
+    int getExpressionCount() {
+        return expressions.size();
+    }
+    
     std::vector<AstExpression *> getExpressions() { return expressions; }
     AstType getType() { return type; }
     virtual void print() {}

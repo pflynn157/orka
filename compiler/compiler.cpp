@@ -24,7 +24,9 @@ void Compiler::compile() {
                 BasicBlock *mainBlock = BasicBlock::Create(*context, "entry", func);
                 builder->SetInsertPoint(mainBlock);
 
-                builder->CreateRetVoid();
+                for (auto stmt : astFunc->getCode()) {
+                    compileStatement(stmt);
+                }
             } break;
 
             default: {}
@@ -35,3 +37,35 @@ void Compiler::compile() {
 void Compiler::debug() {
     mod->print(errs(), nullptr);
 }
+
+// Compiles an individual statement
+void Compiler::compileStatement(AstStatement *stmt) {
+    switch (stmt->getType()) {
+        // A return statement
+        case AstType::Return: {
+            if (stmt->getExpressionCount() == 0) {
+                builder->CreateRetVoid();
+            } else if (stmt->getExpressionCount() == 1) {
+                Value *val = compileValue(stmt->getExpressions().at(0));
+                builder->CreateRet(val);
+            } else {
+                builder->CreateRetVoid();
+            }
+        } break;
+        
+        default: {}
+    }
+}
+
+// Converts an AST value to an LLVM value
+Value *Compiler::compileValue(AstExpression *expr) {
+    switch (expr->getType()) {
+        case AstType::IntL: {
+            AstInt *ival = static_cast<AstInt *>(expr);
+            return builder->getInt32(ival->getValue());
+        }
+    }
+    
+    return nullptr;
+}
+
