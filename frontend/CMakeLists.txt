@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(quik4_frontend)
+project(orka_frontend)
 
 set(SRC
     debug.cpp
@@ -7,5 +7,5 @@ set(SRC
     lex.cpp
 )
 
-add_library(qkparser STATIC ${SRC})
+add_library(ocparser STATIC ${SRC})
 

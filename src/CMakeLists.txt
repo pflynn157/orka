@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(quik4_main)
+project(orka_main)
 
 set(SRC
     main.cpp
 )
 
-add_executable(qkc ${SRC})
+add_executable(occ ${SRC})
 
-target_link_libraries(qkc
-    qkparser
-    qkcompiler
+target_link_libraries(occ
+    ocparser
+    occompiler
 )
 

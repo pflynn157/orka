@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(quik4_compiler)
+project(orka_compiler)
 
 set(SRC
     compiler.cpp
 )
 
-add_library(qkcompiler STATIC ${SRC})
+add_library(occompiler STATIC ${SRC})
 
 llvm_map_components_to_libnames(llvm_libs support core irreader)
 
-target_link_libraries(qkcompiler ${llvm_libs})
+target_link_libraries(occompiler ${llvm_libs})
 
