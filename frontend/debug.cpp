@@ -2,6 +2,14 @@
 
 #include "ast.hpp"
 
+std::string printDataType(DataType dataType) {
+    switch (dataType) {
+        case DataType::Void: return "void";
+        case DataType::Int32: return "i32";
+    }
+    return "";
+}
+
 void AstTree::print() {
     std::cout << "FILE: " << file << std::endl;
     std::cout << std::endl;
@@ -16,8 +24,10 @@ void AstFunction::print() {
     
     for (auto stmt : code) {
         stmt->print();
-        for (auto expr : stmt->getExpressions()) expr->print();
-        std::cout << std::endl;
+        if (stmt->getExpressionCount()) {
+            for (auto expr : stmt->getExpressions()) expr->print();
+            std::cout << std::endl;
+        }
     }
 }
 
@@ -25,6 +35,12 @@ void AstReturnStmt::print() {
     std::cout << "    ";
     std::cout << "RETURN ";
     
+    std::cout << std::endl;
+}
+
+void AstVarDec::print() {
+    std::cout << "    ";
+    std::cout << "VAR " << name << " : " << printDataType(dataType);
     std::cout << std::endl;
 }
 

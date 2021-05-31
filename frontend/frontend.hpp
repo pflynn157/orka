@@ -21,6 +21,7 @@ public:
     void debugScanner();
 protected:
     void buildFunction();
+    void buildVariableDec(AstFunction *func, Token idToken);
     void buildReturn(AstFunction *func);
     void buildExpression(AstStatement *stmt);
 private:

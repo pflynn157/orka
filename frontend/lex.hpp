@@ -14,6 +14,7 @@ enum TokenType {
     Begin,
     End,
     Return,
+    Int,
     
     // Literals
     Id,
@@ -21,7 +22,8 @@ enum TokenType {
     
     // Symbols
     Nl,
-    SemiColon
+    SemiColon,
+    Colon
 };
 
 struct Token {

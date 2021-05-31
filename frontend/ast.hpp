@@ -8,7 +8,14 @@ enum class AstType {
     Func,
     Return,
     
+    VarDec,
+    
     IntL
+};
+
+enum class DataType {
+    Void,
+    Int32
 };
 
 // Forward declarations
@@ -95,10 +102,28 @@ private:
     AstType type = AstType::EmptyAst;
 };
 
+// Represents a return statement
 class AstReturnStmt : public AstStatement {
 public:
     explicit AstReturnStmt() : AstStatement(AstType::Return) {}
     void print();
+};
+
+// Represents a variable declaration
+class AstVarDec : public AstStatement {
+public:
+    explicit AstVarDec(std::string name, DataType dataType) {
+        this->name = name;
+        this->dataType = dataType;
+    }
+    
+    std::string getName() { return name; }
+    DataType getDataType() { return dataType; }
+    
+    void print();
+private:
+    std::string name = "";
+    DataType dataType = DataType::Void;
 };
 
 // Represents an AST expression

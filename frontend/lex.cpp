@@ -19,12 +19,14 @@ void Token::print() {
         case Begin: std::cout << "BEGIN "; break;
         case End: std::cout << "END "; break;
         case Return: std::cout << "RETURN "; break;
+        case Int: std::cout << "INT"; break;
         
         case Id: std::cout << "ID "; break;
         case Int32: std::cout << "I32 "; break;
         
         case Nl: std::cout << "\\n "; break;
         case SemiColon: std::cout << "; "; break;
+        case Colon: std::cout << ": "; break;
         
         default: {}
     }
@@ -79,6 +81,14 @@ Token Scanner::getNext() {
                 continue;
             }
             
+            // Check if we have a symbol
+            if (isSymbol(next)) {
+                Token sym;
+                sym.type = getSymbol(next);
+                token_stack.push(sym);
+            }
+            
+            // Now check the buffer
             token.type = getKeyword();
             if (token.type != EmptyToken) {
                 buffer = "";
@@ -91,13 +101,6 @@ Token Scanner::getNext() {
             } else {
                 token.type = Id;
                 token.id_val = buffer;
-            }
-            
-            // Check if we have a symbol
-            if (isSymbol(next)) {
-                Token sym;
-                sym.type = getSymbol(next);
-                token_stack.push(sym);
             }
             
             // Reset everything
@@ -114,7 +117,8 @@ Token Scanner::getNext() {
 bool Scanner::isSymbol(char c) {
     switch (c) {
         case '\n':
-        case ';': return true;
+        case ';': 
+        case ':': return true;
     }
     return false;
 }
@@ -124,6 +128,7 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "begin") return Begin;
     else if (buffer == "end") return End;
     else if (buffer == "return") return Return;
+    else if (buffer == "int") return Int;
     return EmptyToken;
 }
 
@@ -131,6 +136,7 @@ TokenType Scanner::getSymbol(char c) {
     switch (c) {
         case '\n': return Nl;
         case ';': return SemiColon;
+        case ':': return Colon;
     }
     return EmptyToken;
 }

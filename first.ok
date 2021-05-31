@@ -1,5 +1,6 @@
 
 func _start
+    x : int;
 begin
     return 3;
 end

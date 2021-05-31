@@ -38,14 +38,20 @@ void Frontend::buildFunction() {
     tree->addGlobalStatement(func);
     
     // Build the variable body
-    do {
+    token = scanner->getNext();
+    while (token.type != Eof && token.type != Begin) {
+        switch (token.type) {
+            case Id: buildVariableDec(func, token); break;
+            
+            default: token.print();
+        }
+        
         token = scanner->getNext();
-    } while (token.type != Eof && token.type != Begin);
+    }
     
     // Build the body
-    do {
-        token = scanner->getNext();
-        
+    token = scanner->getNext();
+    while (token.type != Eof && token.type != End) {
         switch (token.type) {
             case Return: buildReturn(func); break;
             
@@ -53,7 +59,33 @@ void Frontend::buildFunction() {
             case Nl: break;
             default: token.print();
         }
-    } while (token.type != Eof && token.type != End);
+        
+        token = scanner->getNext();
+    }
+}
+
+// Builds a variable declaration
+// A variable declaration is composed of an Alloca and optionally, an assignment
+void Frontend::buildVariableDec(AstFunction *func, Token idToken) {
+    Token token = scanner->getNext();
+    
+    if (token.type != Colon) {
+        std::cerr << "Error: Expected \':\' in declaration." << std::endl;
+        token.print();
+        return;
+    }
+    
+    token = scanner->getNext();
+    DataType dataType = DataType::Void;
+    
+    switch (token.type) {
+        case Int: dataType = DataType::Int32; break;
+    }
+    
+    AstVarDec *vd = new AstVarDec(idToken.id_val, dataType);
+    func->addStatement(vd);
+    
+    buildExpression(vd);
 }
 
 void Frontend::buildReturn(AstFunction *func) {
@@ -64,17 +96,17 @@ void Frontend::buildReturn(AstFunction *func) {
 }
 
 void Frontend::buildExpression(AstStatement *stmt) {
-    Token token;
-    do {
-        token = scanner->getNext();
-        
+    Token token = scanner->getNext();
+    while (token.type != Eof && token.type != SemiColon) {
         switch (token.type) {
             case Int32: {
                 AstInt *i32 = new AstInt(token.i32_val);
                 stmt->addExpression(i32);
             } break;
         }
-    } while (token.type != Eof && token.type != SemiColon);
+        
+        token = scanner->getNext();
+    }
 }
 
 // The debug function for the scanner
