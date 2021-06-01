@@ -88,7 +88,7 @@ public:
     void setArguments(std::vector<Var> args) { this->args = args; }
     
     std::string getName() { return name; }
-    std::vector<Var> getArgs() { return args; }
+    std::vector<Var> getArguments() { return args; }
     void print() override;
 private:
     std::string name = "";

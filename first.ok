@@ -1,5 +1,5 @@
 
-extern func println(ln : str)
+extern func puts(ln : str)
 
 func main
     x1 : int;

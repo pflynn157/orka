@@ -15,9 +15,6 @@ Compiler::Compiler(AstTree *tree) {
 }
 
 void Compiler::compile() {
-    FunctionType *FT = FunctionType::get(Type::getVoidTy(*context), Type::getInt8PtrTy(*context), false);
-    Function::Create(FT, Function::ExternalLinkage, "puts", mod.get());
-
     for (auto global : tree->getGlobalStatements()) {
         switch (global->getType()) {
             case AstType::Func: {
@@ -32,6 +29,27 @@ void Compiler::compile() {
                 for (auto stmt : astFunc->getCode()) {
                     compileStatement(stmt);
                 }
+            } break;
+            
+            case AstType::ExternFunc: {
+                AstExternFunction *astFunc = static_cast<AstExternFunction *>(global);
+                
+                std::vector<Var> astVarArgs = astFunc->getArguments();
+                FunctionType *FT;
+                
+                if (astVarArgs.size() == 0) {
+                    FT = FunctionType::get(Type::getVoidTy(*context), Type::getVoidTy(*context), false);
+                } else {
+                    std::vector<Type *> args;
+                    for (auto var : astVarArgs) {
+                        Type *type = translateType(var.type, var.subType);
+                        args.push_back(type);
+                    }
+                    
+                    FT = FunctionType::get(Type::getVoidTy(*context), args, false);
+                }
+                
+                Function::Create(FT, Function::ExternalLinkage, astFunc->getName(), mod.get());
             } break;
 
             default: {}
@@ -69,6 +87,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
             }
         } break;
         
+        // TODO: We should not do error handeling in the compiler. Check for invalid functions in the AST level
         // Function call statements
         case AstType::FuncCallStmt: {
             AstFuncCallStmt *fc = static_cast<AstFuncCallStmt *>(stmt);
@@ -80,6 +99,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
             }
             
             Function *callee = mod->getFunction(fc->getName());
+            if (!callee) std::cerr << "Invalid function call statement." << std::endl;
             builder->CreateCall(callee, args);
         } break;
         
@@ -141,11 +161,18 @@ Value *Compiler::compileValue(AstExpression *expr) {
     return nullptr;
 }
 
-Type *Compiler::translateType(DataType dataType) {
+Type *Compiler::translateType(DataType dataType, DataType subType) {
     Type *type;
             
     switch (dataType) {
         case DataType::Int32: type = Type::getInt32Ty(*context); break;
+        
+        case DataType::Ptr: {
+            switch (subType) {
+                case DataType::Char: type = Type::getInt8PtrTy(*context); break;
+            }
+        } break;
+        
         default: type = Type::getVoidTy(*context);
     }
     

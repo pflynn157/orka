@@ -22,7 +22,7 @@ public:
 protected:
     void compileStatement(AstStatement *stmt);
     Value *compileValue(AstExpression *expr);
-    Type *translateType(DataType dataType);
+    Type *translateType(DataType dataType, DataType subType = DataType::Void);
 private:
     AstTree *tree;
 
