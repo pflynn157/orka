@@ -12,6 +12,9 @@ enum class AstType {
     VarAssign,
     
     Add,
+    Sub,
+    Mul,
+    Div,
     
     IntL,
     ID
@@ -158,6 +161,7 @@ protected:
     AstType type = AstType::EmptyAst;
 };
 
+// Represents the base of a binary expression
 class AstBinaryOp : public AstExpression {
 public:
     void setLVal(AstExpression *lval) { this->lval = lval; }
@@ -171,6 +175,7 @@ protected:
     AstExpression *lval, *rval;
 };
 
+// Represents an add operation
 class AstAddOp : public AstBinaryOp {
 public:
     AstAddOp() {
@@ -180,6 +185,37 @@ public:
     void print();
 };
 
+// Represents a subtraction operation
+class AstSubOp : public AstBinaryOp {
+public:
+    AstSubOp() {
+        this->type = AstType::Sub;
+    }
+    
+    void print();
+};
+
+// Represents a multiplication operation
+class AstMulOp : public AstBinaryOp {
+public:
+    AstMulOp() {
+        this->type = AstType::Mul;
+    }
+    
+    void print();
+};
+
+// Represents a division operation
+class AstDivOp : public AstBinaryOp {
+public:
+    AstDivOp() {
+        this->type = AstType::Div;
+    }
+    
+    void print();
+};
+
+// Represents an integer literal
 class AstInt : public AstExpression {
 public:
     explicit AstInt(int val) : AstExpression(AstType::IntL) {
@@ -192,6 +228,7 @@ private:
     int val = 0;
 };
 
+// Represents a variable reference
 class AstID: public AstExpression {
 public:
     explicit AstID(std::string val) : AstExpression(AstType::ID) {

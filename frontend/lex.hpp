@@ -25,7 +25,10 @@ enum TokenType {
     SemiColon,
     Colon,
     Assign,
-    Plus
+    Plus,
+    Minus,
+    Mul,
+    Div
 };
 
 struct Token {

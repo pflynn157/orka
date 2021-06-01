@@ -97,12 +97,22 @@ Value *Compiler::compileValue(AstExpression *expr) {
             return builder->CreateLoad(type, ptr);
         } break;
         
-        case AstType::Add: {
-            AstAddOp *op = static_cast<AstAddOp *>(expr);
+        case AstType::Add:
+        case AstType::Sub: 
+        case AstType::Mul:
+        case AstType::Div: {
+            AstBinaryOp *op = static_cast<AstBinaryOp *>(expr);
             Value *lval = compileValue(op->getLVal());
             Value *rval = compileValue(op->getRVal());
             
-            return builder->CreateAdd(lval, rval);
+            if (expr->getType() == AstType::Add)
+                return builder->CreateAdd(lval, rval);
+            else if (expr->getType() == AstType::Sub)
+                return builder->CreateSub(lval, rval);
+            else if (expr->getType() == AstType::Mul)
+                return builder->CreateMul(lval, rval);
+            else if (expr->getType() == AstType::Div)
+                return builder->CreateSDiv(lval, rval);
         } break;
     }
     

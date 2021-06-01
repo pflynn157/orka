@@ -54,10 +54,33 @@ void AstVarAssign::print() {
 }
 
 void AstAddOp::print() {
-    
     std::cout << "(";
     lval->print();
     std::cout << ") + (";
+    rval->print();
+    std::cout << ")";
+}
+
+void AstSubOp::print() {
+    std::cout << "(";
+    lval->print();
+    std::cout << ") - (";
+    rval->print();
+    std::cout << ")";
+}
+
+void AstMulOp::print() {
+    std::cout << "(";
+    lval->print();
+    std::cout << ") * (";
+    rval->print();
+    std::cout << ")";
+}
+
+void AstDivOp::print() {
+    std::cout << "(";
+    lval->print();
+    std::cout << ") / (";
     rval->print();
     std::cout << ")";
 }

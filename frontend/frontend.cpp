@@ -149,6 +149,21 @@ void Frontend::buildExpression(AstStatement *stmt) {
                 AstAddOp *add = new AstAddOp;
                 opStack.push(add);
             } break;
+            
+            case Minus: {
+                AstSubOp *sub = new AstSubOp;
+                opStack.push(sub);
+            } break;
+            
+            case Mul: {
+                AstMulOp *mul = new AstMulOp;
+                opStack.push(mul);
+            } break;
+            
+            case Div: {
+                AstDivOp *div = new AstDivOp;
+                opStack.push(div);
+            } break;
         }
         
         token = scanner->getNext();
