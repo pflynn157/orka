@@ -51,6 +51,10 @@ Scanner::~Scanner() {
     reader.close();
 }
 
+void Scanner::rewind(Token token) {
+    token_stack.push(token);
+}
+
 // The main scanning function
 Token Scanner::getNext() {
     if (token_stack.size() > 0) {

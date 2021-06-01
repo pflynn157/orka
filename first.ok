@@ -1,8 +1,9 @@
 
 func main
     x : int;
+    y : int = 3;
 begin
-    x = 5 + 3;
-    return 3;
+    x = 5 + 3 + y;
+    return x;
 end
 

@@ -22,6 +22,7 @@ public:
 protected:
     void compileStatement(AstStatement *stmt);
     Value *compileValue(AstExpression *expr);
+    Type *translateType(DataType dataType);
 private:
     AstTree *tree;
 
@@ -31,6 +32,7 @@ private:
     std::unique_ptr<IRBuilder<>> builder;
     
     // Symbol table
-    std::map<std::string, Value *> symtable;
+    std::map<std::string, AllocaInst *> symtable;
+    std::map<std::string, DataType> typeTable;
 };
 

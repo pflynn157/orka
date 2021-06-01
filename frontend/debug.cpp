@@ -66,3 +66,7 @@ void AstInt::print() {
     std::cout << val;
 }
 
+void AstID::print() {
+    std::cout << val;
+}
+

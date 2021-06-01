@@ -46,15 +46,11 @@ void Compiler::compileStatement(AstStatement *stmt) {
         // A variable declaration (alloca) statement
         case AstType::VarDec: {
             AstVarDec *vd = static_cast<AstVarDec *>(stmt);
-            Type *type;
+            Type *type = translateType(vd->getDataType());
             
-            switch (vd->getDataType()) {
-                case DataType::Int32: type = Type::getInt32Ty(*context); break;
-                default: type = Type::getVoidTy(*context);
-            }
-            
-            Value *var = builder->CreateAlloca(type);
+            AllocaInst *var = builder->CreateAlloca(type);
             symtable[vd->getName()] = var;
+            typeTable[vd->getName()] = vd->getDataType();
         } break;
         
         // A variable assignment
@@ -93,8 +89,34 @@ Value *Compiler::compileValue(AstExpression *expr) {
             AstInt *ival = static_cast<AstInt *>(expr);
             return builder->getInt32(ival->getValue());
         }
+        
+        case AstType::ID: {
+            AstID *id = static_cast<AstID *>(expr);
+            AllocaInst *ptr = symtable[id->getValue()];
+            Type *type = translateType(typeTable[id->getValue()]);
+            return builder->CreateLoad(type, ptr);
+        } break;
+        
+        case AstType::Add: {
+            AstAddOp *op = static_cast<AstAddOp *>(expr);
+            Value *lval = compileValue(op->getLVal());
+            Value *rval = compileValue(op->getRVal());
+            
+            return builder->CreateAdd(lval, rval);
+        } break;
     }
     
     return nullptr;
+}
+
+Type *Compiler::translateType(DataType dataType) {
+    Type *type;
+            
+    switch (dataType) {
+        case DataType::Int32: type = Type::getInt32Ty(*context); break;
+        default: type = Type::getVoidTy(*context);
+    }
+    
+    return type;
 }
 

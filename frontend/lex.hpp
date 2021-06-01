@@ -43,6 +43,7 @@ public:
     explicit Scanner(std::string input);
     ~Scanner();
     
+    void rewind(Token token);
     Token getNext();
     
     bool isError() { return error; }

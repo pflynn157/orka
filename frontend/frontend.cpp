@@ -97,7 +97,15 @@ void Frontend::buildVariableDec(AstFunction *func, Token idToken) {
     AstVarDec *vd = new AstVarDec(idToken.id_val, dataType);
     func->addStatement(vd);
     
-    buildExpression(vd);
+    token = scanner->getNext();
+    if (token.type != SemiColon) {
+        scanner->rewind(token);
+        
+        AstVarAssign *va = new AstVarAssign(idToken.id_val);
+        func->addStatement(va);
+        
+        buildExpression(va);
+    }
 }
 
 // Builds a variable assignment
@@ -130,6 +138,11 @@ void Frontend::buildExpression(AstStatement *stmt) {
             case Int32: {
                 AstInt *i32 = new AstInt(token.i32_val);
                 output.push(i32);
+            } break;
+            
+            case Id: {
+                AstID *id = new AstID(token.id_val);
+                output.push(id);
             } break;
             
             case Plus: {

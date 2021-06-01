@@ -13,7 +13,8 @@ enum class AstType {
     
     Add,
     
-    IntL
+    IntL,
+    ID
 };
 
 enum class DataType {
@@ -163,7 +164,7 @@ public:
     void setRVal(AstExpression *rval) { this->rval = rval; }
     
     AstExpression *getLVal() { return lval; }
-    AstExpression *getRVal();
+    AstExpression *getRVal() { return rval; }
     
     virtual void print() {}
 protected:
@@ -189,5 +190,17 @@ public:
     void print();
 private:
     int val = 0;
+};
+
+class AstID: public AstExpression {
+public:
+    explicit AstID(std::string val) : AstExpression(AstType::ID) {
+        this->val = val;
+    }
+    
+    std::string getValue() { return val; }
+    void print();
+private:
+    std::string val = "";
 };
 
