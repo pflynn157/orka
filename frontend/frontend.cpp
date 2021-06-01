@@ -60,6 +60,8 @@ void Frontend::buildFunction() {
                 
                 if (token.type == Assign) {
                     buildVariableAssign(func, idToken);
+                } else if (token.type == LParen) {
+                    buildFunctionCallStmt(func, idToken);
                 } else {
                     std::cerr << "Invalid ID" << std::endl;
                 }
@@ -120,6 +122,20 @@ void Frontend::buildVariableAssign(AstFunction *func, Token idToken) {
     }
 }
 
+// Builds a function call
+void Frontend::buildFunctionCallStmt(AstFunction *func, Token idToken) {
+    AstFuncCallStmt *fc = new AstFuncCallStmt(idToken.id_val);
+    func->addStatement(fc);
+    
+    buildExpression(fc, RParen);
+    
+    Token token = scanner->getNext();
+    if (token.type != SemiColon) {
+        std::cerr << "Error: Expected \';\'." << std::endl;
+        return;
+    }
+}
+
 void Frontend::buildReturn(AstFunction *func) {
     AstReturnStmt *stmt = new AstReturnStmt;
     func->addStatement(stmt);
@@ -128,16 +144,21 @@ void Frontend::buildReturn(AstFunction *func) {
 }
 
 // Builds an expression
-void Frontend::buildExpression(AstStatement *stmt) {
+void Frontend::buildExpression(AstStatement *stmt, TokenType stopToken) {
     std::stack<AstExpression *> output;
     std::stack<AstExpression *> opStack;
 
     Token token = scanner->getNext();
-    while (token.type != Eof && token.type != SemiColon) {
+    while (token.type != Eof && token.type != stopToken) {
         switch (token.type) {
             case Int32: {
                 AstInt *i32 = new AstInt(token.i32_val);
                 output.push(i32);
+            } break;
+            
+            case String: {
+                AstString *str = new AstString(token.id_val);
+                output.push(str);
             } break;
             
             case Id: {

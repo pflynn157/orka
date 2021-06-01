@@ -8,6 +8,9 @@ enum class AstType {
     Func,
     Return,
     
+    FuncCallStmt,
+    FuncCall,
+    
     VarDec,
     VarAssign,
     
@@ -17,6 +20,7 @@ enum class AstType {
     Div,
     
     IntL,
+    StringL,
     ID
 };
 
@@ -107,6 +111,19 @@ public:
 private:
     std::vector<AstExpression *> expressions;
     AstType type = AstType::EmptyAst;
+};
+
+// Represents a function call statement
+class AstFuncCallStmt : public AstStatement {
+public:
+    explicit AstFuncCallStmt(std::string name) : AstStatement(AstType::FuncCallStmt) {
+        this->name = name;
+    }
+    
+    std::string getName() { return name; }
+    void print();
+private:
+    std::string name = "";
 };
 
 // Represents a return statement
@@ -226,6 +243,19 @@ public:
     void print();
 private:
     int val = 0;
+};
+
+// Represents a string literal
+class AstString : public AstExpression {
+public:
+    explicit AstString(std::string val) : AstExpression(AstType::StringL) {
+        this->val = val;
+    }
+    
+    std::string getValue() { return val; }
+    void print();
+private:
+    std::string val = "";
 };
 
 // Represents a variable reference

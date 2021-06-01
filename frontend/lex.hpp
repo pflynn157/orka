@@ -18,6 +18,7 @@ enum TokenType {
     
     // Literals
     Id,
+    String,
     Int32,
     
     // Symbols
@@ -25,6 +26,10 @@ enum TokenType {
     SemiColon,
     Colon,
     Assign,
+    LParen,
+    RParen,
+    Comma,
+    
     Plus,
     Minus,
     Mul,
@@ -57,6 +62,7 @@ private:
     
     // Control variables for the scanner
     std::string buffer = "";
+    bool inQuote = false;
     
     // Functions
     bool isSymbol(char c);

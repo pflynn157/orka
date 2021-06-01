@@ -34,6 +34,12 @@ void AstFunction::print() {
     }
 }
 
+void AstFuncCallStmt::print() {
+    std::cout << "    ";
+    std::cout << "FC " << name;
+    std::cout << std::endl;
+}
+
 void AstReturnStmt::print() {
     std::cout << "    ";
     std::cout << "RETURN ";
@@ -87,6 +93,10 @@ void AstDivOp::print() {
 
 void AstInt::print() {
     std::cout << val;
+}
+
+void AstString::print() {
+    std::cout << "\"" << val << "\"";
 }
 
 void AstID::print() {

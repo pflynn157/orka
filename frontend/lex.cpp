@@ -28,6 +28,10 @@ void Token::print() {
         case SemiColon: std::cout << "; "; break;
         case Colon: std::cout << ": "; break;
         case Assign: std::cout << "= "; break;
+        case LParen: std::cout << "("; break;
+        case RParen: std::cout << ")"; break;
+        case Comma: std::cout << ", "; break;
+        
         case Plus: std::cout << "+ ";
         case Minus: std::cout << "- ";
         case Mul: std::cout << "* ";
@@ -80,6 +84,26 @@ Token Scanner::getNext() {
             break;
         }
         
+        if (next == '\"') {
+            if (inQuote) {
+                Token str;
+                str.type = String;
+                str.id_val = buffer;
+                
+                buffer = "";
+                inQuote = false;
+                return str;
+            } else {
+                inQuote = true;
+                continue;
+            }
+        }
+        
+        if (inQuote) {
+            buffer += next;
+            continue;
+        }
+        
         if (next == ' ' || isSymbol(next)) {
             if (buffer.length() == 0) {
                 if (isSymbol(next)) {
@@ -128,7 +152,10 @@ bool Scanner::isSymbol(char c) {
         case '\n':
         case ';': 
         case ':': 
-        case '=': 
+        case '=':
+        case '(':
+        case ')':
+        case ',': 
         case '+': 
         case '-': 
         case '*': 
@@ -152,6 +179,9 @@ TokenType Scanner::getSymbol(char c) {
         case ';': return SemiColon;
         case ':': return Colon;
         case '=': return Assign;
+        case '(': return LParen;
+        case ')': return RParen;
+        case ',': return Comma;
         case '+': return Plus;
         case '-': return Minus;
         case '*': return Mul;
