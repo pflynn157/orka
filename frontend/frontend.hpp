@@ -26,7 +26,7 @@ protected:
     void buildVariableAssign(AstFunction *func, Token idToken);
     void buildFunctionCallStmt(AstFunction *func, Token idToken);
     void buildReturn(AstFunction *func);
-    void buildExpression(AstStatement *stmt, TokenType stopToken = SemiColon);
+    void buildExpression(AstStatement *stmt, TokenType stopToken = SemiColon, TokenType separateToken = EmptyToken);
 private:
     std::string input = "";
     Scanner *scanner;

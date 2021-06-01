@@ -1,5 +1,6 @@
 
 extern func puts(ln : str)
+extern func printf(ln : str, x : int)
 
 func main
     x1 : int;
@@ -8,6 +9,7 @@ func main
     y : int = 4;
 begin
     puts("Hi");
+    printf("%d\n", y);
     x1 = y + 1;
     x2 = y - 1;
     x = x1 + x2;

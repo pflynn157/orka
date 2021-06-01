@@ -102,7 +102,16 @@ Token Scanner::getNext() {
         }
         
         if (inQuote) {
-            buffer += next;
+            if (next == '\\') {
+                next = reader.get();
+                switch (next) {
+                    case 'n': buffer += '\n'; break;
+                    case 't': buffer += '\t'; break;
+                    default: buffer += '\\' + next;
+                }
+            } else {
+                buffer += next;
+            }
             continue;
         }
         

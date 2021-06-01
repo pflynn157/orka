@@ -79,7 +79,7 @@ void Frontend::buildFunctionCallStmt(AstFunction *func, Token idToken) {
     AstFuncCallStmt *fc = new AstFuncCallStmt(idToken.id_val);
     func->addStatement(fc);
     
-    buildExpression(fc, RParen);
+    buildExpression(fc, RParen, Comma);
     
     Token token = scanner->getNext();
     if (token.type != SemiColon) {
@@ -96,12 +96,20 @@ void Frontend::buildReturn(AstFunction *func) {
 }
 
 // Builds an expression
-void Frontend::buildExpression(AstStatement *stmt, TokenType stopToken) {
+void Frontend::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType separateToken) {
     std::stack<AstExpression *> output;
     std::stack<AstExpression *> opStack;
 
     Token token = scanner->getNext();
     while (token.type != Eof && token.type != stopToken) {
+        if (token.type == separateToken && output.size() > 0) {
+            AstExpression *expr = output.top();
+            output.pop();
+            
+            stmt->addExpression(expr);
+            continue;
+        }
+    
         switch (token.type) {
             case Int32: {
                 AstInt *i32 = new AstInt(token.i32_val);
