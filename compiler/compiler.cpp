@@ -15,6 +15,9 @@ Compiler::Compiler(AstTree *tree) {
 }
 
 void Compiler::compile() {
+    FunctionType *FT = FunctionType::get(Type::getVoidTy(*context), Type::getInt8PtrTy(*context), false);
+    Function::Create(FT, Function::ExternalLinkage, "puts", mod.get());
+
     for (auto global : tree->getGlobalStatements()) {
         switch (global->getType()) {
             case AstType::Func: {
@@ -66,6 +69,20 @@ void Compiler::compileStatement(AstStatement *stmt) {
             }
         } break;
         
+        // Function call statements
+        case AstType::FuncCallStmt: {
+            AstFuncCallStmt *fc = static_cast<AstFuncCallStmt *>(stmt);
+            std::vector<Value *> args;
+            
+            for (auto stmt : stmt->getExpressions()) {
+                Value *val = compileValue(stmt);
+                args.push_back(val);
+            }
+            
+            Function *callee = mod->getFunction(fc->getName());
+            builder->CreateCall(callee, args);
+        } break;
+        
         // A return statement
         case AstType::Return: {
             if (stmt->getExpressionCount() == 0) {
@@ -88,7 +105,12 @@ Value *Compiler::compileValue(AstExpression *expr) {
         case AstType::IntL: {
             AstInt *ival = static_cast<AstInt *>(expr);
             return builder->getInt32(ival->getValue());
-        }
+        } break;
+        
+        case AstType::StringL: {
+            AstString *str = static_cast<AstString *>(expr);
+            return builder->CreateGlobalStringPtr(str->getValue());
+        } break;
         
         case AstType::ID: {
             AstID *id = static_cast<AstID *>(expr);
