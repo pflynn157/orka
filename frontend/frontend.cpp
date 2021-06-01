@@ -43,6 +43,7 @@ void Frontend::buildFunction() {
         switch (token.type) {
             case Id: buildVariableDec(func, token); break;
             
+            case Nl: break;
             default: token.print();
         }
         
@@ -118,18 +119,51 @@ void Frontend::buildReturn(AstFunction *func) {
     buildExpression(stmt);
 }
 
+// Builds an expression
 void Frontend::buildExpression(AstStatement *stmt) {
+    std::stack<AstExpression *> output;
+    std::stack<AstExpression *> opStack;
+
     Token token = scanner->getNext();
     while (token.type != Eof && token.type != SemiColon) {
         switch (token.type) {
             case Int32: {
                 AstInt *i32 = new AstInt(token.i32_val);
-                stmt->addExpression(i32);
+                output.push(i32);
+            } break;
+            
+            case Plus: {
+                AstAddOp *add = new AstAddOp;
+                opStack.push(add);
             } break;
         }
         
         token = scanner->getNext();
     }
+    
+    // Build the expression
+    while (opStack.size() > 0) {
+        AstExpression *rval = output.top();
+        output.pop();
+        
+        AstExpression *lval = output.top();
+        output.pop();
+        
+        AstBinaryOp *op = static_cast<AstBinaryOp *>(opStack.top());
+        opStack.pop();
+        
+        op->setLVal(lval);
+        op->setRVal(rval);
+        output.push(op);
+    }
+    
+    // Add the expressions back
+    if (output.size() == 0) {
+        return;
+    }
+    
+    AstExpression *expr = output.top();
+    stmt->addExpression(expr);
 }
 
 // The debug function for the scanner

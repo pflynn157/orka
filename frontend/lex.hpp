@@ -24,7 +24,8 @@ enum TokenType {
     Nl,
     SemiColon,
     Colon,
-    Assign
+    Assign,
+    Plus
 };
 
 struct Token {

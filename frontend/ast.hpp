@@ -11,6 +11,8 @@ enum class AstType {
     VarDec,
     VarAssign,
     
+    Add,
+    
     IntL
 };
 
@@ -151,8 +153,30 @@ public:
     
     AstType getType() { return type; }
     virtual void print() {}
-private:
+protected:
     AstType type = AstType::EmptyAst;
+};
+
+class AstBinaryOp : public AstExpression {
+public:
+    void setLVal(AstExpression *lval) { this->lval = lval; }
+    void setRVal(AstExpression *rval) { this->rval = rval; }
+    
+    AstExpression *getLVal() { return lval; }
+    AstExpression *getRVal();
+    
+    virtual void print() {}
+protected:
+    AstExpression *lval, *rval;
+};
+
+class AstAddOp : public AstBinaryOp {
+public:
+    AstAddOp() {
+        this->type = AstType::Add;
+    }
+    
+    void print();
 };
 
 class AstInt : public AstExpression {

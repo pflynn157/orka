@@ -25,7 +25,10 @@ void AstFunction::print() {
     for (auto stmt : code) {
         stmt->print();
         if (stmt->getExpressionCount()) {
-            for (auto expr : stmt->getExpressions()) expr->print();
+            for (auto expr : stmt->getExpressions()) {
+                for (int i = 0; i<8; i++) std::cout << " ";
+                expr->print();
+            }
             std::cout << std::endl;
         }
     }
@@ -50,8 +53,16 @@ void AstVarAssign::print() {
     std::cout << std::endl;
 }
 
+void AstAddOp::print() {
+    
+    std::cout << "(";
+    lval->print();
+    std::cout << ") + (";
+    rval->print();
+    std::cout << ")";
+}
+
 void AstInt::print() {
-    for (int i = 0; i<8; i++) std::cout << " ";
     std::cout << val;
 }
 

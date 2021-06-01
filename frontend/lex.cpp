@@ -28,6 +28,7 @@ void Token::print() {
         case SemiColon: std::cout << "; "; break;
         case Colon: std::cout << ": "; break;
         case Assign: std::cout << "= "; break;
+        case Plus: std::cout << "+ ";
         
         default: {}
     }
@@ -120,7 +121,8 @@ bool Scanner::isSymbol(char c) {
         case '\n':
         case ';': 
         case ':': 
-        case '=': return true;
+        case '=': 
+        case '+': return true;
     }
     return false;
 }
@@ -140,6 +142,7 @@ TokenType Scanner::getSymbol(char c) {
         case ';': return SemiColon;
         case ':': return Colon;
         case '=': return Assign;
+        case '+': return Plus;
     }
     return EmptyToken;
 }

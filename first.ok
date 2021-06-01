@@ -2,7 +2,7 @@
 func main
     x : int;
 begin
-    x = 5;
+    x = 5 + 3;
     return 3;
 end
 

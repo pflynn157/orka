@@ -13,11 +13,19 @@ int main(int argc, char **argv) {
     }
     
     std::string input = argv[1];
+    std::string arg = "";
+    if (argc == 3) arg = argv[2];
     
     Frontend *frontend = new Frontend(input);
-    frontend->parse();
-    AstTree *tree = frontend->getTree();
-    //frontend->debugScanner();
+    AstTree *tree;
+    
+    if (arg == "--test-lex") {
+        frontend->debugScanner();
+        return 0;
+    } else {
+        frontend->parse();
+        tree = frontend->getTree();
+    }
     delete frontend;
     
     tree->print();
