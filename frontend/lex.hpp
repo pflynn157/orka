@@ -10,11 +10,13 @@ enum TokenType {
     Eof,
     
     // Keywords
+    Extern,
     Func,
     Begin,
     End,
     Return,
     Int,
+    Str,
     
     // Literals
     Id,

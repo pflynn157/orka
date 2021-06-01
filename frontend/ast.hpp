@@ -5,6 +5,7 @@
 
 enum class AstType {
     EmptyAst,
+    ExternFunc,
     Func,
     Return,
     
@@ -26,7 +27,15 @@ enum class AstType {
 
 enum class DataType {
     Void,
-    Int32
+    Char,
+    Int32,
+    Ptr
+};
+
+struct Var {
+    std::string name;
+    DataType type;
+    DataType subType;
 };
 
 // Forward declarations
@@ -67,6 +76,23 @@ public:
     virtual void print() {}
 private:
     AstType type = AstType::EmptyAst;
+};
+
+// Represents an extern function
+class AstExternFunction : public AstGlobalStatement {
+public:
+    explicit AstExternFunction(std::string name) : AstGlobalStatement(AstType::ExternFunc) {
+        this->name = name;
+    }
+    
+    void setArguments(std::vector<Var> args) { this->args = args; }
+    
+    std::string getName() { return name; }
+    std::vector<Var> getArgs() { return args; }
+    void print() override;
+private:
+    std::string name = "";
+    std::vector<Var> args;
 };
 
 // Represents a function

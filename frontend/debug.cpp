@@ -5,7 +5,9 @@
 std::string printDataType(DataType dataType) {
     switch (dataType) {
         case DataType::Void: return "void";
+        case DataType::Char: return "char";
         case DataType::Int32: return "i32";
+        case DataType::Ptr: return "ptr";
     }
     return "";
 }
@@ -17,6 +19,17 @@ void AstTree::print() {
     for (auto stmt : global_statements) {
         stmt->print();
     }
+}
+
+void AstExternFunction::print() {
+    std::cout << "EXTERN FUNC " << name << "(";
+    for (auto var : args) {
+        std::cout << printDataType(var.type);
+        if (var.subType != DataType::Void)
+            std::cout << "*" << printDataType(var.subType);
+        std::cout << ", ";
+    }
+    std::cout << ")" << std::endl;
 }
 
 void AstFunction::print() {

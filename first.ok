@@ -1,4 +1,6 @@
 
+extern func println(ln : str)
+
 func main
     x1 : int;
     x2 : int;

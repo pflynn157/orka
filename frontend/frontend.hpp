@@ -21,6 +21,7 @@ public:
     void debugScanner();
 protected:
     void buildFunction();
+    void buildExternFunction();
     void buildVariableDec(AstFunction *func, Token idToken);
     void buildVariableAssign(AstFunction *func, Token idToken);
     void buildFunctionCallStmt(AstFunction *func, Token idToken);

@@ -15,11 +15,13 @@ void Token::print() {
         case EmptyToken: std::cout << "?? "; break;
         case Eof: std::cout << "EOF "; break;
         
+        case Extern: std::cout << "EXTERN "; break;
         case Func: std::cout << "FUNC "; break;
         case Begin: std::cout << "BEGIN "; break;
         case End: std::cout << "END "; break;
         case Return: std::cout << "RETURN "; break;
         case Int: std::cout << "INT"; break;
+        case Str: std::cout << "STR"; break;
         
         case Id: std::cout << "ID "; break;
         case Int32: std::cout << "I32 "; break;
@@ -165,11 +167,13 @@ bool Scanner::isSymbol(char c) {
 }
 
 TokenType Scanner::getKeyword() {
-    if (buffer == "func") return Func;
+    if (buffer == "extern") return Extern;
+    else if (buffer == "func") return Func;
     else if (buffer == "begin") return Begin;
     else if (buffer == "end") return End;
     else if (buffer == "return") return Return;
     else if (buffer == "int") return Int;
+    else if (buffer == "str") return Str;
     return EmptyToken;
 }
 
