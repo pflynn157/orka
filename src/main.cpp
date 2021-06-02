@@ -22,19 +22,26 @@ int main(int argc, char **argv) {
     if (arg == "--test-lex") {
         frontend->debugScanner();
         return 0;
-    } else {
-        frontend->parse();
-        tree = frontend->getTree();
     }
+    
+    frontend->parse();
+    tree = frontend->getTree();
+    
     delete frontend;
     
-    tree->print();
-    std::cout << "====================" << std::endl << std::endl;
+    if (arg == "--ast") {
+        tree->print();
+        return 0;
+    }
 
     //test
     Compiler *compiler = new Compiler(tree);
     compiler->compile();
-    compiler->debug();
+    
+    if (arg == "--llvm") {
+        compiler->debug();
+        return 0;
+    }
     
     compiler->writeAssembly();
     compiler->assemble();
