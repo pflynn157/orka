@@ -12,14 +12,40 @@ int main(int argc, char **argv) {
         return 1;
     }
     
-    std::string input = argv[1];
-    std::string arg = "";
-    if (argc == 3) arg = argv[2];
+    // Compiler (codegen) flags
+    CFlags flags;
+    flags.name = "a.out";
+    
+    // Other flags
+    std::string input = "";
+    bool testLex = false;
+    bool printAst = false;
+    bool printLLVM = false;
+    
+    for (int i = 1; i<argc; i++) {
+        std::string arg = argv[i];
+        
+        if (arg == "--test-lex") {
+            testLex = true;
+        } else if (arg == "--ast") {
+            printAst = true;
+        } else if (arg == "--llvm") {
+            printLLVM = true;
+        } else if (arg == "-o") {
+            flags.name = argv[i+1];
+            i += 1;
+        } else if (arg[0] == '-') {
+            std::cerr << "Invalid option: " << arg << std::endl;
+            return 1;
+        } else {
+            input = arg;
+        }
+    }
     
     Frontend *frontend = new Frontend(input);
     AstTree *tree;
     
-    if (arg == "--test-lex") {
+    if (testLex) {
         frontend->debugScanner();
         return 0;
     }
@@ -29,16 +55,16 @@ int main(int argc, char **argv) {
     
     delete frontend;
     
-    if (arg == "--ast") {
+    if (printAst) {
         tree->print();
         return 0;
     }
 
     //test
-    Compiler *compiler = new Compiler(tree);
+    Compiler *compiler = new Compiler(tree, flags);
     compiler->compile();
     
-    if (arg == "--llvm") {
+    if (printLLVM) {
         compiler->debug();
         return 0;
     }

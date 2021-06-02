@@ -52,6 +52,7 @@ void Token::print() {
 Scanner::Scanner(std::string input) {
     reader = std::ifstream(input.c_str());
     if (!reader.is_open()) {
+        std::cout << "Unknown input file." << std::endl;
         error = true;
     }
 }

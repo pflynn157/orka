@@ -41,7 +41,7 @@ void Compiler::writeAssembly() {
     mod->setDataLayout(machine->createDataLayout());
     
     // Write it out
-    std::string outputPath = "/tmp/first.asm";
+    std::string outputPath = "/tmp/" + cflags.name + ".asm";
     std::error_code errorCode;
     raw_fd_ostream writer(outputPath, errorCode, sys::fs::OF_None);
     
@@ -65,13 +65,15 @@ void Compiler::writeAssembly() {
 // Assemble the file
 // TODO: This needs to be done properly. System() != proper. I was lazy
 void Compiler::assemble() {
-    system("as /tmp/first.asm -o /tmp/first.o");
+    std::string cmd = "as /tmp/" + cflags.name + ".asm -o /tmp/" + cflags.name + ".o";
+    system(cmd.c_str());
 }
 
 // Link
 // TODO: Same as above...
 // Also... We shouldn't be using GCC to link
 void Compiler::link() {
-    system("gcc /tmp/first.o -o first");
+    std::string cmd = "gcc /tmp/" + cflags.name + ".o -o " + cflags.name;
+    system(cmd.c_str());
 }
 

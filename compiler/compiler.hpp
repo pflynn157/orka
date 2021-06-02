@@ -11,9 +11,13 @@ using namespace llvm;
 
 #include <ast.hpp>
 
+struct CFlags {
+    std::string name;
+};
+
 class Compiler {
 public:
-    explicit Compiler(AstTree *tree);
+    explicit Compiler(AstTree *tree, CFlags flags);
     void compile();
     void debug();
     void writeAssembly();
@@ -25,6 +29,7 @@ protected:
     Type *translateType(DataType dataType, DataType subType = DataType::Void);
 private:
     AstTree *tree;
+    CFlags cflags;
 
     // LLVM stuff
     std::unique_ptr<LLVMContext> context;

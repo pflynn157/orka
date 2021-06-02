@@ -6,11 +6,12 @@ using namespace llvm;
 
 #include <compiler.hpp>
 
-Compiler::Compiler(AstTree *tree) {
+Compiler::Compiler(AstTree *tree, CFlags cflags) {
     this->tree = tree;
+    this->cflags = cflags;
 
     context = std::make_unique<LLVMContext>();
-    mod = std::make_unique<Module>("mod1", *context);
+    mod = std::make_unique<Module>(cflags.name, *context);
     builder = std::make_unique<IRBuilder<>>(*context);
 }
 
