@@ -33,7 +33,14 @@ void AstExternFunction::print() {
 }
 
 void AstFunction::print() {
-    std::cout << "FUNC: " << name << std::endl;
+    std::cout << "FUNC " << name << "(";
+    for (auto var : args) {
+        std::cout << printDataType(var.type);
+        if (var.subType != DataType::Void)
+            std::cout << "*" << printDataType(var.subType);
+        std::cout << ", ";
+    }
+    std::cout << ")" << std::endl;
     
     for (auto stmt : code) {
         stmt->print();

@@ -47,7 +47,10 @@ public:
     }
     
     std::string getName() { return name; }
+    std::vector<Var> getArguments() { return args; }
     std::vector<AstStatement *> getCode() { return code; }
+    
+    void setArguments(std::vector<Var> args) { this->args = args; }
     
     void addStatement(AstStatement *statement) {
         code.push_back(statement);
@@ -56,6 +59,7 @@ public:
     void print() override;
 private:
     std::string name = "";
+    std::vector<Var> args;
     std::vector<AstStatement *> code;
 };
 

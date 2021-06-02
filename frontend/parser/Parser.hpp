@@ -21,6 +21,7 @@ public:
     
     void debugScanner();
 protected:
+    bool getFunctionArgs(std::vector<Var> &args);
     bool buildFunction();
     bool buildExternFunction();
     bool buildVariableDec(AstFunction *func, Token idToken);
