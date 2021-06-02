@@ -1,4 +1,10 @@
 
+#OUTPUT
+#Hi
+#END
+
+#RET 2
+
 extern func puts(ln : str)
 extern func printf(ln : str, x : int)
 

@@ -1,0 +1,15 @@
+
+#OUTPUT
+#Hi
+#END
+
+#RET 2
+
+extern func puts(ln : str)
+
+func main
+begin
+    puts("Hi");
+    return 2;
+end
+

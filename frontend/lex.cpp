@@ -86,6 +86,12 @@ Token Scanner::getNext() {
             break;
         }
         
+        if (next == '#') {
+            while (next != '\n' && !reader.eof()) {
+                next = reader.get();
+            }
+        }
+        
         if (next == '\"') {
             if (inQuote) {
                 Token str;
