@@ -1,19 +1,19 @@
 #include <iostream>
 
-#include <frontend.hpp>
+#include <parser/Parser.hpp>
 
-Frontend::Frontend(std::string input) {
+Parser::Parser(std::string input) {
     this->input = input;
     scanner = new Scanner(input);
     
     tree = new AstTree(input);
 }
 
-Frontend::~Frontend() {
+Parser::~Parser() {
     delete scanner;
 }
 
-void Frontend::parse() {
+void Parser::parse() {
     Token token;
     do {
         token = scanner->getNext();
@@ -30,73 +30,8 @@ void Frontend::parse() {
     } while (token.type != Eof);
 }
 
-// Builds a variable declaration
-// A variable declaration is composed of an Alloca and optionally, an assignment
-void Frontend::buildVariableDec(AstFunction *func, Token idToken) {
-    Token token = scanner->getNext();
-    
-    if (token.type != Colon) {
-        std::cerr << "Error: Expected \':\' in declaration." << std::endl;
-        token.print();
-        return;
-    }
-    
-    token = scanner->getNext();
-    DataType dataType = DataType::Void;
-    
-    switch (token.type) {
-        case Int: dataType = DataType::Int32; break;
-    }
-    
-    AstVarDec *vd = new AstVarDec(idToken.id_val, dataType);
-    func->addStatement(vd);
-    
-    token = scanner->getNext();
-    if (token.type != SemiColon) {
-        scanner->rewind(token);
-        
-        AstVarAssign *va = new AstVarAssign(idToken.id_val);
-        func->addStatement(va);
-        
-        buildExpression(va);
-    }
-}
-
-// Builds a variable assignment
-void Frontend::buildVariableAssign(AstFunction *func, Token idToken) {
-    AstVarAssign *va = new AstVarAssign(idToken.id_val);
-    func->addStatement(va);
-    
-    buildExpression(va);
-    
-    if (va->getExpressionCount() == 0) {
-        std::cerr << "Error: Invalid variable assignment." << std::endl;
-    }
-}
-
-// Builds a function call
-void Frontend::buildFunctionCallStmt(AstFunction *func, Token idToken) {
-    AstFuncCallStmt *fc = new AstFuncCallStmt(idToken.id_val);
-    func->addStatement(fc);
-    
-    buildExpression(fc, RParen, Comma);
-    
-    Token token = scanner->getNext();
-    if (token.type != SemiColon) {
-        std::cerr << "Error: Expected \';\'." << std::endl;
-        return;
-    }
-}
-
-void Frontend::buildReturn(AstFunction *func) {
-    AstReturnStmt *stmt = new AstReturnStmt;
-    func->addStatement(stmt);
-    
-    buildExpression(stmt);
-}
-
 // Builds an expression
-void Frontend::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType separateToken) {
+void Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType separateToken) {
     std::stack<AstExpression *> output;
     std::stack<AstExpression *> opStack;
 
@@ -176,7 +111,7 @@ void Frontend::buildExpression(AstStatement *stmt, TokenType stopToken, TokenTyp
 }
 
 // The debug function for the scanner
-void Frontend::debugScanner() {
+void Parser::debugScanner() {
     std::cout << "Debugging scanner..." << std::endl;
     
     Token t;

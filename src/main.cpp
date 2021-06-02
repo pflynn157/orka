@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include <frontend.hpp>
+#include <parser/Parser.hpp>
 #include <ast.hpp>
 
 #include <compiler.hpp>
@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
         }
     }
     
-    Frontend *frontend = new Frontend(input);
+    Parser *frontend = new Parser(input);
     AstTree *tree;
     
     if (testLex) {

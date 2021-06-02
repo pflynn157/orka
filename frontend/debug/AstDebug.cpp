@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "ast.hpp"
+#include <ast.hpp>
 
 std::string printDataType(DataType dataType) {
     switch (dataType) {

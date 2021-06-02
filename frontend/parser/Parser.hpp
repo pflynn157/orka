@@ -2,17 +2,17 @@
 
 #include <string>
 
-#include <lex.hpp>
+#include <lex/Lex.hpp>
 #include <ast.hpp>
 
-// The frontend class
-// The frontend is in charge of performing all parsing and AST-building tasks
+// The parser class
+// The parser is in charge of performing all parsing and AST-building tasks
 // It is also in charge of the error manager
 
-class Frontend {
+class Parser {
 public:
-    explicit Frontend(std::string input);
-    ~Frontend();
+    explicit Parser(std::string input);
+    ~Parser();
     
     void parse();
     

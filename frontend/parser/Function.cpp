@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include <frontend.hpp>
+#include <parser/Parser.hpp>
 #include <ast.hpp>
 
 // Builds a function
-void Frontend::buildFunction() {
+void Parser::buildFunction() {
     Token token = scanner->getNext();
     if (token.type != Id) {
         // TODO: Error
@@ -57,7 +57,7 @@ void Frontend::buildFunction() {
 }
 
 // Builds an extern function declaration
-void Frontend::buildExternFunction() {
+void Parser::buildExternFunction() {
     Token token = scanner->getNext();
     if (token.type != Func) {
         std::cerr << "Error: Expected \"func\"." << std::endl;
@@ -118,5 +118,27 @@ void Frontend::buildExternFunction() {
     AstExternFunction *ex = new AstExternFunction(funcName);
     ex->setArguments(args);
     tree->addGlobalStatement(ex);
+}
+
+// Builds a function call
+void Parser::buildFunctionCallStmt(AstFunction *func, Token idToken) {
+    AstFuncCallStmt *fc = new AstFuncCallStmt(idToken.id_val);
+    func->addStatement(fc);
+    
+    buildExpression(fc, RParen, Comma);
+    
+    Token token = scanner->getNext();
+    if (token.type != SemiColon) {
+        std::cerr << "Error: Expected \';\'." << std::endl;
+        return;
+    }
+}
+
+// Builds a return statement
+void Parser::buildReturn(AstFunction *func) {
+    AstReturnStmt *stmt = new AstReturnStmt;
+    func->addStatement(stmt);
+    
+    buildExpression(stmt);
 }
 
