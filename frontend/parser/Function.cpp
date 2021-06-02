@@ -4,12 +4,11 @@
 #include <ast.hpp>
 
 // Builds a function
-void Parser::buildFunction() {
+bool Parser::buildFunction() {
     Token token = scanner->getNext();
     if (token.type != Id) {
-        // TODO: Error
-        std::cout << "Error: Expected ID" << std::endl;
-        return;
+        syntax->addError(scanner->getLine(), "Expected function name.");
+        return false;
     }
 
     AstFunction *func = new AstFunction(token.id_val);
@@ -22,7 +21,11 @@ void Parser::buildFunction() {
             case Id: buildVariableDec(func, token); break;
             
             case Nl: break;
-            default: token.print();
+            
+            default: {
+                syntax->addError(scanner->getLine(), "Invalid token in expression.");
+                return false;
+            }
         }
         
         token = scanner->getNext();
@@ -41,7 +44,8 @@ void Parser::buildFunction() {
                 } else if (token.type == LParen) {
                     buildFunctionCallStmt(func, idToken);
                 } else {
-                    std::cerr << "Invalid ID" << std::endl;
+                    syntax->addError(scanner->getLine(), "Invalid use of identifier.");
+                    return false;
                 }
             } break;
             
@@ -49,11 +53,17 @@ void Parser::buildFunction() {
             
             case End: 
             case Nl: break;
-            default: token.print();
+            
+            default: {
+                syntax->addError(scanner->getLine(), "Invalid token in expression.");
+                return false;
+            }
         }
         
         token = scanner->getNext();
     }
+    
+    return true;
 }
 
 // Builds an extern function declaration

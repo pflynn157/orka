@@ -3,8 +3,11 @@ project(orka_frontend)
 
 set(SRC
     lex/Lex.cpp
+    
     debug/AstDebug.cpp
     debug/LexDebug.cpp
+    
+    error/Manager.cpp
     
     parser/Function.cpp
     parser/Parser.cpp

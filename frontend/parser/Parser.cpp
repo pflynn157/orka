@@ -7,27 +7,41 @@ Parser::Parser(std::string input) {
     scanner = new Scanner(input);
     
     tree = new AstTree(input);
+    syntax = new ErrorManager;
 }
 
 Parser::~Parser() {
     delete scanner;
+    delete syntax;
 }
 
-void Parser::parse() {
+bool Parser::parse() {
     Token token;
     do {
         token = scanner->getNext();
+        bool code = true;
         
         switch (token.type) {
             case Func: {
-                buildFunction();
+                code = buildFunction();
             } break;
             
             case Extern: {
                 buildExternFunction();
             } break;
         }
+        
+        if (!code) break;
     } while (token.type != Eof);
+    
+    // Check for errors, and print if so
+    if (syntax->errorsPresent()) {
+        syntax->printErrors();
+        return false;
+    }
+    
+    syntax->printWarnings();
+    return true;
 }
 
 // Builds an expression

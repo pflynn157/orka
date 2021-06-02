@@ -56,6 +56,8 @@ public:
     void rewind(Token token);
     Token getNext();
     
+    int getLine() { return 0; }
+    
     bool isError() { return error; }
 private:
     std::ifstream reader;

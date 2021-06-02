@@ -3,6 +3,7 @@
 #include <string>
 
 #include <lex/Lex.hpp>
+#include <error/Manager.hpp>
 #include <ast.hpp>
 
 // The parser class
@@ -14,13 +15,13 @@ public:
     explicit Parser(std::string input);
     ~Parser();
     
-    void parse();
+    bool parse();
     
     AstTree *getTree() { return tree; }
     
     void debugScanner();
 protected:
-    void buildFunction();
+    bool buildFunction();
     void buildExternFunction();
     void buildVariableDec(AstFunction *func, Token idToken);
     void buildVariableAssign(AstFunction *func, Token idToken);
@@ -31,5 +32,6 @@ private:
     std::string input = "";
     Scanner *scanner;
     AstTree *tree;
+    ErrorManager *syntax;
 };
 
