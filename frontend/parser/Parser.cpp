@@ -27,7 +27,7 @@ bool Parser::parse() {
             } break;
             
             case Extern: {
-                buildExternFunction();
+                code = buildExternFunction();
             } break;
         }
         
@@ -45,7 +45,7 @@ bool Parser::parse() {
 }
 
 // Builds an expression
-void Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType separateToken) {
+bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType separateToken) {
     std::stack<AstExpression *> output;
     std::stack<AstExpression *> opStack;
 
@@ -117,11 +117,13 @@ void Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
     
     // Add the expressions back
     if (output.size() == 0) {
-        return;
+        return true;
     }
     
     AstExpression *expr = output.top();
     stmt->addExpression(expr);
+    
+    return true;
 }
 
 // The debug function for the scanner

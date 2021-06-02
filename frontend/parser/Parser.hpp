@@ -22,12 +22,12 @@ public:
     void debugScanner();
 protected:
     bool buildFunction();
-    void buildExternFunction();
-    void buildVariableDec(AstFunction *func, Token idToken);
-    void buildVariableAssign(AstFunction *func, Token idToken);
-    void buildFunctionCallStmt(AstFunction *func, Token idToken);
-    void buildReturn(AstFunction *func);
-    void buildExpression(AstStatement *stmt, TokenType stopToken = SemiColon, TokenType separateToken = EmptyToken);
+    bool buildExternFunction();
+    bool buildVariableDec(AstFunction *func, Token idToken);
+    bool buildVariableAssign(AstFunction *func, Token idToken);
+    bool buildFunctionCallStmt(AstFunction *func, Token idToken);
+    bool buildReturn(AstFunction *func);
+    bool buildExpression(AstStatement *stmt, TokenType stopToken = SemiColon, TokenType separateToken = EmptyToken);
 private:
     std::string input = "";
     Scanner *scanner;

@@ -17,8 +17,10 @@ bool Parser::buildFunction() {
     // Build the variable body
     token = scanner->getNext();
     while (token.type != Eof && token.type != Begin) {
+        bool code = true;
+        
         switch (token.type) {
-            case Id: buildVariableDec(func, token); break;
+            case Id: code = buildVariableDec(func, token); break;
             
             case Nl: break;
             
@@ -28,28 +30,31 @@ bool Parser::buildFunction() {
             }
         }
         
+        if (!code) return false;
         token = scanner->getNext();
     }
     
     // Build the body
     token = scanner->getNext();
     while (token.type != Eof && token.type != End) {
+        bool code = true;
+        
         switch (token.type) {
             case Id: {
                 Token idToken = token;
                 token = scanner->getNext();
                 
                 if (token.type == Assign) {
-                    buildVariableAssign(func, idToken);
+                    code = buildVariableAssign(func, idToken);
                 } else if (token.type == LParen) {
-                    buildFunctionCallStmt(func, idToken);
+                    code = buildFunctionCallStmt(func, idToken);
                 } else {
                     syntax->addError(scanner->getLine(), "Invalid use of identifier.");
                     return false;
                 }
             } break;
             
-            case Return: buildReturn(func); break;
+            case Return: code = buildReturn(func); break;
             
             case End: 
             case Nl: break;
@@ -60,6 +65,7 @@ bool Parser::buildFunction() {
             }
         }
         
+        if (!code) return false;
         token = scanner->getNext();
     }
     
@@ -67,17 +73,17 @@ bool Parser::buildFunction() {
 }
 
 // Builds an extern function declaration
-void Parser::buildExternFunction() {
+bool Parser::buildExternFunction() {
     Token token = scanner->getNext();
     if (token.type != Func) {
-        std::cerr << "Error: Expected \"func\"." << std::endl;
-        return;
+        syntax->addError(scanner->getLine(), "Expected \"func\".");
+        return false;
     }
     
     token = scanner->getNext();
     if (token.type != Id) {
-        std::cerr << "Error: Expected function name." << std::endl;
-        return;
+        syntax->addError(scanner->getLine(), "Expected function name.");
+        return false;
     }
     
     std::string funcName = token.id_val;
@@ -93,13 +99,13 @@ void Parser::buildExternFunction() {
             Var v;
             
             if (t1.type != Id) {
-                std::cerr << "Error: Invalid function argument: Expected name." << std::endl;
-                return;
+                syntax->addError(scanner->getLine(), "Invalid function argument: Expected name.");
+                return false;
             }
             
             if (t2.type != Colon) {
-                std::cerr << "Error: Invalid function argument: Expected \':\'." << std::endl;
-                return;
+                syntax->addError(scanner->getLine(), "Invalid function argument: Expected \':\'.");
+                return false;
             }
             
             switch (t3.type) {
@@ -110,8 +116,8 @@ void Parser::buildExternFunction() {
                 } break;
                 
                 default: {
-                    std::cerr << "Error: Invalid function argument: Unknown type." << std::endl;
-                    return;
+                    syntax->addError(scanner->getLine(), "Invalid function argument: Unknown type.");
+                    return false;
                 }
             }
             
@@ -128,27 +134,33 @@ void Parser::buildExternFunction() {
     AstExternFunction *ex = new AstExternFunction(funcName);
     ex->setArguments(args);
     tree->addGlobalStatement(ex);
+    
+    return true;
 }
 
 // Builds a function call
-void Parser::buildFunctionCallStmt(AstFunction *func, Token idToken) {
+bool Parser::buildFunctionCallStmt(AstFunction *func, Token idToken) {
     AstFuncCallStmt *fc = new AstFuncCallStmt(idToken.id_val);
     func->addStatement(fc);
     
-    buildExpression(fc, RParen, Comma);
+    if (!buildExpression(fc, RParen, Comma)) return false;
     
     Token token = scanner->getNext();
     if (token.type != SemiColon) {
-        std::cerr << "Error: Expected \';\'." << std::endl;
-        return;
+        syntax->addError(scanner->getLine(), "Expected \';\'.");
+        return false;
     }
+    
+    return true;
 }
 
 // Builds a return statement
-void Parser::buildReturn(AstFunction *func) {
+bool Parser::buildReturn(AstFunction *func) {
     AstReturnStmt *stmt = new AstReturnStmt;
     func->addStatement(stmt);
     
-    buildExpression(stmt);
+    if (!buildExpression(stmt)) return false;
+    
+    return true;
 }
 

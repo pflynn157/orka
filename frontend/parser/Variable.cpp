@@ -5,13 +5,12 @@
 
 // Builds a variable declaration
 // A variable declaration is composed of an Alloca and optionally, an assignment
-void Parser::buildVariableDec(AstFunction *func, Token idToken) {
+bool Parser::buildVariableDec(AstFunction *func, Token idToken) {
     Token token = scanner->getNext();
     
     if (token.type != Colon) {
-        std::cerr << "Error: Expected \':\' in declaration." << std::endl;
-        token.print();
-        return;
+        syntax->addError(scanner->getLine(), "Error: Expected \':\' in declaration.");
+        return false;
     }
     
     token = scanner->getNext();
@@ -31,19 +30,24 @@ void Parser::buildVariableDec(AstFunction *func, Token idToken) {
         AstVarAssign *va = new AstVarAssign(idToken.id_val);
         func->addStatement(va);
         
-        buildExpression(va);
+        if (!buildExpression(va)) return false;
     }
+    
+    return true;
 }
 
 // Builds a variable assignment
-void Parser::buildVariableAssign(AstFunction *func, Token idToken) {
+bool Parser::buildVariableAssign(AstFunction *func, Token idToken) {
     AstVarAssign *va = new AstVarAssign(idToken.id_val);
     func->addStatement(va);
     
-    buildExpression(va);
+    if (!buildExpression(va)) return false;
     
     if (va->getExpressionCount() == 0) {
-        std::cerr << "Error: Invalid variable assignment." << std::endl;
+        syntax->addError(scanner->getLine(), "Invalid variable assignment.");
+        return false;
     }
+    
+    return true;
 }
 
