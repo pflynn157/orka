@@ -29,6 +29,8 @@ bool Parser::parse() {
             case Extern: {
                 code = buildExternFunction();
             } break;
+            
+            default: {}
         }
         
         if (!code) break;
@@ -94,6 +96,8 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
                 AstDivOp *div = new AstDivOp;
                 opStack.push(div);
             } break;
+            
+            default: {}
         }
         
         token = scanner->getNext();

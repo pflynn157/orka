@@ -1,6 +1,8 @@
 #include "llvm/IR/BasicBlock.h"
+#include "llvm/Support/TargetRegistry.h"
 
 using namespace llvm;
+using namespace llvm::sys;
 
 #include <iostream>
 
@@ -157,6 +159,8 @@ Value *Compiler::compileValue(AstExpression *expr) {
             else if (expr->getType() == AstType::Div)
                 return builder->CreateSDiv(lval, rval);
         } break;
+        
+        default: {}
     }
     
     return nullptr;
@@ -171,6 +175,8 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
         case DataType::Ptr: {
             switch (subType) {
                 case DataType::Char: type = Type::getInt8PtrTy(*context); break;
+                
+                default: {}
             }
         } break;
         

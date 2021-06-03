@@ -73,7 +73,11 @@ void Compiler::assemble() {
 // TODO: Same as above...
 // Also... We shouldn't be using GCC to link
 void Compiler::link() {
-    std::string cmd = "gcc /tmp/" + cflags.name + ".o -o " + cflags.name;
+    std::string cmd = "ld ";
+    cmd += "/usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o /usr/lib/x86_64-linux-gnu/crtn.o ";
+    cmd += "/tmp/" + cflags.name + ".o -o " + cflags.name;
+    cmd += " -dynamic-linker /lib64/ld-linux-x86-64.so.2 ";
+    cmd += "-lc ";
     system(cmd.c_str());
 }
 

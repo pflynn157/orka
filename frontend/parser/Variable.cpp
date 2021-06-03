@@ -18,6 +18,8 @@ bool Parser::buildVariableDec(AstFunction *func, Token idToken) {
     
     switch (token.type) {
         case Int: dataType = DataType::Int32; break;
+        
+        default: {}
     }
     
     AstVarDec *vd = new AstVarDec(idToken.id_val, dataType);
