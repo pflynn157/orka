@@ -5,6 +5,11 @@ find_package(LLVM REQUIRED CONFIG)
 
 add_compile_options(-std=c++17 -g)
 
+option(FEDORA "On Fedora OS" OFF)
+if (FEDORA)
+    add_definitions(-DLINK_FEDORA)
+endif()
+
 include_directories(frontend compiler)
 
 include_directories(${LLVM_INCLUDE_DIRS})
