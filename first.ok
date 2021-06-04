@@ -14,12 +14,13 @@ extern func printf(ln : str, x : int)
 func printNum(x:int)
 begin
     puts("Hi!");
+    printf("Num: %d\n", x);
     return;
 end
 
 func main
 begin
-    printNum();
+    printNum(23);
     
     return 0;
 end

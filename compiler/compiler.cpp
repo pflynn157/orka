@@ -42,6 +42,23 @@ void Compiler::compile() {
 
                 BasicBlock *mainBlock = BasicBlock::Create(*context, "entry", func);
                 builder->SetInsertPoint(mainBlock);
+                
+                // Load and store any arguments
+                if (astVarArgs.size() > 0) {
+                    for (int i = 0; i<astVarArgs.size(); i++) {
+                        Var var = astVarArgs.at(i);
+                        
+                        // Build the alloca for the local var
+                        Type *type = translateType(var.type, var.subType);
+                        AllocaInst *alloca = builder->CreateAlloca(type);
+                        symtable[var.name] = alloca;
+                        typeTable[var.name] = var.type;
+                        
+                        // Store the variable
+                        Value *param = func->getArg(i);
+                        builder->CreateStore(param, alloca);
+                    }
+                }
 
                 for (auto stmt : astFunc->getCode()) {
                     compileStatement(stmt);
