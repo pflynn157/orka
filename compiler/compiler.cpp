@@ -152,14 +152,13 @@ void Compiler::compileStatement(AstStatement *stmt) {
         
         // An IF statement
         case AstType::If: {
-            BasicBlock *trueBlock = BasicBlock::Create(*context, "true" + std::to_string(blockCount));
-            BasicBlock *falseBlock = BasicBlock::Create(*context, "false" + std::to_string(blockCount));
+            BasicBlock *trueBlock = BasicBlock::Create(*context, "true" + std::to_string(blockCount), currentFunc);
+            BasicBlock *falseBlock = BasicBlock::Create(*context, "false" + std::to_string(blockCount), currentFunc);
             blockStack.push(falseBlock);
             
             Value *cond = compileValue(stmt->getExpressions().at(0));
             builder->CreateCondBr(cond, trueBlock, falseBlock);
             
-            trueBlock->insertInto(currentFunc);
             builder->SetInsertPoint(trueBlock);
         } break;
         
@@ -169,7 +168,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
                 BasicBlock *block = blockStack.top();
                 blockStack.pop();
                 
-                block->insertInto(currentFunc);
+                builder->CreateBr(block);
                 builder->SetInsertPoint(block);
             }
         } break;
