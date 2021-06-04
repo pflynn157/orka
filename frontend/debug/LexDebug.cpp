@@ -14,6 +14,7 @@ void Token::print() {
         case Return: std::cout << "RETURN "; break;
         case Int: std::cout << "INT"; break;
         case Str: std::cout << "STR"; break;
+        case If: std::cout << "IF"; break;
         
         case Id: std::cout << "ID "; break;
         case Int32: std::cout << "I32 "; break;
@@ -26,10 +27,11 @@ void Token::print() {
         case RParen: std::cout << ")"; break;
         case Comma: std::cout << ", "; break;
         
-        case Plus: std::cout << "+ ";
-        case Minus: std::cout << "- ";
-        case Mul: std::cout << "* ";
-        case Div: std::cout << "/ ";
+        case Plus: std::cout << "+ "; break;
+        case Minus: std::cout << "- "; break;
+        case Mul: std::cout << "* "; break;
+        case Div: std::cout << "/ "; break;
+        case GT: std::cout << "> "; break;
         
         default: {}
     }

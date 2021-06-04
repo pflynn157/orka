@@ -17,6 +17,7 @@ enum TokenType {
     Return,
     Int,
     Str,
+    If,
     
     // Literals
     Id,
@@ -35,7 +36,8 @@ enum TokenType {
     Plus,
     Minus,
     Mul,
-    Div
+    Div,
+    GT
 };
 
 struct Token {

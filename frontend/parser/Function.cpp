@@ -90,8 +90,9 @@ bool Parser::buildFunction() {
     
     // Build the body
     token = scanner->getNext();
-    while (token.type != Eof && token.type != End) {
+    while (token.type != Eof) {
         bool code = true;
+        bool end = false;
         
         switch (token.type) {
             case Id: {
@@ -110,7 +111,17 @@ bool Parser::buildFunction() {
             
             case Return: code = buildReturn(func); break;
             
-            case End: 
+            case If: code = buildConditional(func); break;
+            
+            case End: {
+                if (layer == 0) {
+                    end = true;
+                } else {
+                    --layer;
+                    func->addStatement(new AstEnd);
+                }
+            } break;
+            
             case Nl: break;
             
             default: {
@@ -119,6 +130,7 @@ bool Parser::buildFunction() {
             }
         }
         
+        if (end) break;
         if (!code) return false;
         token = scanner->getNext();
     }
@@ -161,6 +173,7 @@ bool Parser::buildFunctionCallStmt(AstFunction *func, Token idToken) {
     Token token = scanner->getNext();
     if (token.type != SemiColon) {
         syntax->addError(scanner->getLine(), "Expected \';\'.");
+        token.print();
         return false;
     }
     

@@ -79,6 +79,20 @@ void AstVarAssign::print() {
     std::cout << std::endl;
 }
 
+void AstIfStmt::print() {
+    std::cout << "    ";
+    std::cout << "IF ";
+    
+    std::cout << std::endl;
+}
+
+void AstEnd::print() {
+    std::cout << "    ";
+    std::cout << "END";
+    
+    std::cout << std::endl;
+}
+
 void AstAddOp::print() {
     std::cout << "(";
     lval->print();
@@ -107,6 +121,14 @@ void AstDivOp::print() {
     std::cout << "(";
     lval->print();
     std::cout << ") / (";
+    rval->print();
+    std::cout << ")";
+}
+
+void AstGTOp::print() {
+    std::cout << "(";
+    lval->print();
+    std::cout << ") > (";
     rval->print();
     std::cout << ")";
 }

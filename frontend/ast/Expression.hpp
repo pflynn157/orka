@@ -73,6 +73,16 @@ public:
     void print();
 };
 
+// Represents a greater-than operation
+class AstGTOp : public AstBinaryOp {
+public:
+    AstGTOp() {
+        this->type = AstType::GT;
+    }
+    
+    void print();
+};
+
 // Represents an integer literal
 class AstInt : public AstExpression {
 public:

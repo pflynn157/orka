@@ -46,6 +46,16 @@ bool Parser::parse() {
     return true;
 }
 
+// Builds a conditional statement
+bool Parser::buildConditional(AstFunction *func) {
+    AstIfStmt *cond = new AstIfStmt;
+    if (!buildExpression(cond, Nl)) return false;
+    func->addStatement(cond);
+
+    ++layer;
+    return true;
+}
+
 // Builds an expression
 bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType separateToken) {
     std::stack<AstExpression *> output;
@@ -95,6 +105,11 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
             case Div: {
                 AstDivOp *div = new AstDivOp;
                 opStack.push(div);
+            } break;
+            
+            case GT: {
+                AstGTOp *gt = new AstGTOp;
+                opStack.push(gt);
             } break;
             
             default: {}

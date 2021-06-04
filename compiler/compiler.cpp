@@ -39,6 +39,7 @@ void Compiler::compile() {
                 }
                 
                 Function *func = Function::Create(FT, Function::ExternalLinkage, astFunc->getName(), mod.get());
+                currentFunc = func;
 
                 BasicBlock *mainBlock = BasicBlock::Create(*context, "entry", func);
                 builder->SetInsertPoint(mainBlock);
@@ -149,6 +150,30 @@ void Compiler::compileStatement(AstStatement *stmt) {
             }
         } break;
         
+        // An IF statement
+        case AstType::If: {
+            BasicBlock *trueBlock = BasicBlock::Create(*context, "true" + std::to_string(blockCount));
+            BasicBlock *falseBlock = BasicBlock::Create(*context, "false" + std::to_string(blockCount));
+            blockStack.push(falseBlock);
+            
+            Value *cond = compileValue(stmt->getExpressions().at(0));
+            builder->CreateCondBr(cond, trueBlock, falseBlock);
+            
+            trueBlock->insertInto(currentFunc);
+            builder->SetInsertPoint(trueBlock);
+        } break;
+        
+        // The end of a block
+        case AstType::End: {
+            if (blockStack.size() > 0) {
+                BasicBlock *block = blockStack.top();
+                blockStack.pop();
+                
+                block->insertInto(currentFunc);
+                builder->SetInsertPoint(block);
+            }
+        } break;
+        
         default: {}
     }
 }
@@ -176,7 +201,8 @@ Value *Compiler::compileValue(AstExpression *expr) {
         case AstType::Add:
         case AstType::Sub: 
         case AstType::Mul:
-        case AstType::Div: {
+        case AstType::Div:
+        case AstType::GT: {
             AstBinaryOp *op = static_cast<AstBinaryOp *>(expr);
             Value *lval = compileValue(op->getLVal());
             Value *rval = compileValue(op->getRVal());
@@ -189,6 +215,8 @@ Value *Compiler::compileValue(AstExpression *expr) {
                 return builder->CreateMul(lval, rval);
             else if (expr->getType() == AstType::Div)
                 return builder->CreateSDiv(lval, rval);
+            else if (expr->getType() == AstType::GT)
+                return builder->CreateICmpSGT(lval, rval);
         } break;
         
         default: {}

@@ -14,10 +14,15 @@ enum class AstType {
     VarDec,
     VarAssign,
     
+    If,
+    End,
+    
     Add,
     Sub,
     Mul,
     Div,
+    
+    GT,
     
     IntL,
     StringL,

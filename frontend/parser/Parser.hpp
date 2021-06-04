@@ -28,11 +28,13 @@ protected:
     bool buildVariableAssign(AstFunction *func, Token idToken);
     bool buildFunctionCallStmt(AstFunction *func, Token idToken);
     bool buildReturn(AstFunction *func);
+    bool buildConditional(AstFunction *func);
     bool buildExpression(AstStatement *stmt, TokenType stopToken = SemiColon, TokenType separateToken = EmptyToken);
 private:
     std::string input = "";
     Scanner *scanner;
     AstTree *tree;
     ErrorManager *syntax;
+    int layer = 0;
 };
 

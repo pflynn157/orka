@@ -139,7 +139,8 @@ bool Scanner::isSymbol(char c) {
         case '+': 
         case '-': 
         case '*': 
-        case '/': return true;
+        case '/': 
+        case '>': return true;
     }
     return false;
 }
@@ -152,6 +153,7 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "return") return Return;
     else if (buffer == "int") return Int;
     else if (buffer == "str") return Str;
+    else if (buffer == "if") return If;
     return EmptyToken;
 }
 
@@ -168,6 +170,7 @@ TokenType Scanner::getSymbol(char c) {
         case '-': return Minus;
         case '*': return Mul;
         case '/': return Div;
+        case '>': return GT;
     }
     return EmptyToken;
 }

@@ -1,26 +1,13 @@
 
-#OUTPUT
-#X1: 30
-#X2: 10
-#X3: 200
-#X4: 2
-#END
-
-#RET 0
 
 extern func puts(ln : str)
-extern func printf(ln : str, x : int)
-
-func printNum(x:int)
-begin
-    puts("Hi!");
-    printf("Num: %d\n", x);
-    return;
-end
 
 func main
+    x : int = 20;
 begin
-    printNum(23);
+    if x > 10
+        puts("Greater");
+    end
     
     return 0;
 end
