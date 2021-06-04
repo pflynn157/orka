@@ -23,7 +23,21 @@ void Compiler::compile() {
             case AstType::Func: {
                 AstFunction *astFunc = static_cast<AstFunction *>(global);
 
-                FunctionType *FT = FunctionType::get(Type::getVoidTy(*context), Type::getVoidTy(*context), false);
+                std::vector<Var> astVarArgs = astFunc->getArguments();
+                FunctionType *FT;
+                
+                if (astVarArgs.size() == 0) {
+                    FT = FunctionType::get(Type::getVoidTy(*context), false);
+                } else {
+                    std::vector<Type *> args;
+                    for (auto var : astVarArgs) {
+                        Type *type = translateType(var.type, var.subType);
+                        args.push_back(type);
+                    }
+                    
+                    FT = FunctionType::get(Type::getVoidTy(*context), args, false);
+                }
+                
                 Function *func = Function::Create(FT, Function::ExternalLinkage, astFunc->getName(), mod.get());
 
                 BasicBlock *mainBlock = BasicBlock::Create(*context, "entry", func);
@@ -41,7 +55,7 @@ void Compiler::compile() {
                 FunctionType *FT;
                 
                 if (astVarArgs.size() == 0) {
-                    FT = FunctionType::get(Type::getVoidTy(*context), Type::getVoidTy(*context), false);
+                    FT = FunctionType::get(Type::getVoidTy(*context), false);
                 } else {
                     std::vector<Type *> args;
                     for (auto var : astVarArgs) {

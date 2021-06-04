@@ -13,6 +13,7 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
             Token t2 = scanner->getNext();
             Token t3 = scanner->getNext();
             Var v;
+            v.subType = DataType::Void;
             
             if (t1.type != Id) {
                 syntax->addError(scanner->getLine(), "Invalid function argument: Expected name.");

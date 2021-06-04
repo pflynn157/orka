@@ -8,25 +8,18 @@
 
 #RET 0
 
+extern func puts(ln : str)
 extern func printf(ln : str, x : int)
 
-func main
-    x1 : int = 0;
-    x2 : int = 0;
-    x3 : int = 0;
-    x4 : int = 0;
-    
-    y : int = 20;
+func printNum(x:int)
 begin
-    x1 = y + 10;
-    x2 = y - 10;
-    x3 = y * 10;
-    x4 = y / 10;
-    
-    printf("X1: %d\n", x1);
-    printf("X2: %d\n", x2);
-    printf("X3: %d\n", x3);
-    printf("X4: %d\n", x4);
+    puts("Hi!");
+    return;
+end
+
+func main
+begin
+    printNum();
     
     return 0;
 end
