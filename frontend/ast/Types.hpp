@@ -15,6 +15,7 @@ enum class AstType {
     VarAssign,
     
     If,
+    Else,
     End,
     
     Add,

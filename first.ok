@@ -3,10 +3,12 @@
 extern func puts(ln : str)
 
 func main
-    x : int = 2;
+    x : int = 20;
 begin
     if x > 10
         puts("Greater");
+    else
+        puts("Less");
     end
     
     return 0;

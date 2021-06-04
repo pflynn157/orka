@@ -89,6 +89,12 @@ public:
     void print();
 };
 
+class AstElseStmt : public AstStatement {
+public:
+    explicit AstElseStmt() : AstStatement(AstType::Else) {}
+    void print();
+};
+
 // Represents a block end
 class AstEnd : public AstStatement {
 public:

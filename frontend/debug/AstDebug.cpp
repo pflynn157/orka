@@ -86,6 +86,11 @@ void AstIfStmt::print() {
     std::cout << std::endl;
 }
 
+void AstElseStmt::print() {
+    std::cout << "    ";
+    std::cout << "ELSE" << std::endl;
+}
+
 void AstEnd::print() {
     std::cout << "    ";
     std::cout << "END";

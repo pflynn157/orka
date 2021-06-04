@@ -154,12 +154,29 @@ void Compiler::compileStatement(AstStatement *stmt) {
         case AstType::If: {
             BasicBlock *trueBlock = BasicBlock::Create(*context, "true" + std::to_string(blockCount), currentFunc);
             BasicBlock *falseBlock = BasicBlock::Create(*context, "false" + std::to_string(blockCount), currentFunc);
+            BasicBlock *endBlock = BasicBlock::Create(*context, "end" + std::to_string(blockCount), currentFunc);
+            ++blockCount;
+            
             blockStack.push(falseBlock);
+            endBlockStack.push(endBlock);
             
             Value *cond = compileValue(stmt->getExpressions().at(0));
             builder->CreateCondBr(cond, trueBlock, falseBlock);
             
             builder->SetInsertPoint(trueBlock);
+        } break;
+        
+        // An ELSE statement
+        case AstType::Else: {
+            if (blockStack.size() > 0) {
+                BasicBlock *endBlock = endBlockStack.top();
+                
+                BasicBlock *block = blockStack.top();
+                blockStack.pop();
+                
+                builder->CreateBr(endBlock);
+                builder->SetInsertPoint(block);
+            }
         } break;
         
         // The end of a block
@@ -170,6 +187,14 @@ void Compiler::compileStatement(AstStatement *stmt) {
                 
                 builder->CreateBr(block);
                 builder->SetInsertPoint(block);
+            }
+            
+            if (endBlockStack.size() > 0) {
+                BasicBlock *end = endBlockStack.top();
+                endBlockStack.pop();
+                
+                builder->CreateBr(end);
+                builder->SetInsertPoint(end);
             }
         } break;
         

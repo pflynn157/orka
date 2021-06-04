@@ -154,6 +154,7 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "int") return Int;
     else if (buffer == "str") return Str;
     else if (buffer == "if") return If;
+    else if (buffer == "else") return Else;
     return EmptyToken;
 }
 

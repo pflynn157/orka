@@ -44,6 +44,7 @@ private:
     
     // Block stack
     std::stack<BasicBlock *> blockStack;
+    std::stack<BasicBlock *> endBlockStack;
     int blockCount = 0;
 };
 
