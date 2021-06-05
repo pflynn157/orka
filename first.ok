@@ -3,10 +3,15 @@
 extern func puts(ln : str)
 
 func main
-    x : int = 20;
+    x : int = 4;
 begin
     if x > 10
-        puts("Greater");
+        puts("Greater than 10");
+        if x > 15
+            puts("Greater than 15");
+        else
+            puts("Less than 15");
+        end
     else
         puts("Less");
     end
