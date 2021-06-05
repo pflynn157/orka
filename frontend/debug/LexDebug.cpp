@@ -16,6 +16,7 @@ void Token::print() {
         case Str: std::cout << "STR"; break;
         case If: std::cout << "IF"; break;
         case Else: std::cout << "ELSE"; break;
+        case While: std::cout << "WHILE"; break;
         
         case Id: std::cout << "ID "; break;
         case Int32: std::cout << "I32 "; break;
@@ -33,6 +34,7 @@ void Token::print() {
         case Mul: std::cout << "* "; break;
         case Div: std::cout << "/ "; break;
         case GT: std::cout << "> "; break;
+        case LT: std::cout << "< "; break;
         
         default: {}
     }

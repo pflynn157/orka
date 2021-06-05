@@ -152,7 +152,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
         
         // An IF statement
         case AstType::If: {
-            BasicBlock *trueBlock = BasicBlock::Create(*context, "true" + std::to_string(blockCount), currentFunc);
+            /*BasicBlock *trueBlock = BasicBlock::Create(*context, "true" + std::to_string(blockCount), currentFunc);
             BasicBlock *falseBlock = BasicBlock::Create(*context, "false" + std::to_string(blockCount));
             BasicBlock *endBlock = BasicBlock::Create(*context, "end" + std::to_string(blockCount));
             ++blockCount;
@@ -163,12 +163,12 @@ void Compiler::compileStatement(AstStatement *stmt) {
             Value *cond = compileValue(stmt->getExpressions().at(0));
             builder->CreateCondBr(cond, trueBlock, falseBlock);
             
-            builder->SetInsertPoint(trueBlock);
+            builder->SetInsertPoint(trueBlock);*/
         } break;
         
         // An ELSE statement
         case AstType::Else: {
-            if (blockStack.size() > 0) {
+            /*if (blockStack.size() > 0) {
                 BasicBlock *endBlock = endBlockStack.top();
                 
                 BasicBlock *block = blockStack.top();
@@ -177,7 +177,31 @@ void Compiler::compileStatement(AstStatement *stmt) {
                 builder->CreateBr(endBlock);
                 block->insertInto(currentFunc);
                 builder->SetInsertPoint(block);
-            }
+            }*/
+        } break;
+        
+        // A while loop
+        case AstType::While: {
+            BasicBlock *loopBlock = BasicBlock::Create(*context, "loop_body" + std::to_string(blockCount), currentFunc);
+            BasicBlock *loopCmp = BasicBlock::Create(*context, "loop_cmp" + std::to_string(blockCount), currentFunc);
+            BasicBlock *loopEnd = BasicBlock::Create(*context, "loop_end" + std::to_string(blockCount), currentFunc);
+            ++blockCount;
+            
+            BasicBlock *current = builder->GetInsertBlock();
+            loopBlock->moveAfter(current);
+            loopCmp->moveAfter(loopBlock);
+            loopEnd->moveAfter(loopCmp);
+            
+            builder->CreateBr(loopCmp);
+            builder->SetInsertPoint(loopCmp);
+            Value *cond = compileValue(stmt->getExpressions().at(0));
+            builder->CreateCondBr(cond, loopBlock, loopEnd);
+            
+            builder->SetInsertPoint(loopBlock);
+            Instruction *br = builder->CreateBr(loopCmp);
+            builder->SetInsertPoint(br);
+            
+            endBlockStack.push(loopEnd);
         } break;
         
         // The end of a block
@@ -186,8 +210,6 @@ void Compiler::compileStatement(AstStatement *stmt) {
                 BasicBlock *end = endBlockStack.top();
                 endBlockStack.pop();
                 
-                builder->CreateBr(end);
-                end->insertInto(currentFunc);
                 builder->SetInsertPoint(end);
             }
         } break;
@@ -220,7 +242,8 @@ Value *Compiler::compileValue(AstExpression *expr) {
         case AstType::Sub: 
         case AstType::Mul:
         case AstType::Div:
-        case AstType::GT: {
+        case AstType::GT:
+        case AstType::LT: {
             AstBinaryOp *op = static_cast<AstBinaryOp *>(expr);
             Value *lval = compileValue(op->getLVal());
             Value *rval = compileValue(op->getRVal());
@@ -235,6 +258,8 @@ Value *Compiler::compileValue(AstExpression *expr) {
                 return builder->CreateSDiv(lval, rval);
             else if (expr->getType() == AstType::GT)
                 return builder->CreateICmpSGT(lval, rval);
+            else if (expr->getType() == AstType::LT)
+                return builder->CreateICmpSLT(lval, rval);
         } break;
         
         default: {}

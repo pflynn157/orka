@@ -19,6 +19,7 @@ enum TokenType {
     Str,
     If,
     Else,
+    While,
     
     // Literals
     Id,
@@ -38,7 +39,8 @@ enum TokenType {
     Minus,
     Mul,
     Div,
-    GT
+    GT,
+    LT
 };
 
 struct Token {

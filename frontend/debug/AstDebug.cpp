@@ -91,6 +91,11 @@ void AstElseStmt::print() {
     std::cout << "ELSE" << std::endl;
 }
 
+void AstWhileStmt::print() {
+    std::cout << "    ";
+    std::cout << "WHILE" << std::endl;
+}
+
 void AstEnd::print() {
     std::cout << "    ";
     std::cout << "END";
@@ -134,6 +139,14 @@ void AstGTOp::print() {
     std::cout << "(";
     lval->print();
     std::cout << ") > (";
+    rval->print();
+    std::cout << ")";
+}
+
+void AstLTOp::print() {
+    std::cout << "(";
+    lval->print();
+    std::cout << ") < (";
     rval->print();
     std::cout << ")";
 }

@@ -29,6 +29,7 @@ protected:
     bool buildFunctionCallStmt(AstFunction *func, Token idToken);
     bool buildReturn(AstFunction *func);
     bool buildConditional(AstFunction *func);
+    bool buildWhile(AstFunction *func);
     bool buildExpression(AstStatement *stmt, TokenType stopToken = SemiColon, TokenType separateToken = EmptyToken);
 private:
     std::string input = "";

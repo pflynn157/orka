@@ -114,6 +114,8 @@ bool Parser::buildFunction() {
             case If: code = buildConditional(func); break;
             case Else: func->addStatement(new AstElseStmt); break;
             
+            case While: code = buildWhile(func); break;
+            
             case End: {
                 if (layer == 0) {
                     end = true;

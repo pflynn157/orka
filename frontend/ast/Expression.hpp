@@ -83,6 +83,16 @@ public:
     void print();
 };
 
+// Represents a less-than operation
+class AstLTOp : public AstBinaryOp {
+public:
+    AstLTOp() {
+        this->type = AstType::LT;
+    }
+    
+    void print();
+};
+
 // Represents an integer literal
 class AstInt : public AstExpression {
 public:

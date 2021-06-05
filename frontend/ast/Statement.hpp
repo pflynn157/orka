@@ -95,6 +95,13 @@ public:
     void print();
 };
 
+// Represents a while statement
+class AstWhileStmt : public AstStatement {
+public:
+    explicit AstWhileStmt() : AstStatement(AstType::While) {}
+    void print();
+};
+
 // Represents a block end
 class AstEnd : public AstStatement {
 public:

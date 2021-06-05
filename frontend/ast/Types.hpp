@@ -16,6 +16,7 @@ enum class AstType {
     
     If,
     Else,
+    While,
     End,
     
     Add,
@@ -24,6 +25,7 @@ enum class AstType {
     Div,
     
     GT,
+    LT,
     
     IntL,
     StringL,

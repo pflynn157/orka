@@ -56,6 +56,16 @@ bool Parser::buildConditional(AstFunction *func) {
     return true;
 }
 
+// Builds a while statement
+bool Parser::buildWhile(AstFunction *func) {
+    AstWhileStmt *loop = new AstWhileStmt;
+    if (!buildExpression(loop, Nl)) return false;
+    func->addStatement(loop);
+    
+    ++layer;
+    return true;
+}
+
 // Builds an expression
 bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType separateToken) {
     std::stack<AstExpression *> output;
@@ -111,6 +121,8 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
                 AstGTOp *gt = new AstGTOp;
                 opStack.push(gt);
             } break;
+            
+            case LT: opStack.push(new AstLTOp); break;
             
             default: {}
         }

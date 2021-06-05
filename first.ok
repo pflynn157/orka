@@ -1,48 +1,19 @@
 
-#OUTPUT
-#Greater than 10
-#Greater than 15
-#Done
-#---
-#Less
-#---
-#Greater than 10
-#Less than 15
-#Done
-#---
-#END
-
-#RET 0
-
-extern func puts(ln : str)
-
-func compare(x:int)
-begin
-    if x > 10
-        puts("Greater than 10");
-        if x > 15
-            puts("Greater than 15");
-        else
-            puts("Less than 15");
-        end
-        puts("Done");
-    else
-        puts("Less");
-    end
-    
-    return;
-end
+extern func puts(ln:str)
+extern func printf(ln:str, x:int)
 
 func main
-    x : int = 40;
+    x : int = 0;
 begin
-    compare(x);
-    puts("---");
-    compare(3);
-    puts("---");
-    compare(11);
-    puts("---");
-    
+    while x < 10
+        #if x > 5
+        #    printf("^ ");
+        #end
+        
+        printf("X: %d\n", x);
+        x = x + 1;
+    end
+
     return 0;
 end
 
