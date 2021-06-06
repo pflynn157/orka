@@ -9,6 +9,7 @@ set(SRC
     
     error/Manager.cpp
     
+    parser/Flow.cpp
     parser/Function.cpp
     parser/Parser.cpp
     parser/Variable.cpp

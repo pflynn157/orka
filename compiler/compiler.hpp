@@ -25,6 +25,8 @@ public:
     void link();
 protected:
     void compileStatement(AstStatement *stmt);
+    void compileIfStatement(AstStatement *stmt);
+    void compileWhileStatement(AstStatement *stmt);
     Value *compileValue(AstExpression *expr);
     Type *translateType(DataType dataType, DataType subType = DataType::Void);
 private:

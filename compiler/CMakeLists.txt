@@ -4,6 +4,7 @@ project(orka_compiler)
 set(SRC
     builder.cpp
     compiler.cpp
+    flow.cpp
 )
 
 add_library(occompiler STATIC ${SRC})

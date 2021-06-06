@@ -46,49 +46,6 @@ bool Parser::parse() {
     return true;
 }
 
-// Builds a conditional statement
-bool Parser::buildConditional(AstBlock *block) {
-    AstIfStmt *cond = new AstIfStmt;
-    if (!buildExpression(cond, Nl)) return false;
-    block->addStatement(cond);
-
-    ++layer;
-    buildBlock(cond->getBlock(), layer, cond);
-    
-    return true;
-}
-
-// Builds an ELIF statement
-bool Parser::buildElif(AstIfStmt *block) {
-    AstElifStmt *elif = new AstElifStmt;
-    if (!buildExpression(elif, Nl)) return false;
-    block->addBranch(elif);
-    
-    buildBlock(elif->getBlock(), layer, block, true);
-    return true;
-}
-
-// Builds an ELSE statement
-bool Parser::buildElse(AstIfStmt *block) {
-    AstElseStmt *elsee = new AstElseStmt;
-    block->addBranch(elsee);
-    
-    buildBlock(elsee->getBlock(), layer);
-    return true;
-}
-
-// Builds a while statement
-bool Parser::buildWhile(AstBlock *block) {
-    AstWhileStmt *loop = new AstWhileStmt;
-    if (!buildExpression(loop, Nl)) return false;
-    block->addStatement(loop);
-    
-    ++layer;
-    buildBlock(loop->getBlock(), layer);
-    
-    return true;
-}
-
 // Builds a statement block
 bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, bool inElif) {
     Token token = scanner->getNext();
@@ -113,8 +70,9 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
             
             case Return: code = buildReturn(block); break;
             
-            // TODO: This stretch kind of sucks. If we can move to the functions,
-            // that would be nice
+            // Handle conditionals
+            // Yes, ELIF and ElSE are similar, but if you look closely, there is a subtle
+            // difference (one very much needed)
             case If: code = buildConditional(block); break;
             case Elif: {
                 if (inElif) {
@@ -134,8 +92,11 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
                 }
             } break;
             
+            // Handle loops
             case While: code = buildWhile(block); break;
             
+            // Handle the END keywork
+            // This is kind of tricky in conditionals
             case End: {
                 if (inElif) {
                     scanner->rewind(token);
