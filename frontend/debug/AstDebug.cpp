@@ -204,6 +204,22 @@ void AstDivOp::print() {
     std::cout << ")";
 }
 
+void AstEQOp::print() {
+    std::cout << "(";
+    lval->print();
+    std::cout << ") == (";
+    rval->print();
+    std::cout << ")";
+}
+
+void AstNEQOp::print() {
+    std::cout << "(";
+    lval->print();
+    std::cout << ") != (";
+    rval->print();
+    std::cout << ")";
+}
+
 void AstGTOp::print() {
     std::cout << "(";
     lval->print();
@@ -216,6 +232,22 @@ void AstLTOp::print() {
     std::cout << "(";
     lval->print();
     std::cout << ") < (";
+    rval->print();
+    std::cout << ")";
+}
+
+void AstGTEOp::print() {
+    std::cout << "(";
+    lval->print();
+    std::cout << ") >= (";
+    rval->print();
+    std::cout << ")";
+}
+
+void AstLTEOp::print() {
+    std::cout << "(";
+    lval->print();
+    std::cout << ") <= (";
     rval->print();
     std::cout << ")";
 }

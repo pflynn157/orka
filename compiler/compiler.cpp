@@ -188,8 +188,12 @@ Value *Compiler::compileValue(AstExpression *expr) {
         case AstType::Sub: 
         case AstType::Mul:
         case AstType::Div:
+        case AstType::EQ:
+        case AstType::NEQ:
         case AstType::GT:
-        case AstType::LT: {
+        case AstType::LT:
+        case AstType::GTE:
+        case AstType::LTE: {
             AstBinaryOp *op = static_cast<AstBinaryOp *>(expr);
             Value *lval = compileValue(op->getLVal());
             Value *rval = compileValue(op->getRVal());
@@ -202,10 +206,19 @@ Value *Compiler::compileValue(AstExpression *expr) {
                 return builder->CreateMul(lval, rval);
             else if (expr->getType() == AstType::Div)
                 return builder->CreateSDiv(lval, rval);
+                
+            else if (expr->getType() == AstType::EQ)
+                return builder->CreateICmpEQ(lval, rval);
+            else if (expr->getType() == AstType::NEQ)
+                return builder->CreateICmpNE(lval, rval);
             else if (expr->getType() == AstType::GT)
                 return builder->CreateICmpSGT(lval, rval);
             else if (expr->getType() == AstType::LT)
                 return builder->CreateICmpSLT(lval, rval);
+            else if (expr->getType() == AstType::GTE)
+                return builder->CreateICmpSGE(lval, rval);
+            else if (expr->getType() == AstType::LTE)
+                return builder->CreateICmpSLE(lval, rval);
         } break;
         
         default: {}

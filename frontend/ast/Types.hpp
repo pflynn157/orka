@@ -25,8 +25,12 @@ enum class AstType {
     Mul,
     Div,
     
+    EQ,
+    NEQ,
     GT,
     LT,
+    GTE,
+    LTE,
     
     IntL,
     StringL,

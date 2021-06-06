@@ -40,8 +40,13 @@ enum TokenType {
     Minus,
     Mul,
     Div,
+    
+    EQ,
+    NEQ,
     GT,
-    LT
+    LT,
+    GTE,
+    LTE,
 };
 
 struct Token {

@@ -141,7 +141,8 @@ bool Scanner::isSymbol(char c) {
         case '*': 
         case '/': 
         case '>':
-        case '<': return true;
+        case '<': 
+        case '!': return true;
     }
     return false;
 }
@@ -166,7 +167,6 @@ TokenType Scanner::getSymbol(char c) {
         case '\n': return Nl;
         case ';': return SemiColon;
         case ':': return Colon;
-        case '=': return Assign;
         case '(': return LParen;
         case ')': return RParen;
         case ',': return Comma;
@@ -174,8 +174,45 @@ TokenType Scanner::getSymbol(char c) {
         case '-': return Minus;
         case '*': return Mul;
         case '/': return Div;
-        case '>': return GT;
-        case '<': return LT;
+        
+        case '>': {
+            char c2 = reader.get();
+            if (c2 == '=') {
+                return GTE;
+            } else {
+                reader.unget();
+                return GT;
+            }
+        } break;
+        
+        case '<': {
+            char c2 = reader.get();
+            if (c2 == '=') {
+                return LTE;
+            } else {
+                reader.unget();
+                return LT;
+            }
+        } break;
+        
+        case '=': {
+            char c2 = reader.get();
+            if (c2 == '=') {
+                return EQ;
+            } else {
+                reader.unget();
+                return Assign;
+            }
+        } break;
+        
+        case '!': {
+            char c2 = reader.get();
+            if (c2 == '=') {
+                return NEQ;
+            } else {
+                reader.unget();
+            }
+        } break;
     }
     return EmptyToken;
 }

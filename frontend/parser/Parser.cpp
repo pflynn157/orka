@@ -177,12 +177,12 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
                 opStack.push(div);
             } break;
             
-            case GT: {
-                AstGTOp *gt = new AstGTOp;
-                opStack.push(gt);
-            } break;
-            
+            case EQ: opStack.push(new AstEQOp); break;
+            case NEQ: opStack.push(new AstNEQOp); break;
+            case GT: opStack.push(new AstGTOp); break;
             case LT: opStack.push(new AstLTOp); break;
+            case GTE: opStack.push(new AstGTEOp); break;
+            case LTE: opStack.push(new AstLTEOp); break;
             
             default: {}
         }

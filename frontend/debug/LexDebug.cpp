@@ -34,8 +34,13 @@ void Token::print() {
         case Minus: std::cout << "- "; break;
         case Mul: std::cout << "* "; break;
         case Div: std::cout << "/ "; break;
+        
+        case EQ: std::cout << "== "; break;
+        case NEQ: std::cout << "!= "; break;
         case GT: std::cout << "> "; break;
         case LT: std::cout << "< "; break;
+        case GTE: std::cout << ">= "; break;
+        case LTE: std::cout << "<= "; break;
         
         default: {}
     }

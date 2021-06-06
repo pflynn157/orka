@@ -73,6 +73,26 @@ public:
     void print();
 };
 
+// Represents an equal-to operation
+class AstEQOp : public AstBinaryOp {
+public:
+    AstEQOp() {
+        this->type = AstType::EQ;
+    }
+    
+    void print();
+};
+
+// Represents a not-equal-to operation
+class AstNEQOp : public AstBinaryOp {
+public:
+    AstNEQOp() {
+        this->type = AstType::NEQ;
+    }
+    
+    void print();
+};
+
 // Represents a greater-than operation
 class AstGTOp : public AstBinaryOp {
 public:
@@ -88,6 +108,26 @@ class AstLTOp : public AstBinaryOp {
 public:
     AstLTOp() {
         this->type = AstType::LT;
+    }
+    
+    void print();
+};
+
+// Represents a greater-than-or-equal operation
+class AstGTEOp : public AstBinaryOp {
+public:
+    AstGTEOp() {
+        this->type = AstType::GTE;
+    }
+    
+    void print();
+};
+
+// Represents a less-than-or-equal operation
+class AstLTEOp : public AstBinaryOp {
+public:
+    AstLTEOp() {
+        this->type = AstType::LTE;
     }
     
     void print();
