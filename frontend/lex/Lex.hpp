@@ -18,6 +18,7 @@ enum TokenType {
     Int,
     Str,
     If,
+    Elif,
     Else,
     While,
     

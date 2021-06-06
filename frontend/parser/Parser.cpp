@@ -58,6 +58,16 @@ bool Parser::buildConditional(AstBlock *block) {
     return true;
 }
 
+// Builds an ELIF statement
+bool Parser::buildElif(AstIfStmt *block) {
+    AstElifStmt *elif = new AstElifStmt;
+    if (!buildExpression(elif, Nl)) return false;
+    block->addBranch(elif);
+    
+    buildBlock(elif->getBlock(), layer, block, true);
+    return true;
+}
+
 // Builds an ELSE statement
 bool Parser::buildElse(AstIfStmt *block) {
     AstElseStmt *elsee = new AstElseStmt;
@@ -80,7 +90,7 @@ bool Parser::buildWhile(AstBlock *block) {
 }
 
 // Builds a statement block
-bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock) {
+bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, bool inElif) {
     Token token = scanner->getNext();
     while (token.type != Eof) {
         bool code = true;
@@ -103,12 +113,35 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock) 
             
             case Return: code = buildReturn(block); break;
             
+            // TODO: This stretch kind of sucks. If we can move to the functions,
+            // that would be nice
             case If: code = buildConditional(block); break;
-            case Else: code = buildElse(parentBlock); end = true; break;
+            case Elif: {
+                if (inElif) {
+                    scanner->rewind(token);
+                    end = true;
+                } else {
+                    code = buildElif(parentBlock);
+                }
+            } break;
+            case Else: {
+                if (inElif) {
+                    scanner->rewind(token);
+                    end = true;
+                } else {
+                    code = buildElse(parentBlock);
+                    end = true;
+                }
+            } break;
             
             case While: code = buildWhile(block); break;
             
             case End: {
+                if (inElif) {
+                    scanner->rewind(token);
+                    end = true;
+                    break;
+                }
                 if (layer == stopLayer) {
                     end = true;
                 }

@@ -100,6 +100,20 @@ private:
     std::vector<AstStatement *> branches;
 };
 
+class AstElifStmt : public AstStatement {
+public:
+    explicit AstElifStmt() : AstStatement(AstType::Elif) {
+        block = new AstBlock;
+    }
+    
+    void addStatement(AstStatement *stmt) { block->addStatement(stmt); }
+    AstBlock *getBlock() { return block; }
+    
+    void print();
+private:
+    AstBlock *block;
+};
+
 class AstElseStmt : public AstStatement {
 public:
     explicit AstElseStmt() : AstStatement(AstType::Else) {

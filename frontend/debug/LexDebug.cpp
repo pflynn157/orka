@@ -15,6 +15,7 @@ void Token::print() {
         case Int: std::cout << "INT"; break;
         case Str: std::cout << "STR"; break;
         case If: std::cout << "IF"; break;
+        case Elif: std::cout << "ELIF"; break;
         case Else: std::cout << "ELSE"; break;
         case While: std::cout << "WHILE"; break;
         

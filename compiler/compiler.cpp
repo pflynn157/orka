@@ -183,16 +183,49 @@ void Compiler::compileStatement(AstStatement *stmt) {
             builder->CreateBr(endBlock);
             
             // Branches
+            bool hadElif = false;
+            bool hadElse = false;
+            
             for (auto stmt : condStmt->getBranches()) {
-                if (stmt->getType() == AstType::Else) {
+                if (stmt->getType() == AstType::Elif) {
+                    AstElifStmt *elifStmt = static_cast<AstElifStmt *>(stmt);
+                    
+                    BasicBlock *trueBlock2 = BasicBlock::Create(*context, "true" + std::to_string(blockCount), currentFunc);
+                    BasicBlock *falseBlock2 = BasicBlock::Create(*context, "false" + std::to_string(blockCount), currentFunc);
+                    
+                    // Align
+                    if (!hadElif) builder->SetInsertPoint(falseBlock);
+                    BasicBlock *current = builder->GetInsertBlock();
+                    trueBlock2->moveAfter(current);
+                    falseBlock2->moveAfter(trueBlock2);
+                    
+                    Value *cond = compileValue(stmt->getExpressions().at(0));
+                    builder->CreateCondBr(cond, trueBlock2, falseBlock2);
+                    
+                    builder->SetInsertPoint(trueBlock2);
+                    for (auto stmt2 : elifStmt->getBlock()->getBlock()) {
+                        compileStatement(stmt2);
+                    }
+                    builder->CreateBr(endBlock);
+                    
+                    builder->SetInsertPoint(falseBlock2);
+                    hadElif = true;
+                } else if (stmt->getType() == AstType::Else) {
                     AstElseStmt *elseStmt = static_cast<AstElseStmt *>(stmt);
                     
-                    builder->SetInsertPoint(falseBlock);
+                    if (!hadElif) builder->SetInsertPoint(falseBlock);
+                    
                     for (auto stmt2 : elseStmt->getBlock()->getBlock()) {
                         compileStatement(stmt2);
                     }
                     builder->CreateBr(endBlock);
+                    
+                    hadElse = true;
                 }
+            }
+            
+            if (hadElif && !hadElse) {
+                builder->CreateBr(endBlock);
             }
             
             // Start at the end block

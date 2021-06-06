@@ -29,9 +29,10 @@ protected:
     bool buildFunctionCallStmt(AstBlock *block, Token idToken);
     bool buildReturn(AstBlock *block);
     bool buildConditional(AstBlock *block);
+    bool buildElif(AstIfStmt *block);
     bool buildElse(AstIfStmt *block);
     bool buildWhile(AstBlock *block);
-    bool buildBlock(AstBlock *block, int stopLayer = 0, AstIfStmt *parentBlock = nullptr);
+    bool buildBlock(AstBlock *block, int stopLayer = 0, AstIfStmt *parentBlock = nullptr, bool inElif = false);
     bool buildExpression(AstStatement *stmt, TokenType stopToken = SemiColon, TokenType separateToken = EmptyToken);
 private:
     std::string input = "";
