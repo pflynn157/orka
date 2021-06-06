@@ -61,7 +61,7 @@ void Compiler::compile() {
                     }
                 }
 
-                for (auto stmt : astFunc->getCode()) {
+                for (auto stmt : astFunc->getBlock()->getBlock()) {
                     compileStatement(stmt);
                 }
             } break;

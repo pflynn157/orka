@@ -44,22 +44,23 @@ class AstFunction : public AstGlobalStatement {
 public:
     explicit AstFunction(std::string name) : AstGlobalStatement(AstType::Func) {
         this->name = name;
+        block = new AstBlock;
     }
     
     std::string getName() { return name; }
     std::vector<Var> getArguments() { return args; }
-    std::vector<AstStatement *> getCode() { return code; }
+    AstBlock *getBlock() { return block; }
     
     void setArguments(std::vector<Var> args) { this->args = args; }
     
     void addStatement(AstStatement *statement) {
-        code.push_back(statement);
+        block->addStatement(statement);
     }
     
     void print() override;
 private:
     std::string name = "";
     std::vector<Var> args;
-    std::vector<AstStatement *> code;
+    AstBlock *block;
 };
 

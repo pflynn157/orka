@@ -5,7 +5,7 @@
 
 // Builds a variable declaration
 // A variable declaration is composed of an Alloca and optionally, an assignment
-bool Parser::buildVariableDec(AstFunction *func, Token idToken) {
+bool Parser::buildVariableDec(AstBlock *block, Token idToken) {
     Token token = scanner->getNext();
     
     if (token.type != Colon) {
@@ -23,14 +23,14 @@ bool Parser::buildVariableDec(AstFunction *func, Token idToken) {
     }
     
     AstVarDec *vd = new AstVarDec(idToken.id_val, dataType);
-    func->addStatement(vd);
+    block->addStatement(vd);
     
     token = scanner->getNext();
     if (token.type != SemiColon) {
         scanner->rewind(token);
         
         AstVarAssign *va = new AstVarAssign(idToken.id_val);
-        func->addStatement(va);
+        block->addStatement(va);
         
         if (!buildExpression(va)) return false;
     }
@@ -39,9 +39,9 @@ bool Parser::buildVariableDec(AstFunction *func, Token idToken) {
 }
 
 // Builds a variable assignment
-bool Parser::buildVariableAssign(AstFunction *func, Token idToken) {
+bool Parser::buildVariableAssign(AstBlock *block, Token idToken) {
     AstVarAssign *va = new AstVarAssign(idToken.id_val);
-    func->addStatement(va);
+    block->addStatement(va);
     
     if (!buildExpression(va)) return false;
     

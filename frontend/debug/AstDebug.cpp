@@ -42,7 +42,7 @@ void AstFunction::print() {
     }
     std::cout << ")" << std::endl;
     
-    for (auto stmt : code) {
+    for (auto stmt : block->getBlock()) {
         stmt->print();
         if (stmt->getExpressionCount()) {
             for (auto expr : stmt->getExpressions()) {

@@ -24,12 +24,12 @@ protected:
     bool getFunctionArgs(std::vector<Var> &args);
     bool buildFunction();
     bool buildExternFunction();
-    bool buildVariableDec(AstFunction *func, Token idToken);
-    bool buildVariableAssign(AstFunction *func, Token idToken);
-    bool buildFunctionCallStmt(AstFunction *func, Token idToken);
-    bool buildReturn(AstFunction *func);
-    bool buildConditional(AstFunction *func);
-    bool buildWhile(AstFunction *func);
+    bool buildVariableDec(AstBlock *block, Token idToken);
+    bool buildVariableAssign(AstBlock *block, Token idToken);
+    bool buildFunctionCallStmt(AstBlock *block, Token idToken);
+    bool buildReturn(AstBlock *block);
+    bool buildConditional(AstBlock *block);
+    bool buildWhile(AstBlock *block);
     bool buildExpression(AstStatement *stmt, TokenType stopToken = SemiColon, TokenType separateToken = EmptyToken);
 private:
     std::string input = "";

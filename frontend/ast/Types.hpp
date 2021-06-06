@@ -45,3 +45,15 @@ struct Var {
     DataType subType;
 };
 
+// Represents a block
+class AstStatement;
+
+class AstBlock {
+public:
+    void addStatement(AstStatement *stmt) { block.push_back(stmt); }
+    void addStatements(std::vector<AstStatement *> block) { this->block = block; }
+    std::vector<AstStatement *> getBlock() { return block; }
+private:
+    std::vector<AstStatement *> block;
+};
+

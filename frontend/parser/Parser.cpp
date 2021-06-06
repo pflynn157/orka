@@ -47,20 +47,20 @@ bool Parser::parse() {
 }
 
 // Builds a conditional statement
-bool Parser::buildConditional(AstFunction *func) {
+bool Parser::buildConditional(AstBlock *block) {
     AstIfStmt *cond = new AstIfStmt;
     if (!buildExpression(cond, Nl)) return false;
-    func->addStatement(cond);
+    block->addStatement(cond);
 
     ++layer;
     return true;
 }
 
 // Builds a while statement
-bool Parser::buildWhile(AstFunction *func) {
+bool Parser::buildWhile(AstBlock *block) {
     AstWhileStmt *loop = new AstWhileStmt;
     if (!buildExpression(loop, Nl)) return false;
-    func->addStatement(loop);
+    block->addStatement(loop);
     
     ++layer;
     return true;

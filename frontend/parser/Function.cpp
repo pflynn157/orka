@@ -74,7 +74,7 @@ bool Parser::buildFunction() {
         bool code = true;
         
         switch (token.type) {
-            case Id: code = buildVariableDec(func, token); break;
+            case Id: code = buildVariableDec(func->getBlock(), token); break;
             
             case Nl: break;
             
@@ -100,21 +100,21 @@ bool Parser::buildFunction() {
                 token = scanner->getNext();
                 
                 if (token.type == Assign) {
-                    code = buildVariableAssign(func, idToken);
+                    code = buildVariableAssign(func->getBlock(), idToken);
                 } else if (token.type == LParen) {
-                    code = buildFunctionCallStmt(func, idToken);
+                    code = buildFunctionCallStmt(func->getBlock(), idToken);
                 } else {
                     syntax->addError(scanner->getLine(), "Invalid use of identifier.");
                     return false;
                 }
             } break;
             
-            case Return: code = buildReturn(func); break;
+            case Return: code = buildReturn(func->getBlock()); break;
             
-            case If: code = buildConditional(func); break;
+            case If: code = buildConditional(func->getBlock()); break;
             case Else: func->addStatement(new AstElseStmt); break;
             
-            case While: code = buildWhile(func); break;
+            case While: code = buildWhile(func->getBlock()); break;
             
             case End: {
                 if (layer == 0) {
@@ -167,9 +167,9 @@ bool Parser::buildExternFunction() {
 }
 
 // Builds a function call
-bool Parser::buildFunctionCallStmt(AstFunction *func, Token idToken) {
+bool Parser::buildFunctionCallStmt(AstBlock *block, Token idToken) {
     AstFuncCallStmt *fc = new AstFuncCallStmt(idToken.id_val);
-    func->addStatement(fc);
+    block->addStatement(fc);
     
     if (!buildExpression(fc, RParen, Comma)) return false;
     
@@ -184,9 +184,9 @@ bool Parser::buildFunctionCallStmt(AstFunction *func, Token idToken) {
 }
 
 // Builds a return statement
-bool Parser::buildReturn(AstFunction *func) {
+bool Parser::buildReturn(AstBlock *block) {
     AstReturnStmt *stmt = new AstReturnStmt;
-    func->addStatement(stmt);
+    block->addStatement(stmt);
     
     if (!buildExpression(stmt)) return false;
     
