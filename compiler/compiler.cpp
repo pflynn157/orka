@@ -152,18 +152,26 @@ void Compiler::compileStatement(AstStatement *stmt) {
         
         // An IF statement
         case AstType::If: {
-            /*BasicBlock *trueBlock = BasicBlock::Create(*context, "true" + std::to_string(blockCount), currentFunc);
-            BasicBlock *falseBlock = BasicBlock::Create(*context, "false" + std::to_string(blockCount));
-            BasicBlock *endBlock = BasicBlock::Create(*context, "end" + std::to_string(blockCount));
+            BasicBlock *trueBlock = BasicBlock::Create(*context, "true" + std::to_string(blockCount), currentFunc);
+            BasicBlock *falseBlock = BasicBlock::Create(*context, "false" + std::to_string(blockCount), currentFunc);
+            BasicBlock *endBlock = BasicBlock::Create(*context, "end" + std::to_string(blockCount), currentFunc);
             ++blockCount;
-            
-            blockStack.push(falseBlock);
-            endBlockStack.push(endBlock);
             
             Value *cond = compileValue(stmt->getExpressions().at(0));
             builder->CreateCondBr(cond, trueBlock, falseBlock);
             
-            builder->SetInsertPoint(trueBlock);*/
+            // Align the blocks
+            BasicBlock *current = builder->GetInsertBlock();
+            trueBlock->moveAfter(current);
+            falseBlock->moveAfter(trueBlock);
+            endBlock->moveAfter(falseBlock);
+            
+            builder->SetInsertPoint(trueBlock);
+            //Instruction *br = builder->CreateBr(endBlock);
+            //builder->SetInsertPoint(br);
+            
+            endBlockStack.push(endBlock);
+            blockStack.push(falseBlock);
         } break;
         
         // An ELSE statement
@@ -187,10 +195,10 @@ void Compiler::compileStatement(AstStatement *stmt) {
             BasicBlock *loopEnd = BasicBlock::Create(*context, "loop_end" + std::to_string(blockCount), currentFunc);
             ++blockCount;
             
-            BasicBlock *current = builder->GetInsertBlock();
+            /*BasicBlock *current = builder->GetInsertBlock();
             loopBlock->moveAfter(current);
             loopCmp->moveAfter(loopBlock);
-            loopEnd->moveAfter(loopCmp);
+            loopEnd->moveAfter(loopCmp);*/
             
             builder->CreateBr(loopCmp);
             builder->SetInsertPoint(loopCmp);
@@ -199,18 +207,31 @@ void Compiler::compileStatement(AstStatement *stmt) {
             
             builder->SetInsertPoint(loopBlock);
             Instruction *br = builder->CreateBr(loopCmp);
-            builder->SetInsertPoint(br);
             
             endBlockStack.push(loopEnd);
         } break;
         
         // The end of a block
         case AstType::End: {
+            if (blockStack.size() > 0) {
+                BasicBlock *block = blockStack.top();
+                blockStack.pop();
+                
+                builder->SetInsertPoint(block);
+                builder->CreateBr(endBlockStack.top());
+            }
+        
             if (endBlockStack.size() > 0) {
                 BasicBlock *end = endBlockStack.top();
                 endBlockStack.pop();
                 
                 builder->SetInsertPoint(end);
+                
+                BasicBlock *block = BasicBlock::Create(*context, "", currentFunc);
+                builder->CreateBr(block);
+                
+                block->moveAfter(builder->GetInsertBlock());
+                builder->SetInsertPoint(block);
             }
         } break;
         

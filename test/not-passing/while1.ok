@@ -1,0 +1,19 @@
+
+extern func puts(ln:str)
+extern func printf(ln:str, x:int)
+
+func main
+    x : int = 0;
+begin
+    while x < 10
+        if x > 5
+            printf("^ ");
+        end
+        
+        printf("X: %d\n", x);
+        x = x + 1;
+    end
+
+    return 0;
+end
+
