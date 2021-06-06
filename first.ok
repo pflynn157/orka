@@ -3,10 +3,16 @@ extern func puts(ln:str)
 extern func printf(ln:str, x:int)
 
 func main
-    x : int = 0;
+    x : int = 20;
 begin
     puts("Hello!");
     printf("%d\n", x);
+    
+    if x > 10
+        puts("Greater");
+    else
+        puts("Less");
+    end
 
     return 0;
 end

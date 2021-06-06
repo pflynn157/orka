@@ -85,14 +85,33 @@ private:
 // Represents a conditional statement
 class AstIfStmt : public AstStatement {
 public:
-    explicit AstIfStmt() : AstStatement(AstType::If) {}
+    explicit AstIfStmt() : AstStatement(AstType::If) {
+        block = new AstBlock;
+    }
+    
+    void addStatement(AstStatement *stmt) { block->addStatement(stmt); }
+    void addBranch(AstStatement *stmt) { branches.push_back(stmt); }
+    AstBlock *getBlock() { return block; }
+    std::vector<AstStatement *> getBranches() { return branches; }
+    
     void print();
+private:
+    AstBlock *block;
+    std::vector<AstStatement *> branches;
 };
 
 class AstElseStmt : public AstStatement {
 public:
-    explicit AstElseStmt() : AstStatement(AstType::Else) {}
+    explicit AstElseStmt() : AstStatement(AstType::Else) {
+        block = new AstBlock;
+    }
+    
+    void addStatement(AstStatement *stmt) { block->addStatement(stmt); }
+    AstBlock *getBlock() { return block; }
+    
     void print();
+private:
+    AstBlock *block;
 };
 
 // Represents a while statement

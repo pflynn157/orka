@@ -53,6 +53,17 @@ bool Parser::buildConditional(AstBlock *block) {
     block->addStatement(cond);
 
     ++layer;
+    buildBlock(cond->getBlock(), layer, cond);
+    
+    return true;
+}
+
+// Builds an ELSE statement
+bool Parser::buildElse(AstIfStmt *block) {
+    AstElseStmt *elsee = new AstElseStmt;
+    block->addBranch(elsee);
+    
+    buildBlock(elsee->getBlock(), layer);
     return true;
 }
 
@@ -63,6 +74,59 @@ bool Parser::buildWhile(AstBlock *block) {
     block->addStatement(loop);
     
     ++layer;
+    return true;
+}
+
+// Builds a statement block
+bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock) {
+    Token token = scanner->getNext();
+    while (token.type != Eof) {
+        bool code = true;
+        bool end = false;
+        
+        switch (token.type) {
+            case Id: {
+                Token idToken = token;
+                token = scanner->getNext();
+                
+                if (token.type == Assign) {
+                    code = buildVariableAssign(block, idToken);
+                } else if (token.type == LParen) {
+                    code = buildFunctionCallStmt(block, idToken);
+                } else {
+                    syntax->addError(scanner->getLine(), "Invalid use of identifier.");
+                    return false;
+                }
+            } break;
+            
+            case Return: code = buildReturn(block); break;
+            
+            case If: code = buildConditional(block); break;
+            case Else: code = buildElse(parentBlock); end = true; break;
+            
+            case While: code = buildWhile(block); break;
+            
+            case End: {
+                if (layer == stopLayer) {
+                    end = true;
+                } else {
+                    --layer;
+                }
+            } break;
+            
+            case Nl: break;
+            
+            default: {
+                syntax->addError(scanner->getLine(), "Invalid token in expression.");
+                return false;
+            }
+        }
+        
+        if (end) break;
+        if (!code) return false;
+        token = scanner->getNext();
+    }
+    
     return true;
 }
 
