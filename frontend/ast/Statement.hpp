@@ -117,8 +117,16 @@ private:
 // Represents a while statement
 class AstWhileStmt : public AstStatement {
 public:
-    explicit AstWhileStmt() : AstStatement(AstType::While) {}
+    explicit AstWhileStmt() : AstStatement(AstType::While) {
+        block = new AstBlock;
+    }
+    
+    void addStatement(AstStatement *stmt) { block->addStatement(stmt); }
+    AstBlock *getBlock() { return block; }
+    
     void print();
+private:
+    AstBlock *block;
 };
 
 // Represents a block end

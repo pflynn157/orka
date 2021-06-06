@@ -74,6 +74,8 @@ bool Parser::buildWhile(AstBlock *block) {
     block->addStatement(loop);
     
     ++layer;
+    buildBlock(loop->getBlock(), layer);
+    
     return true;
 }
 

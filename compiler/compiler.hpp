@@ -8,7 +8,6 @@ using namespace llvm;
 
 #include <string>
 #include <map>
-#include <stack>
 
 #include <ast.hpp>
 
@@ -43,8 +42,6 @@ private:
     std::map<std::string, DataType> typeTable;
     
     // Block stack
-    std::stack<BasicBlock *> blockStack;
-    std::stack<BasicBlock *> endBlockStack;
     int blockCount = 0;
 };
 

@@ -199,31 +199,19 @@ void Compiler::compileStatement(AstStatement *stmt) {
             builder->SetInsertPoint(endBlock);
         } break;
         
-        // An ELSE statement
-        case AstType::Else: {
-            /*if (blockStack.size() > 0) {
-                BasicBlock *endBlock = endBlockStack.top();
-                
-                BasicBlock *block = blockStack.top();
-                blockStack.pop();
-                
-                builder->CreateBr(endBlock);
-                block->insertInto(currentFunc);
-                builder->SetInsertPoint(block);
-            }*/
-        } break;
-        
         // A while loop
         case AstType::While: {
+            AstWhileStmt *loop = static_cast<AstWhileStmt *>(stmt);
+        
             BasicBlock *loopBlock = BasicBlock::Create(*context, "loop_body" + std::to_string(blockCount), currentFunc);
             BasicBlock *loopCmp = BasicBlock::Create(*context, "loop_cmp" + std::to_string(blockCount), currentFunc);
             BasicBlock *loopEnd = BasicBlock::Create(*context, "loop_end" + std::to_string(blockCount), currentFunc);
             ++blockCount;
             
-            /*BasicBlock *current = builder->GetInsertBlock();
+            BasicBlock *current = builder->GetInsertBlock();
             loopBlock->moveAfter(current);
             loopCmp->moveAfter(loopBlock);
-            loopEnd->moveAfter(loopCmp);*/
+            loopEnd->moveAfter(loopCmp);
             
             builder->CreateBr(loopCmp);
             builder->SetInsertPoint(loopCmp);
@@ -231,33 +219,11 @@ void Compiler::compileStatement(AstStatement *stmt) {
             builder->CreateCondBr(cond, loopBlock, loopEnd);
             
             builder->SetInsertPoint(loopBlock);
-            Instruction *br = builder->CreateBr(loopCmp);
-            
-            endBlockStack.push(loopEnd);
-        } break;
-        
-        // The end of a block
-        case AstType::End: {
-            if (blockStack.size() > 0) {
-                BasicBlock *block = blockStack.top();
-                blockStack.pop();
-                
-                builder->SetInsertPoint(block);
-                builder->CreateBr(endBlockStack.top());
+            for (auto stmt : loop->getBlock()->getBlock()) {
+                compileStatement(stmt);
             }
-        
-            if (endBlockStack.size() > 0) {
-                BasicBlock *end = endBlockStack.top();
-                endBlockStack.pop();
-                
-                builder->SetInsertPoint(end);
-                
-                BasicBlock *block = BasicBlock::Create(*context, "", currentFunc);
-                builder->CreateBr(block);
-                
-                block->moveAfter(builder->GetInsertBlock());
-                builder->SetInsertPoint(block);
-            }
+            builder->CreateBr(loopCmp);
+            builder->SetInsertPoint(loopEnd);
         } break;
         
         default: {}
