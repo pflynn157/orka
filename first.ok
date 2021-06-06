@@ -3,15 +3,15 @@ extern func puts(ln:str)
 extern func printf(ln:str, x:int)
 
 func main
-    x : int = 20;
+    x : int = 0;
 begin
-    puts("Hello!");
-    printf("%d\n", x);
-    
-    if x > 10
-        puts("Greater");
-    else
-        puts("Less");
+    while x < 10
+        if x > 5
+            printf("^ ");
+        end
+        
+        printf("X: %d\n", x);
+        x = x + 1;
     end
 
     return 0;

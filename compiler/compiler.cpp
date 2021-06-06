@@ -152,26 +152,51 @@ void Compiler::compileStatement(AstStatement *stmt) {
         
         // An IF statement
         case AstType::If: {
+            AstIfStmt *condStmt = static_cast<AstIfStmt *>(stmt);
+            bool hasBranches = condStmt->getBranches().size();
+        
             BasicBlock *trueBlock = BasicBlock::Create(*context, "true" + std::to_string(blockCount), currentFunc);
-            BasicBlock *falseBlock = BasicBlock::Create(*context, "false" + std::to_string(blockCount), currentFunc);
+            BasicBlock *falseBlock = nullptr;
             BasicBlock *endBlock = BasicBlock::Create(*context, "end" + std::to_string(blockCount), currentFunc);
+            if (hasBranches) falseBlock = BasicBlock::Create(*context, "false" + std::to_string(blockCount), currentFunc);
             ++blockCount;
             
             Value *cond = compileValue(stmt->getExpressions().at(0));
-            builder->CreateCondBr(cond, trueBlock, falseBlock);
+            if (hasBranches) builder->CreateCondBr(cond, trueBlock, falseBlock);
+            else builder->CreateCondBr(cond, trueBlock, endBlock);
             
             // Align the blocks
             BasicBlock *current = builder->GetInsertBlock();
             trueBlock->moveAfter(current);
-            falseBlock->moveAfter(trueBlock);
-            endBlock->moveAfter(falseBlock);
+            
+            if (hasBranches) {
+                falseBlock->moveAfter(trueBlock);
+                endBlock->moveAfter(falseBlock);
+            } else {
+                endBlock->moveAfter(trueBlock);
+            }
             
             builder->SetInsertPoint(trueBlock);
-            //Instruction *br = builder->CreateBr(endBlock);
-            //builder->SetInsertPoint(br);
+            for (auto stmt : condStmt->getBlock()->getBlock()) {
+                compileStatement(stmt);
+            }
+            builder->CreateBr(endBlock);
             
-            endBlockStack.push(endBlock);
-            blockStack.push(falseBlock);
+            // Branches
+            for (auto stmt : condStmt->getBranches()) {
+                if (stmt->getType() == AstType::Else) {
+                    AstElseStmt *elseStmt = static_cast<AstElseStmt *>(stmt);
+                    
+                    builder->SetInsertPoint(falseBlock);
+                    for (auto stmt2 : elseStmt->getBlock()->getBlock()) {
+                        compileStatement(stmt2);
+                    }
+                    builder->CreateBr(endBlock);
+                }
+            }
+            
+            // Start at the end block
+            builder->SetInsertPoint(endBlock);
         } break;
         
         // An ELSE statement

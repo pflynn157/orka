@@ -109,15 +109,15 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock) 
             case End: {
                 if (layer == stopLayer) {
                     end = true;
-                } else {
-                    --layer;
                 }
+                if (layer > 0) --layer;
             } break;
             
             case Nl: break;
             
             default: {
                 syntax->addError(scanner->getLine(), "Invalid token in expression.");
+                token.print();
                 return false;
             }
         }

@@ -51,6 +51,7 @@ int main(int argc, char **argv) {
     }
     
     if (!frontend->parse()) {
+        frontend->getTree()->print();
         delete frontend;
         return 1;
     }
