@@ -56,15 +56,42 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
 // Builds a function
 bool Parser::buildFunction() {
     Token token = scanner->getNext();
+    std::string funcName = token.id_val;
+    
     if (token.type != Id) {
         syntax->addError(scanner->getLine(), "Expected function name.");
         return false;
     }
     
+    // Get arguments
     std::vector<Var> args;
     if (!getFunctionArgs(args)) return false;
 
-    AstFunction *func = new AstFunction(token.id_val);
+    // Check to see if there's any return type
+    token = scanner->getNext();
+    bool isExtern = false;
+    
+    if (token.type == Is) {
+        token = scanner->getNext();
+        if (token.type == Extern) {
+            isExtern = true;
+        } else {
+            scanner->rewind(token);
+        }
+    } else {
+        syntax->addError(scanner->getLine(), "Expected \'is\' keyword.");
+        return false;
+    }
+
+    // Create the function object
+    if (isExtern) {
+        AstExternFunction *ex = new AstExternFunction(funcName);
+        ex->setArguments(args);
+        tree->addGlobalStatement(ex);
+        return true;
+    }
+    
+    AstFunction *func = new AstFunction(funcName);
     func->setArguments(args);
     tree->addGlobalStatement(func);
     
@@ -90,31 +117,6 @@ bool Parser::buildFunction() {
     
     // Build the body
     return buildBlock(func->getBlock());
-}
-
-// Builds an extern function declaration
-bool Parser::buildExternFunction() {
-    Token token = scanner->getNext();
-    if (token.type != Func) {
-        syntax->addError(scanner->getLine(), "Expected \"func\".");
-        return false;
-    }
-    
-    token = scanner->getNext();
-    if (token.type != Id) {
-        syntax->addError(scanner->getLine(), "Expected function name.");
-        return false;
-    }
-    
-    std::string funcName = token.id_val;
-    std::vector<Var> args;
-    if (!getFunctionArgs(args)) return false;
-    
-    AstExternFunction *ex = new AstExternFunction(funcName);
-    ex->setArguments(args);
-    tree->addGlobalStatement(ex);
-    
-    return true;
 }
 
 // Builds a function call

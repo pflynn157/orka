@@ -4,7 +4,7 @@
 // Builds a conditional statement
 bool Parser::buildConditional(AstBlock *block) {
     AstIfStmt *cond = new AstIfStmt;
-    if (!buildExpression(cond, Nl)) return false;
+    if (!buildExpression(cond, Then)) return false;
     block->addStatement(cond);
 
     ++layer;
@@ -16,7 +16,7 @@ bool Parser::buildConditional(AstBlock *block) {
 // Builds an ELIF statement
 bool Parser::buildElif(AstIfStmt *block) {
     AstElifStmt *elif = new AstElifStmt;
-    if (!buildExpression(elif, Nl)) return false;
+    if (!buildExpression(elif, Then)) return false;
     block->addBranch(elif);
     
     buildBlock(elif->getBlock(), layer, block, true);
@@ -35,7 +35,7 @@ bool Parser::buildElse(AstIfStmt *block) {
 // Builds a while statement
 bool Parser::buildWhile(AstBlock *block) {
     AstWhileStmt *loop = new AstWhileStmt;
-    if (!buildExpression(loop, Nl)) return false;
+    if (!buildExpression(loop, Do)) return false;
     block->addStatement(loop);
     
     ++layer;

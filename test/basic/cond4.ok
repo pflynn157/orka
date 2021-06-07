@@ -18,12 +18,12 @@
 
 #RET 0
 
-extern func printf(ln:str, x:int)
-extern func puts(ln:str)
+func printf(ln:str, x:int) is extern
+func puts(ln:str) is extern
 
-func cmp1(x:int)
+func cmp1(x:int) is
 begin
-    if x == 10
+    if x == 10 then
         puts("Equal");
     else
         puts("NEQ");
@@ -32,9 +32,9 @@ begin
     return;
 end
 
-func cmp2(x:int)
+func cmp2(x:int) is
 begin
-    if x > 10
+    if x > 10 then
         puts("GT");
     else
         puts("Not");
@@ -43,9 +43,9 @@ begin
     return;
 end
 
-func cmp3(x:int)
+func cmp3(x:int) is
 begin
-    if x < 10
+    if x < 10 then
         puts("LT");
     else
         puts("Not");
@@ -54,9 +54,9 @@ begin
     return;
 end
 
-func cmp4(x:int)
+func cmp4(x:int) is
 begin
-    if x != 10
+    if x != 10 then
         puts("NEQ");
     else
         puts("Not");
@@ -65,9 +65,9 @@ begin
     return;
 end
 
-func cmp5(x:int)
+func cmp5(x:int) is
 begin
-    if x >= 10
+    if x >= 10 then
         puts("GTE");
     else
         puts("Not");
@@ -76,9 +76,9 @@ begin
     return;
 end
 
-func cmp6(x:int)
+func cmp6(x:int) is
 begin
-    if x <= 10
+    if x <= 10 then
         puts("LTE");
     else
         puts("Not");
@@ -87,7 +87,7 @@ begin
     return;
 end
 
-func main
+func main is
 begin
     cmp1(10);
     cmp1(0);

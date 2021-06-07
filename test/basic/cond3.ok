@@ -7,23 +7,23 @@
 
 #RET 0
 
-extern func printf(ln:str, x:int)
-extern func puts(ln:str)
+func printf(ln:str, x:int) is extern
+func puts(ln:str) is extern
 
-func cmp(x:int)
+func cmp(x:int) is
 begin
-    if x > 20
+    if x > 20 then
         puts("X greater than 20.");
-    elif x > 10
+    elif x > 10 then
         puts("X greater than 10.");
-    elif x > 5
+    elif x > 5 then
         puts("X greater than 5.");
     end
 
     return 0;
 end
 
-func main
+func main is
 begin
     cmp(25);
     cmp(4);

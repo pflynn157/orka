@@ -5,9 +5,9 @@
 
 #RET 2
 
-extern func puts(ln : str)
+func puts(ln : str) is extern
 
-func main
+func main is
 begin
     puts("Hi");
     return 2;

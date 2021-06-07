@@ -21,6 +21,9 @@ enum TokenType {
     Elif,
     Else,
     While,
+    Is,
+    Then,
+    Do,
     
     // Literals
     Id,

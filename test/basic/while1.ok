@@ -14,13 +14,13 @@
 
 #RET 0
 
-extern func printf(ln:str, x:int)
+func printf(ln:str, x:int) is extern
 
-func main
+func main is
     x : int = 0;
 begin
-    while x < 10
-        if x > 5
+    while x < 10 do
+        if x > 5 then
             printf("^ ");
         end
         

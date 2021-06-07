@@ -14,13 +14,13 @@
 
 #RET 0
 
-extern func puts(ln : str)
+func puts(ln : str) is extern
 
-func compare(x:int)
+func compare(x:int) is
 begin
-    if x > 10
+    if x > 10 then
         puts("Greater than 10");
-        if x > 15
+        if x > 15 then
             puts("Greater than 15");
         else
             puts("Less than 15");
@@ -33,7 +33,7 @@ begin
     return;
 end
 
-func main
+func main is
     x : int = 40;
 begin
     compare(x);

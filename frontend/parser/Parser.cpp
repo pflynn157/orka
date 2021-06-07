@@ -26,11 +26,14 @@ bool Parser::parse() {
                 code = buildFunction();
             } break;
             
-            case Extern: {
-                code = buildExternFunction();
-            } break;
+            case Eof:
+            case Nl: break;
             
-            default: {}
+            default: {
+                syntax->addError(scanner->getLine(), "Invalid token in global scope.");
+                token.print();
+                code = false;
+            }
         }
         
         if (!code) break;

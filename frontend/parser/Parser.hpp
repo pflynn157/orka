@@ -23,7 +23,6 @@ public:
 protected:
     bool getFunctionArgs(std::vector<Var> &args);
     bool buildFunction();
-    bool buildExternFunction();
     bool buildVariableDec(AstBlock *block, Token idToken);
     bool buildVariableAssign(AstBlock *block, Token idToken);
     bool buildFunctionCallStmt(AstBlock *block, Token idToken);

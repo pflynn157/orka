@@ -8,9 +8,9 @@
 
 #RET 0
 
-extern func printf(ln : str, x : int)
+func printf(ln : str, x : int) is extern
 
-func main
+func main is
     x1 : int = 0;
     x2 : int = 0;
     x3 : int = 0;

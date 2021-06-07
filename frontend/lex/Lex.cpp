@@ -159,6 +159,9 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "elif") return Elif;
     else if (buffer == "else") return Else;
     else if (buffer == "while") return While;
+    else if (buffer == "is") return Is;
+    else if (buffer == "then") return Then;
+    else if (buffer == "do") return Do;
     return EmptyToken;
 }
 

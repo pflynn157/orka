@@ -1,114 +1,16 @@
 
-#OUTPUT
-#Equal
-#NEQ
-#GT
-#Not
-#LT
-#Not
-#NEQ
-#Not
-#GTE
-#GTE
-#Not
-#LTE
-#LTE
-#Not
-#END
+func printf(ln:str, x:int) is extern
 
-#RET 0
-
-extern func printf(ln:str, x:int)
-extern func puts(ln:str)
-
-func cmp1(x:int)
+func main is
+    x : int = 0;
 begin
-    if x == 10
-        puts("Equal");
-    else
-        puts("NEQ");
+    while x < 10 do
+        if x == 5 then printf("Big!\n"); end
+        
+        printf("%d\n", x);
+        x = x + 1;
     end
     
     return;
-end
-
-func cmp2(x:int)
-begin
-    if x > 10
-        puts("GT");
-    else
-        puts("Not");
-    end
-    
-    return;
-end
-
-func cmp3(x:int)
-begin
-    if x < 10
-        puts("LT");
-    else
-        puts("Not");
-    end
-    
-    return;
-end
-
-func cmp4(x:int)
-begin
-    if x != 10
-        puts("NEQ");
-    else
-        puts("Not");
-    end
-    
-    return;
-end
-
-func cmp5(x:int)
-begin
-    if x >= 10
-        puts("GTE");
-    else
-        puts("Not");
-    end
-    
-    return;
-end
-
-func cmp6(x:int)
-begin
-    if x <= 10
-        puts("LTE");
-    else
-        puts("Not");
-    end
-    
-    return;
-end
-
-func main
-begin
-    cmp1(10);
-    cmp1(0);
-    
-    cmp2(20);
-    cmp2(0);
-    
-    cmp3(5);
-    cmp3(50);
-    
-    cmp4(11);
-    cmp4(10);
-    
-    cmp5(20);
-    cmp5(10);
-    cmp5(0);
-    
-    cmp6(10);
-    cmp6(0);
-    cmp6(20);
-    
-    return 0;
 end
 
