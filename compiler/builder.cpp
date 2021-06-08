@@ -82,7 +82,7 @@ void Compiler::link() {
     //cmd += "/usr/local/lib/orka/occ_start.o ";
     cmd += "/tmp/" + cflags.name + ".o -o " + cflags.name;
     cmd += " -dynamic-linker /lib64/ld-linux-x86-64.so.2 ";
-    cmd += "-lc ";
+    cmd += "-lc -lorka_corelib";
     system(cmd.c_str());
 }
 

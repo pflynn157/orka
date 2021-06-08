@@ -9,6 +9,9 @@ if [[ ! -d $LIB_INSTALL ]] ; then
 fi
 
 sudo cp build/occ_start.o $LIB_INSTALL
+sudo cp build/liborka_corelib.a /usr/local/lib
+
+sudo ldconfig
 
 echo "Done"
 

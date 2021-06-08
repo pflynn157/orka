@@ -1,40 +1,12 @@
 
-#OUTPUT
-#*
-#**
-#***
-#****
-#****!===!
-#****!===!
-#****!===!
-#****!===!
-#****!===!
-#****!===!
-#END
 
-#RET 0
-
-func printf(ln:str, x:int) is extern
+func _ok_exit(x:int) is extern
 
 func main is
     x : int = 0;
     i : int = 0;
 begin
-    while x < 10 do
-        i = 1;
-        while i <= x + 1 do
-            if i == 5 then
-                printf("!===!");
-                break;
-            end
-        
-            printf("*");
-            i = i + 1;
-        end
-        printf("\n");
-        
-        x = x + 1;
-    end
+    _ok_exit(20);
     
     return 0;
 end
