@@ -19,14 +19,14 @@
 #RET 0
 
 func printf(ln:str, x:int) is extern
-func puts(ln:str) is extern
+func println(ln:str) is extern
 
 func cmp1(x:int) is
 begin
     if x == 10 then
-        puts("Equal");
+        println("Equal");
     else
-        puts("NEQ");
+        println("NEQ");
     end
     
     return;
@@ -35,9 +35,9 @@ end
 func cmp2(x:int) is
 begin
     if x > 10 then
-        puts("GT");
+        println("GT");
     else
-        puts("Not");
+        println("Not");
     end
     
     return;
@@ -46,9 +46,9 @@ end
 func cmp3(x:int) is
 begin
     if x < 10 then
-        puts("LT");
+        println("LT");
     else
-        puts("Not");
+        println("Not");
     end
     
     return;
@@ -57,9 +57,9 @@ end
 func cmp4(x:int) is
 begin
     if x != 10 then
-        puts("NEQ");
+        println("NEQ");
     else
-        puts("Not");
+        println("Not");
     end
     
     return;
@@ -68,9 +68,9 @@ end
 func cmp5(x:int) is
 begin
     if x >= 10 then
-        puts("GTE");
+        println("GTE");
     else
-        puts("Not");
+        println("Not");
     end
     
     return;
@@ -79,9 +79,9 @@ end
 func cmp6(x:int) is
 begin
     if x <= 10 then
-        puts("LTE");
+        println("LTE");
     else
-        puts("Not");
+        println("Not");
     end
     
     return;

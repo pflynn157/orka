@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CFLAGS="-nostdlib -c"
+CFLAGS="-nostdlib -c -Wno-builtin-declaration-mismatch"
 
 echo "Building standard library..."
 

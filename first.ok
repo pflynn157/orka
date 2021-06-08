@@ -1,13 +1,20 @@
 
-func _ok_println(s:str) is extern
-func _ok_exit(x:int) is extern
+func println(s:str) is extern
+func print_int(x:int) is extern
+func exit(x:int) is extern
+func printf(line:str, x:int) is extern
 
 func main is
     x : int = 0;
     i : int = 0;
 begin
-    _ok_println("Hello!");
-    _ok_exit(20);
+    println("Hello!");
+    print_int(0);
+    println("");
+    
+    printf("Num1: %d\n", 23);
+    
+    exit(20);
     
     return 0;
 end

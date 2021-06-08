@@ -8,16 +8,16 @@
 #RET 0
 
 func printf(ln:str, x:int) is extern
-func puts(ln:str) is extern
+func println(ln:str) is extern
 
 func cmp(x:int) is
 begin
     if x > 20 then
-        puts("X greater than 20.");
+        println("X greater than 20.");
     elif x > 10 then
-        puts("X greater than 10.");
+        println("X greater than 10.");
     elif x > 5 then
-        puts("X greater than 5.");
+        println("X greater than 5.");
     end
 
     return 0;

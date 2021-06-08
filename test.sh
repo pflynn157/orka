@@ -54,6 +54,7 @@ echo "Running all tests..."
 echo ""
 
 run_test 'test/basic/*.ok' 'sys' $flags
+run_test 'test/cond/*.ok' 'sys' $flags
 run_test 'test/loop/*.ok' 'sys' $flags
 
 echo ""

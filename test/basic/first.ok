@@ -5,11 +5,11 @@
 
 #RET 2
 
-func _ok_println(s:str) is extern
+func println(s:str) is extern
 
 func main is
 begin
-    _ok_println("Hi");
+    println("Hi");
     return 2;
 end
 
