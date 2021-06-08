@@ -1,11 +1,12 @@
 
-
+func _ok_println(s:str) is extern
 func _ok_exit(x:int) is extern
 
 func main is
     x : int = 0;
     i : int = 0;
 begin
+    _ok_println("Hello!");
     _ok_exit(20);
     
     return 0;

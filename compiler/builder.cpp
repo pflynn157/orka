@@ -75,14 +75,15 @@ void Compiler::assemble() {
 void Compiler::link() {
     std::string cmd = "ld ";
 #ifdef LINK_FEDORA
-    cmd += "/usr/lib64/crt1.o /usr/lib64/crti.o /usr/lib64/crtn.o ";
+    //cmd += "/usr/lib64/crt1.o /usr/lib64/crti.o /usr/lib64/crtn.o ";
 #else
-    cmd += "/usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o /usr/lib/x86_64-linux-gnu/crtn.o ";
+    //cmd += "/usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o /usr/lib/x86_64-linux-gnu/crtn.o ";
 #endif
-    //cmd += "/usr/local/lib/orka/occ_start.o ";
+    cmd += "/usr/local/lib/orka/occ_start.o ";
     cmd += "/tmp/" + cflags.name + ".o -o " + cflags.name;
     cmd += " -dynamic-linker /lib64/ld-linux-x86-64.so.2 ";
-    cmd += "-lc -lorka_corelib";
+    //cmd += "-lc -lorka_corelib";
+    cmd += "-lorka_corelib";
     system(cmd.c_str());
 }
 
