@@ -98,7 +98,10 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
             // Handle loops
             case While: code = buildWhile(block); break;
             
-            // Handle the END keywork
+            case Break: code = buildLoopCtrl(block, true); break;
+            case Continue: code = buildLoopCtrl(block, false); break;
+            
+            // Handle the END keyword
             // This is kind of tricky in conditionals
             case End: {
                 if (inElif) {

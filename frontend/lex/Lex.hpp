@@ -24,6 +24,8 @@ enum TokenType {
     Is,
     Then,
     Do,
+    Break,
+    Continue,
     
     // Literals
     Id,

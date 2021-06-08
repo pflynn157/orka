@@ -165,6 +165,16 @@ void AstWhileStmt::print() {
     std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 }
 
+void AstBreak::print() {
+    std::cout << "    ";
+    std::cout << "BREAK" << std::endl;
+}
+
+void AstContinue::print() {
+    std::cout << "    ";
+    std::cout << "CONTINUE" << std::endl;
+}
+
 void AstEnd::print() {
     std::cout << "    ";
     std::cout << "END";

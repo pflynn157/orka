@@ -160,6 +160,16 @@ void Compiler::compileStatement(AstStatement *stmt) {
             compileWhileStatement(stmt);
         } break;
         
+        // A break statement
+        case AstType::Break: {
+            builder->CreateBr(breakStack.top());
+        } break;
+        
+        // A continue statement
+        case AstType::Continue: {
+            builder->CreateBr(continueStack.top());
+        } break;
+        
         default: {}
     }
 }

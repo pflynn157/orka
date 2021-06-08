@@ -20,6 +20,9 @@ enum class AstType {
     While,
     End,
     
+    Break,
+    Continue,
+    
     Add,
     Sub,
     Mul,

@@ -44,3 +44,17 @@ bool Parser::buildWhile(AstBlock *block) {
     return true;
 }
 
+// Builds a loop keyword
+bool Parser::buildLoopCtrl(AstBlock *block, bool isBreak) {
+    if (isBreak) block->addStatement(new AstBreak);
+    else block->addStatement(new AstContinue);
+    
+    Token token = scanner->getNext();
+    if (token.type != SemiColon) {
+        syntax->addError(scanner->getLine(), "Expected \';\' after break or continue.");
+        return false;
+    }
+    
+    return true;
+}
+

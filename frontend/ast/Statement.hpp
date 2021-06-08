@@ -143,6 +143,20 @@ private:
     AstBlock *block;
 };
 
+// Represents a break statement for a loop
+class AstBreak : public AstStatement {
+public:
+    explicit AstBreak() : AstStatement(AstType::Break) {}
+    void print();
+};
+
+// Represents a continue statement for a loop
+class AstContinue : public AstStatement {
+public:
+    explicit AstContinue() : AstStatement(AstType::Continue) {}
+    void print();
+};
+
 // Represents a block end
 class AstEnd : public AstStatement {
 public:

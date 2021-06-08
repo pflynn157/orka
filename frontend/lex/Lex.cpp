@@ -162,6 +162,8 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "is") return Is;
     else if (buffer == "then") return Then;
     else if (buffer == "do") return Do;
+    else if (buffer == "break") return Break;
+    else if (buffer == "continue") return Continue;
     return EmptyToken;
 }
 

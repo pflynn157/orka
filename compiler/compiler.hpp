@@ -8,6 +8,7 @@ using namespace llvm;
 
 #include <string>
 #include <map>
+#include <stack>
 
 #include <ast.hpp>
 
@@ -45,5 +46,7 @@ private:
     
     // Block stack
     int blockCount = 0;
+    std::stack<BasicBlock *> breakStack;
+    std::stack<BasicBlock *> continueStack;
 };
 

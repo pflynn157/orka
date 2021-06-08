@@ -95,6 +95,9 @@ void Compiler::compileWhileStatement(AstStatement *stmt) {
     loopBlock->moveAfter(current);
     loopCmp->moveAfter(loopBlock);
     loopEnd->moveAfter(loopCmp);
+    
+    breakStack.push(loopEnd);
+    continueStack.push(loopCmp);
 
     builder->CreateBr(loopCmp);
     builder->SetInsertPoint(loopCmp);
@@ -107,5 +110,8 @@ void Compiler::compileWhileStatement(AstStatement *stmt) {
     }
     builder->CreateBr(loopCmp);
     builder->SetInsertPoint(loopEnd);
+    
+    breakStack.pop();
+    continueStack.pop();
 }
 
