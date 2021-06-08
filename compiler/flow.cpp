@@ -27,10 +27,12 @@ void Compiler::compileIfStatement(AstStatement *stmt) {
     }
 
     builder->SetInsertPoint(trueBlock);
+    bool hasBreak = false;
     for (auto stmt : condStmt->getBlock()->getBlock()) {
         compileStatement(stmt);
+        if (stmt->getType() == AstType::Break) hasBreak = true;
     }
-    builder->CreateBr(endBlock);
+    if (!hasBreak) builder->CreateBr(endBlock);
 
     // Branches
     bool hadElif = false;
@@ -53,10 +55,11 @@ void Compiler::compileIfStatement(AstStatement *stmt) {
             builder->CreateCondBr(cond, trueBlock2, falseBlock2);
             
             builder->SetInsertPoint(trueBlock2);
+            bool hasBreak = false;
             for (auto stmt2 : elifStmt->getBlock()->getBlock()) {
                 compileStatement(stmt2);
             }
-            builder->CreateBr(endBlock);
+            if (!hasBreak) builder->CreateBr(endBlock);
             
             builder->SetInsertPoint(falseBlock2);
             hadElif = true;
@@ -65,10 +68,11 @@ void Compiler::compileIfStatement(AstStatement *stmt) {
             
             if (!hadElif) builder->SetInsertPoint(falseBlock);
             
+            bool hasBreak = false;
             for (auto stmt2 : elseStmt->getBlock()->getBlock()) {
                 compileStatement(stmt2);
             }
-            builder->CreateBr(endBlock);
+            if (!hasBreak) builder->CreateBr(endBlock);
             
             hadElse = true;
         }
@@ -109,6 +113,7 @@ void Compiler::compileWhileStatement(AstStatement *stmt) {
         compileStatement(stmt);
     }
     builder->CreateBr(loopCmp);
+    
     builder->SetInsertPoint(loopEnd);
     
     breakStack.pop();
