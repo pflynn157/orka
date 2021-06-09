@@ -132,6 +132,7 @@ bool Scanner::isSymbol(char c) {
         case '\n':
         case ';': 
         case ':': 
+        case '.':
         case '=':
         case '(':
         case ')':
@@ -159,11 +160,13 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "elif") return Elif;
     else if (buffer == "else") return Else;
     else if (buffer == "while") return While;
+    else if (buffer == "for") return For;
     else if (buffer == "is") return Is;
     else if (buffer == "then") return Then;
     else if (buffer == "do") return Do;
     else if (buffer == "break") return Break;
     else if (buffer == "continue") return Continue;
+    else if (buffer == "in") return In;
     return EmptyToken;
 }
 
@@ -214,6 +217,15 @@ TokenType Scanner::getSymbol(char c) {
             char c2 = reader.get();
             if (c2 == '=') {
                 return NEQ;
+            } else {
+                reader.unget();
+            }
+        } break;
+        
+        case '.': {
+            char c2 = reader.get();
+            if (c2 == '.') {
+                return Range;
             } else {
                 reader.unget();
             }

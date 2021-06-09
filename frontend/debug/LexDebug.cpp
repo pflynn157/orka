@@ -23,6 +23,7 @@ void Token::print() {
         case Do: std::cout << "DO"; break;
         case Break: std::cout << "BREAK"; break;
         case Continue: std::cout << "CONTINUE"; break;
+        case In: std::cout << "IN"; break;
         
         case Id: std::cout << "ID "; break;
         case Int32: std::cout << "I32 "; break;
@@ -34,6 +35,7 @@ void Token::print() {
         case LParen: std::cout << "("; break;
         case RParen: std::cout << ")"; break;
         case Comma: std::cout << ", "; break;
+        case Range: std::cout << ".. "; break;
         
         case Plus: std::cout << "+ "; break;
         case Minus: std::cout << "- "; break;

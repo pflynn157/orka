@@ -1,20 +1,14 @@
 
-func println(s:str) is extern
-func print_int(x:int) is extern
-func exit(x:int) is extern
 func printf(line:str, x:int) is extern
 
 func main is
-    x : int = 0;
-    i : int = 0;
 begin
-    println("Hello!");
-    print_int(0);
-    println("");
+    for i in 0 .. 10 do
+        printf("%d ", i);
+    end
     
-    printf("Num1: %d\n", 23);
-    
-    exit(20);
+    printf("\n");
+    printf("Done\n");
     
     return 0;
 end

@@ -67,6 +67,7 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
                     code = buildFunctionCallStmt(block, idToken);
                 } else {
                     syntax->addError(scanner->getLine(), "Invalid use of identifier.");
+                    token.print();
                     return false;
                 }
             } break;
@@ -97,6 +98,7 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
             
             // Handle loops
             case While: code = buildWhile(block); break;
+            case For: code = buildFor(block); break;
             
             case Break: code = buildLoopCtrl(block, true); break;
             case Continue: code = buildLoopCtrl(block, false); break;

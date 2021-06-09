@@ -21,11 +21,13 @@ enum TokenType {
     Elif,
     Else,
     While,
+    For,
     Is,
     Then,
     Do,
     Break,
     Continue,
+    In,
     
     // Literals
     Id,
@@ -40,6 +42,7 @@ enum TokenType {
     LParen,
     RParen,
     Comma,
+    Range,
     
     Plus,
     Minus,

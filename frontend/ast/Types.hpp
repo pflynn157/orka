@@ -18,6 +18,7 @@ enum class AstType {
     Elif,
     Else,
     While,
+    For,
     End,
     
     Break,

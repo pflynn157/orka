@@ -6,6 +6,7 @@
 #include <ast/Types.hpp>
 
 class AstExpression;
+class AstID;
 
 // Represents an AST statement
 class AstStatement {
@@ -21,6 +22,10 @@ public:
     
     int getExpressionCount() {
         return expressions.size();
+    }
+    
+    void clearExpressions() {
+        expressions.clear();
     }
     
     std::vector<AstExpression *> getExpressions() { return expressions; }
@@ -141,6 +146,30 @@ public:
     void print();
 private:
     AstBlock *block;
+};
+
+// Represents a for loop
+class AstForStmt : public AstStatement {
+public:
+    explicit AstForStmt() : AstStatement(AstType::For) {
+        block = new AstBlock;
+    }
+    
+    void setIndex(AstID *indexVar) { this->indexVar = indexVar; }
+    void setStartBound(AstExpression *expr) { startBound = expr; }
+    void setEndBound(AstExpression *expr) { endBound = expr; }
+    void addStatement(AstStatement *stmt) { block->addStatement(stmt); }
+    
+    AstID *getIndex() { return indexVar; }
+    AstExpression *getStartBound() { return startBound; }
+    AstExpression *getEndBound() { return endBound; }
+    AstBlock *getBlock() { return block; }
+    
+    void print();
+private:
+    AstBlock *block;
+    AstID *indexVar;
+    AstExpression *startBound, *endBound;
 };
 
 // Represents a break statement for a loop
