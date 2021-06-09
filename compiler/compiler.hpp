@@ -28,6 +28,7 @@ protected:
     void compileStatement(AstStatement *stmt);
     void compileIfStatement(AstStatement *stmt);
     void compileWhileStatement(AstStatement *stmt);
+    void compileForStatement(AstStatement *stmt);
     Value *compileValue(AstExpression *expr);
     Type *translateType(DataType dataType, DataType subType = DataType::Void);
 private:
