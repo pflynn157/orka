@@ -165,6 +165,24 @@ void AstWhileStmt::print() {
     std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 }
 
+void AstLoopStmt::print() {
+    std::cout << "    ";
+    std::cout << "LOOP" << std::endl;
+    
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    for (auto stmt : block->getBlock()) {
+        stmt->print();
+        if (stmt->getExpressionCount()) {
+            for (auto expr : stmt->getExpressions()) {
+                for (int i = 0; i<8; i++) std::cout << " ";
+                expr->print();
+            }
+            std::cout << std::endl;
+        }
+    }
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+}
+
 void AstForStmt::print() {
     std::cout << "    ";
     std::cout << "FOR ";

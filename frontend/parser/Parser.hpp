@@ -31,6 +31,7 @@ protected:
     bool buildElif(AstIfStmt *block);
     bool buildElse(AstIfStmt *block);
     bool buildWhile(AstBlock *block);
+    bool buildLoop(AstBlock *block);
     bool buildFor(AstBlock *block);
     bool buildLoopCtrl(AstBlock *block, bool isBreak);
     bool buildBlock(AstBlock *block, int stopLayer = 0, AstIfStmt *parentBlock = nullptr, bool inElif = false);

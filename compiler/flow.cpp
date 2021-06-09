@@ -120,6 +120,35 @@ void Compiler::compileWhileStatement(AstStatement *stmt) {
     continueStack.pop();
 }
 
+// Translates an infinite-loop (loop) statement to LLVM
+void Compiler::compileLoopStatement(AstStatement *stmt) {
+    AstLoopStmt *loop = static_cast<AstLoopStmt *>(stmt);
+    
+    BasicBlock *loopBlock = BasicBlock::Create(*context, "loop_body" + std::to_string(blockCount), currentFunc);
+    BasicBlock *loopEnd = BasicBlock::Create(*context, "loop_end" + std::to_string(blockCount), currentFunc);
+    ++blockCount;
+    
+    BasicBlock *current = builder->GetInsertBlock();
+    loopBlock->moveAfter(current);
+    loopEnd->moveAfter(loopBlock);
+    
+    breakStack.push(loopEnd);
+    continueStack.push(loopBlock);
+    
+    builder->CreateBr(loopBlock);
+    builder->SetInsertPoint(loopBlock);
+    
+    for (auto stmt : loop->getBlock()->getBlock()) {
+        compileStatement(stmt);
+    }
+    builder->CreateBr(loopBlock);
+    
+    builder->SetInsertPoint(loopEnd);
+    
+    breakStack.pop();
+    continueStack.pop();
+}
+
 // Translates a for loop to LLVM
 void Compiler::compileForStatement(AstStatement *stmt) {
     AstForStmt *loop = static_cast<AstForStmt *>(stmt);

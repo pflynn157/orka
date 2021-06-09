@@ -148,6 +148,21 @@ private:
     AstBlock *block;
 };
 
+// Represents an infinite loop statement
+class AstLoopStmt : public AstStatement {
+public:
+    explicit AstLoopStmt() : AstStatement(AstType::Loop) {
+        block = new AstBlock;
+    }
+    
+    void addStatement(AstStatement *stmt) { block->addStatement(stmt); }
+    AstBlock *getBlock() { return block; }
+    
+    void print();
+private:
+    AstBlock *block;
+};
+
 // Represents a for loop
 class AstForStmt : public AstStatement {
 public:

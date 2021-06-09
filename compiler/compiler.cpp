@@ -160,6 +160,9 @@ void Compiler::compileStatement(AstStatement *stmt) {
             compileWhileStatement(stmt);
         } break;
         
+        // An infinite loop
+        case AstType::Loop: compileLoopStatement(stmt); break;
+        
         // A for loop
         case AstType::For: {
             compileForStatement(stmt);
