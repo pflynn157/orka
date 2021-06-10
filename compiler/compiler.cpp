@@ -102,7 +102,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
         // A variable declaration (alloca) statement
         case AstType::VarDec: {
             AstVarDec *vd = static_cast<AstVarDec *>(stmt);
-            Type *type = translateType(vd->getDataType());
+            Type *type = translateType(vd->getDataType(), vd->getPtrType());
             
             AllocaInst *var = builder->CreateAlloca(type);
             symtable[vd->getName()] = var;
@@ -254,6 +254,7 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
         case DataType::Ptr: {
             switch (subType) {
                 case DataType::Char: type = Type::getInt8PtrTy(*context); break;
+                case DataType::Int32: type = Type::getInt32PtrTy(*context); break;
                 
                 default: {}
             }

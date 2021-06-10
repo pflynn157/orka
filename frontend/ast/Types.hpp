@@ -9,7 +9,7 @@ enum class AstType {
     Return,
     
     FuncCallStmt,
-    FuncCall,
+    FuncCallExpr,
     
     VarDec,
     VarAssign,

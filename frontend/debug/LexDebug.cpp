@@ -35,6 +35,8 @@ void Token::print() {
         case Assign: std::cout << "= "; break;
         case LParen: std::cout << "("; break;
         case RParen: std::cout << ")"; break;
+        case LBracket: std::cout << "["; break;
+        case RBracket: std::cout << "]"; break;
         case Comma: std::cout << ", "; break;
         case Range: std::cout << ".. "; break;
         

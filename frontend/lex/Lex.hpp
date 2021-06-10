@@ -42,6 +42,8 @@ enum TokenType {
     Assign,
     LParen,
     RParen,
+    LBracket,
+    RBracket,
     Comma,
     Range,
     

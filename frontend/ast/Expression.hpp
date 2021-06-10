@@ -172,3 +172,22 @@ private:
     std::string val = "";
 };
 
+// Represents a function call
+class AstFuncCallExpr : public AstExpression {
+public:
+    explicit AstFuncCallExpr(std::string name) : AstExpression(AstType::FuncCallExpr) {
+        this->name = name;
+    }
+    
+    void setArguments(std::vector<AstExpression *> args) {
+        this->args = args;
+    }
+    
+    std::vector<AstExpression *> getArguments() { return args; }
+    std::string getName() { return name; }
+    void print();
+private:
+    std::vector<AstExpression *> args;
+    std::string name = "";
+};
+

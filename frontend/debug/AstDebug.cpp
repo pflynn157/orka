@@ -70,6 +70,9 @@ void AstReturnStmt::print() {
 void AstVarDec::print() {
     std::cout << "    ";
     std::cout << "VAR " << name << " : " << printDataType(dataType);
+    if (ptrType != DataType::Void) {
+        std::cout << "*" << printDataType(ptrType);
+    }
     std::cout << std::endl;
 }
 
@@ -314,5 +317,13 @@ void AstString::print() {
 
 void AstID::print() {
     std::cout << val;
+}
+
+void AstFuncCallExpr::print() {
+    std::cout << name << "(";
+    for (auto arg : args) {
+        arg->print();
+    }
+    std::cout << ")";
 }
 

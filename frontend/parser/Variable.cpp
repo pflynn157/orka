@@ -26,12 +26,39 @@ bool Parser::buildVariableDec(AstBlock *block, Token idToken) {
     block->addStatement(vd);
     
     token = scanner->getNext();
-    if (token.type != SemiColon) {
-        scanner->rewind(token);
+    
+    // We have an array
+    if (token.type == LBracket) {
+        vd->setDataType(DataType::Ptr);
+        vd->setPtrType(dataType);
         
+        if (!buildExpression(vd, RBracket)) return false;   
+        
+        token = scanner->getNext();
+        if (token.type != SemiColon) {
+            syntax->addError(scanner->getLine(), "Error: Expected \';\'.");
+            return false;
+        }
+        
+        // Create an assignment to a malloc call
         AstVarAssign *va = new AstVarAssign(idToken.id_val);
         block->addStatement(va);
         
+        AstFuncCallExpr *callMalloc = new AstFuncCallExpr("malloc");
+        callMalloc->setArguments(vd->getExpressions());
+        va->addExpression(callMalloc);
+    
+    // We're at the end of the declaration
+    } else if (token.type == SemiColon) {
+        return true;
+        
+    // Otherwise, we have a regular variable
+    } else {
+        scanner->rewind(token);
+
+        AstVarAssign *va = new AstVarAssign(idToken.id_val);
+        block->addStatement(va);
+
         if (!buildExpression(va)) return false;
     }
     

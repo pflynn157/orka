@@ -1,22 +1,9 @@
 
-#OUTPUT
-#0|1|2|3|4|5|6|7|8|9|
-#Done
-#END
-
-#RET 0
-
 func printf(line:str, x:int) is extern
 
 func main is
+    numbers : int[5];
 begin
-    for i in 0 .. 10 do
-        printf("%d|", i);
-    end
-    
-    printf("\n");
-    printf("Done\n");
-    
     return 0;
 end
 
