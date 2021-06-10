@@ -138,7 +138,7 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
 }
 
 // Builds an expression
-bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType separateToken) {
+bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType separateToken, AstExpression **dest) {
     std::stack<AstExpression *> output;
     std::stack<AstExpression *> opStack;
 
@@ -164,8 +164,20 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
             } break;
             
             case Id: {
-                AstID *id = new AstID(token.id_val);
-                output.push(id);
+                std::string name = token.id_val;
+                token = scanner->getNext();
+                if (token.type == LBracket) {
+                    AstExpression *index = nullptr;
+                    buildExpression(nullptr, RBracket, EmptyToken, &index);
+                    
+                    AstArrayAccess *acc = new AstArrayAccess(name);
+                    acc->setIndex(index);
+                    output.push(acc);
+                } else {
+                    AstID *id = new AstID(name);
+                    output.push(id);
+                    scanner->rewind(token);
+                }
             } break;
             
             case Plus: {
@@ -222,8 +234,12 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
         return true;
     }
     
-    AstExpression *expr = output.top();
-    stmt->addExpression(expr);
+    if (stmt == nullptr) {
+        *dest = output.top();
+    } else {
+        AstExpression *expr = output.top();
+        stmt->addExpression(expr);
+    }
     
     return true;
 }

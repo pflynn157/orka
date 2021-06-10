@@ -325,6 +325,12 @@ void AstID::print() {
     std::cout << val;
 }
 
+void AstArrayAccess::print() {
+    std::cout << val << "[";
+    index->print();
+    std::cout << "]";
+}
+
 void AstFuncCallExpr::print() {
     std::cout << name << "(";
     for (auto arg : args) {

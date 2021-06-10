@@ -40,7 +40,8 @@ enum class AstType {
     
     IntL,
     StringL,
-    ID
+    ID,
+    ArrayAccess
 };
 
 enum class DataType {

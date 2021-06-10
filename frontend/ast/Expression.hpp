@@ -172,6 +172,23 @@ private:
     std::string val = "";
 };
 
+// Represents an array access
+class AstArrayAccess : public AstExpression {
+public:
+    explicit AstArrayAccess(std::string val) : AstExpression(AstType::ArrayAccess) {
+        this->val = val;
+    }
+    
+    void setIndex(AstExpression *index) { this->index = index; }
+    
+    std::string getValue() { return val; }
+    AstExpression *getIndex() { return index; }
+    void print();
+private:
+    std::string val = "";
+    AstExpression *index;
+};
+
 // Represents a function call
 class AstFuncCallExpr : public AstExpression {
 public:
