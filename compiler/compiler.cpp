@@ -127,6 +127,18 @@ void Compiler::compileStatement(AstStatement *stmt) {
             }
         } break;
         
+        // A pointer (array) assignment
+        case AstType::PtrAssign: {
+            AstPtrAssign *pa = static_cast<AstPtrAssign *>(stmt);
+            Value *ptr = symtable[pa->getName()];
+            Value *index = compileValue(pa->getExpressions().at(0));
+            Value *val = compileValue(pa->getExpressions().at(1));
+            
+            Value *ptrLd = builder->CreateLoad(ptr);
+            Value *ep = builder->CreateGEP(ptrLd, index);
+            builder->CreateStore(val, ep);
+        } break;
+        
         // TODO: We should not do error handeling in the compiler. Check for invalid functions in the AST level
         // Function call statements
         case AstType::FuncCallStmt: {
