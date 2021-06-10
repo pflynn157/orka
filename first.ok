@@ -4,6 +4,7 @@ func printf(line:str, x:int) is extern
 func main is
     numbers : int[5];
 begin
+    numbers[2] = 242;
     return 0;
 end
 

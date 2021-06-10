@@ -63,6 +63,8 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
                 
                 if (token.type == Assign) {
                     code = buildVariableAssign(block, idToken);
+                } else if (token.type == LBracket) {
+                    code = buildArrayAssign(block, idToken);
                 } else if (token.type == LParen) {
                     code = buildFunctionCallStmt(block, idToken);
                 } else {

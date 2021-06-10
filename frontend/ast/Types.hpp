@@ -13,6 +13,7 @@ enum class AstType {
     
     VarDec,
     VarAssign,
+    PtrAssign,
     
     If,
     Elif,

@@ -80,3 +80,21 @@ bool Parser::buildVariableAssign(AstBlock *block, Token idToken) {
     return true;
 }
 
+// Builds an array assignment
+bool Parser::buildArrayAssign(AstBlock *block, Token idToken) {
+    AstPtrAssign *pa = new AstPtrAssign(idToken.id_val);
+    block->addStatement(pa);
+    
+    if (!buildExpression(pa, RBracket)) return false;
+    
+    Token token = scanner->getNext();
+    if (token.type != Assign) {
+        syntax->addError(scanner->getLine(), "Expected \'=\' after array assignment.");
+        return false;
+    }
+    
+    if (!buildExpression(pa)) return false;
+
+    return true;
+}
+

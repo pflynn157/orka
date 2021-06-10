@@ -25,6 +25,7 @@ protected:
     bool buildFunction();
     bool buildVariableDec(AstBlock *block, Token idToken);
     bool buildVariableAssign(AstBlock *block, Token idToken);
+    bool buildArrayAssign(AstBlock *block, Token idToken);
     bool buildFunctionCallStmt(AstBlock *block, Token idToken);
     bool buildReturn(AstBlock *block);
     bool buildConditional(AstBlock *block);

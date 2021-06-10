@@ -92,6 +92,20 @@ private:
     std::string name = "";
 };
 
+// Represents a pointer (array) assignment
+class AstPtrAssign : public AstStatement {
+public:
+    explicit AstPtrAssign(std::string name) : AstStatement(AstType::PtrAssign) {
+        this->name = name;
+    }
+    
+    std::string getName() { return name; }
+    
+    void print();
+private:
+    std::string name = "";
+};
+
 // Represents a conditional statement
 class AstIfStmt : public AstStatement {
 public:

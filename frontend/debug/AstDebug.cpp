@@ -82,6 +82,12 @@ void AstVarAssign::print() {
     std::cout << std::endl;
 }
 
+void AstPtrAssign::print() {
+    std::cout << "    ";
+    std::cout << "PTR= " << name;
+    std::cout << std::endl;
+}
+
 void AstIfStmt::print() {
     std::cout << "    ";
     std::cout << "IF " << std::endl;
