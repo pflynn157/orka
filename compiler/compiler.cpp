@@ -18,6 +18,11 @@ Compiler::Compiler(AstTree *tree, CFlags cflags) {
 }
 
 void Compiler::compile() {
+    // Add declarations for built-in functions
+    FunctionType *FT1 = FunctionType::get(Type::getInt32PtrTy(*context), Type::getInt32Ty(*context), false);
+    Function::Create(FT1, Function::ExternalLinkage, "malloc_int32", mod.get());
+
+    // Build all other functions
     for (auto global : tree->getGlobalStatements()) {
         switch (global->getType()) {
             case AstType::Func: {
@@ -200,6 +205,20 @@ Value *Compiler::compileValue(AstExpression *expr) {
             AllocaInst *ptr = symtable[id->getValue()];
             Type *type = translateType(typeTable[id->getValue()]);
             return builder->CreateLoad(type, ptr);
+        } break;
+        
+        case AstType::FuncCallExpr: {
+            AstFuncCallExpr *fc = static_cast<AstFuncCallExpr *>(expr);
+            std::vector<Value *> args;
+            
+            for (auto stmt : fc->getArguments()) {
+                Value *val = compileValue(stmt);
+                args.push_back(val);
+            }
+            
+            Function *callee = mod->getFunction(fc->getName());
+            if (!callee) std::cerr << "Invalid function call statement." << std::endl;
+            return builder->CreateCall(callee, args);
         } break;
         
         case AstType::Add:
