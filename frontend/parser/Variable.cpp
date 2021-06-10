@@ -44,7 +44,7 @@ bool Parser::buildVariableDec(AstBlock *block, Token idToken) {
         AstVarAssign *va = new AstVarAssign(idToken.id_val);
         block->addStatement(va);
         
-        AstFuncCallExpr *callMalloc = new AstFuncCallExpr("malloc");
+        AstFuncCallExpr *callMalloc = new AstFuncCallExpr("malloc_int32");
         callMalloc->setArguments(vd->getExpressions());
         va->addExpression(callMalloc);
     
