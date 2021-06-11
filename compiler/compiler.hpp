@@ -30,6 +30,7 @@ protected:
     void compileWhileStatement(AstStatement *stmt);
     void compileLoopStatement(AstStatement *stmt);
     void compileForStatement(AstStatement *stmt);
+    void compileForEachStatement(AstForStmt *stmt);
     Value *compileValue(AstExpression *expr);
     Type *translateType(DataType dataType, DataType subType = DataType::Void);
 private:
@@ -46,6 +47,7 @@ private:
     // Symbol table
     std::map<std::string, AllocaInst *> symtable;
     std::map<std::string, DataType> typeTable;
+    std::map<std::string, DataType> ptrTable;
     
     // Block stack
     int blockCount = 0;

@@ -79,7 +79,9 @@ bool Parser::buildFor(AstBlock *block) {
     if (!buildExpression(loop, Do, Range)) return false;
     
     if (loop->getExpressionCount() == 1) {
-        // TODO Once we get arrays
+        AstExpression *start = loop->getExpressions().front();
+        loop->clearExpressions();
+        loop->setStartBound(start);
     } else if (loop->getExpressionCount() == 2) {
         AstExpression *end = loop->getExpressions().back();
         AstExpression *start = loop->getExpressions().front();

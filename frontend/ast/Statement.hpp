@@ -202,6 +202,11 @@ public:
     AstExpression *getEndBound() { return endBound; }
     AstBlock *getBlock() { return block; }
     
+    bool hasEndBound() {
+        if (endBound == nullptr) return false;
+        return true;
+    }
+    
     void print();
 private:
     AstBlock *block;

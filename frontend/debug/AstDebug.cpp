@@ -202,8 +202,10 @@ void AstForStmt::print() {
     indexVar->print();
     std::cout << " IN ";
     startBound->print();
-    std::cout << " .. ";
-    endBound->print();
+    if (endBound != nullptr) {
+        std::cout << " .. ";
+        endBound->print();
+    }
     std::cout << std::endl;
     
     std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;

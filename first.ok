@@ -8,19 +8,16 @@
 
 func printf(line:str, x:int) is extern
 
-func printArray(numbers:int[]) is
-    x : int = numbers[2];
-    size : int = sizeof(numbers);
-begin
-    printf("%d\n", x);
-    printf("Size: %d\n", size);
-end
-
 func main -> int is
     numbers : int[10];
 begin
-    numbers[2] = 242;
-    printArray(numbers);
+    #for i in 0 .. 10 do
+     #   numbers[i] = i;
+    #end
+    
+    for i in numbers do
+        printf("%d\n", i);
+    end
     
     return 0;
 end

@@ -126,6 +126,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
             AllocaInst *var = builder->CreateAlloca(type);
             symtable[vd->getName()] = var;
             typeTable[vd->getName()] = vd->getDataType();
+            ptrTable[vd->getName()] = vd->getPtrType();
             
             // If we have an array, set the size of the structure
             if (isArray) {

@@ -152,6 +152,10 @@ void Compiler::compileLoopStatement(AstStatement *stmt) {
 // Translates a for loop to LLVM
 void Compiler::compileForStatement(AstStatement *stmt) {
     AstForStmt *loop = static_cast<AstForStmt *>(stmt);
+    if (!loop->hasEndBound()) {
+        compileForEachStatement(loop);
+        return;
+    }
     
     BasicBlock *loopBlock = BasicBlock::Create(*context, "loop_body" + std::to_string(blockCount), currentFunc);
     BasicBlock *loopInc = BasicBlock::Create(*context, "loop_inc" + std::to_string(blockCount), currentFunc);
@@ -201,6 +205,101 @@ void Compiler::compileForStatement(AstStatement *stmt) {
 
     // The body
     builder->SetInsertPoint(loopBlock);
+    for (auto stmt : loop->getBlock()->getBlock()) {
+        compileStatement(stmt);
+    }
+    builder->CreateBr(loopInc);
+    
+    builder->SetInsertPoint(loopEnd);
+    
+    breakStack.pop();
+    continueStack.pop();
+}
+
+// Translates a for-each loop to LLVM
+void Compiler::compileForEachStatement(AstForStmt *loop) {
+    // Setup the blocks
+    BasicBlock *loopLoad = BasicBlock::Create(*context, "loop_load" + std::to_string(blockCount), currentFunc);
+    BasicBlock *loopBody = BasicBlock::Create(*context, "loop_body" + std::to_string(blockCount), currentFunc);
+    BasicBlock *loopInc = BasicBlock::Create(*context, "loop_inc" + std::to_string(blockCount), currentFunc);
+    BasicBlock *loopCmp = BasicBlock::Create(*context, "loop_cmp" + std::to_string(blockCount), currentFunc);
+    BasicBlock *loopEnd = BasicBlock::Create(*context, "loop_end" + std::to_string(blockCount), currentFunc);
+    ++blockCount;
+
+    BasicBlock *current = builder->GetInsertBlock();
+    loopLoad->moveAfter(current);
+    loopBody->moveAfter(loopLoad);
+    loopInc->moveAfter(loopBody);
+    loopCmp->moveAfter(loopInc);
+    loopEnd->moveAfter(loopCmp);
+    
+    breakStack.push(loopEnd);
+    continueStack.push(loopCmp);
+    
+    ///
+    // Create the induction variable, the max-size variable, and the element variables
+    //
+    std::map<std::string, AllocaInst *> symtableOld = symtable;
+    std::map<std::string, DataType> typeTableOld = typeTable;
+    
+    // The induction variable
+    std::string arrayName = static_cast<AstID *>(loop->getStartBound())->getValue();
+    std::string indexName = loop->getIndex()->getValue();
+    DataType indexType1 = ptrTable[arrayName];
+    
+    Type *indexType = translateType(indexType1);
+    AllocaInst *indexVar = builder->CreateAlloca(indexType);
+    symtable[indexName] = indexVar;
+    typeTable[indexName] = indexType1;
+    
+    AllocaInst *inductionVar = builder->CreateAlloca(Type::getInt32Ty(*context));
+    builder->CreateStore(builder->getInt32(0), inductionVar);
+    
+    // The size value
+    AllocaInst *arrayPtr = symtable[arrayName];
+    Value *sizePtr = builder->CreateStructGEP(arrayPtr, 1);
+    Value *sizeVal = builder->CreateLoad(sizePtr);
+    
+    // The array pointer
+    Value *arrayStructPtr = builder->CreateStructGEP(arrayPtr, 0);
+    Value *arrayLoad = builder->CreateLoad(arrayStructPtr);
+    
+    ///
+    // Create the loop comparison
+    //
+    builder->CreateBr(loopCmp);
+    builder->SetInsertPoint(loopCmp);
+    
+    Value *inductionVarVal = builder->CreateLoad(inductionVar);
+    Value *cond = builder->CreateICmpSLT(inductionVarVal, sizeVal);
+    builder->CreateCondBr(cond, loopLoad, loopEnd);
+    
+    ///
+    // Loop increment
+    //
+    builder->SetInsertPoint(loopInc);
+    
+    inductionVarVal = builder->CreateLoad(inductionVar);
+    inductionVarVal = builder->CreateAdd(inductionVarVal, builder->getInt32(1));
+    builder->CreateStore(inductionVarVal, inductionVar);
+    
+    builder->CreateBr(loopCmp);
+    
+    ///
+    // Loop load-> loads the next element from the array
+    //
+    builder->SetInsertPoint(loopLoad);
+    
+    Value *ep = builder->CreateGEP(arrayLoad, inductionVar);
+    Value *epLd = builder->CreateLoad(ep);
+    builder->CreateStore(epLd, indexVar);
+    
+    builder->CreateBr(loopBody);
+    
+    ///
+    // Loop body
+    //
+    builder->SetInsertPoint(loopBody);
     for (auto stmt : loop->getBlock()->getBlock()) {
         compileStatement(stmt);
     }
