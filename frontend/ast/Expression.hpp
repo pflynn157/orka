@@ -200,6 +200,9 @@ public:
         this->args = args;
     }
     
+    void addArgument(AstExpression *arg) { args.push_back(arg); }
+    void clearArguments() { args.clear(); }
+    
     std::vector<AstExpression *> getArguments() { return args; }
     std::string getName() { return name; }
     void print();

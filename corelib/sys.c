@@ -8,9 +8,9 @@ void exit(int code)
     syscall2(60, code);
 }
 
-int *malloc_int32(int64_t size) {
+// TODO: Maybe there's a better way to design this?
+uint8_t *malloc(int64_t size) {
     // Last arg 0
-    size *= sizeof(int);
-    return (int *)syscall6(6, 0, size, 3, 34, -1);
+    return (uint8_t *)syscall6(9, 0, size, 3, 34, -1);
 }
 

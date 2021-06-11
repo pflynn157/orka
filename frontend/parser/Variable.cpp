@@ -44,9 +44,23 @@ bool Parser::buildVariableDec(AstBlock *block, Token idToken) {
         AstVarAssign *va = new AstVarAssign(idToken.id_val);
         block->addStatement(va);
         
-        AstFuncCallExpr *callMalloc = new AstFuncCallExpr("malloc_int32");
+        AstFuncCallExpr *callMalloc = new AstFuncCallExpr("malloc");
         callMalloc->setArguments(vd->getExpressions());
         va->addExpression(callMalloc);
+        
+        // In order to get a proper malloc, we need to multiply the argument by
+        // the size of the type. Get the arguments, and do that
+        AstExpression *arg = callMalloc->getArguments().at(0);
+        callMalloc->clearArguments();
+        
+        AstInt *size;
+        if (dataType == DataType::Int32) size = new AstInt(4);
+        else size = new AstInt(1);
+        
+        AstMulOp *op = new AstMulOp;
+        op->setLVal(size);
+        op->setRVal(arg);
+        callMalloc->addArgument(op);
     
     // We're at the end of the declaration
     } else if (token.type == SemiColon) {

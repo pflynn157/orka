@@ -19,8 +19,8 @@ Compiler::Compiler(AstTree *tree, CFlags cflags) {
 
 void Compiler::compile() {
     // Add declarations for built-in functions
-    FunctionType *FT1 = FunctionType::get(Type::getInt32PtrTy(*context), Type::getInt32Ty(*context), false);
-    Function::Create(FT1, Function::ExternalLinkage, "malloc_int32", mod.get());
+    FunctionType *FT1 = FunctionType::get(Type::getInt8PtrTy(*context), Type::getInt32Ty(*context), false);
+    Function::Create(FT1, Function::ExternalLinkage, "malloc", mod.get());
 
     // Build all other functions
     for (auto global : tree->getGlobalStatements()) {
@@ -217,6 +217,16 @@ Value *Compiler::compileValue(AstExpression *expr) {
             AllocaInst *ptr = symtable[id->getValue()];
             Type *type = translateType(typeTable[id->getValue()]);
             return builder->CreateLoad(type, ptr);
+        } break;
+        
+        case AstType::ArrayAccess: {
+            AstArrayAccess *acc = static_cast<AstArrayAccess *>(expr);
+            AllocaInst *ptr = symtable[acc->getValue()];
+            Value *index = compileValue(acc->getIndex());
+            
+            Value *ptrLd = builder->CreateLoad(ptr);
+            Value *ep = builder->CreateGEP(ptrLd, index);
+            return builder->CreateLoad(ep);
         } break;
         
         case AstType::FuncCallExpr: {

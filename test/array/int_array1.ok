@@ -1,0 +1,19 @@
+
+#OUTPUT
+#242
+#END
+
+#RET 0
+
+func printf(line:str, x:int) is extern
+
+func main is
+    numbers : int[5];
+    x : int = 0;
+begin
+    numbers[2] = 242;
+    x = numbers[2];
+    printf("%d\n", x);
+    return 0;
+end
+
