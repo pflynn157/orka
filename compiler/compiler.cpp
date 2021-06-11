@@ -18,6 +18,13 @@ Compiler::Compiler(AstTree *tree, CFlags cflags) {
 }
 
 void Compiler::compile() {
+    // Create the global structure type
+    std::vector<Type *> arrayTypes;
+    arrayTypes.push_back(Type::getInt8PtrTy(*context));
+    arrayTypes.push_back(Type::getInt32Ty(*context));
+    arrayType = StructType::create(*context, arrayTypes);
+    arrayType->setName("ArrayType");
+
     // Add declarations for built-in functions
     FunctionType *FT1 = FunctionType::get(Type::getInt8PtrTy(*context), Type::getInt32Ty(*context), false);
     Function::Create(FT1, Function::ExternalLinkage, "malloc", mod.get());
@@ -109,6 +116,10 @@ void Compiler::compileStatement(AstStatement *stmt) {
             AstVarDec *vd = static_cast<AstVarDec *>(stmt);
             Type *type = translateType(vd->getDataType(), vd->getPtrType());
             
+            if (vd->getDataType() == DataType::Ptr) {
+                type = arrayType;
+            }
+            
             AllocaInst *var = builder->CreateAlloca(type);
             symtable[vd->getName()] = var;
             typeTable[vd->getName()] = vd->getDataType();
@@ -117,13 +128,14 @@ void Compiler::compileStatement(AstStatement *stmt) {
         // A variable assignment
         case AstType::VarAssign: {
             AstVarAssign *va = static_cast<AstVarAssign *>(stmt);
-            Value *ptr = symtable[va->getName()];
+            AllocaInst *ptr = symtable[va->getName()];
+            Value *val = compileValue(stmt->getExpressions().at(0));
             
-            if (stmt->getExpressionCount() == 1) {
-                Value *val = compileValue(stmt->getExpressions().at(0));
-                builder->CreateStore(val, ptr);
+            if (ptr->getType()->getElementType() == arrayType) {
+                Value *arrayPtr = builder->CreateStructGEP(ptr, 0);
+                builder->CreateStore(val, arrayPtr);
             } else {
-            
+                builder->CreateStore(val, ptr);
             }
         } break;
         
@@ -134,9 +146,14 @@ void Compiler::compileStatement(AstStatement *stmt) {
             Value *index = compileValue(pa->getExpressions().at(0));
             Value *val = compileValue(pa->getExpressions().at(1));
             
-            Value *ptrLd = builder->CreateLoad(ptr);
+            Value *arrayPtr = builder->CreateStructGEP(ptr, 0);
+            Value *ptrLd = builder->CreateLoad(arrayPtr);
             Value *ep = builder->CreateGEP(ptrLd, index);
             builder->CreateStore(val, ep);
+            
+            /*Value *ptrLd = builder->CreateLoad(ptr);
+            Value *ep = builder->CreateGEP(ptrLd, index);
+            builder->CreateStore(val, ep);*/
         } break;
         
         // TODO: We should not do error handeling in the compiler. Check for invalid functions in the AST level
@@ -224,7 +241,8 @@ Value *Compiler::compileValue(AstExpression *expr) {
             AllocaInst *ptr = symtable[acc->getValue()];
             Value *index = compileValue(acc->getIndex());
             
-            Value *ptrLd = builder->CreateLoad(ptr);
+            Value *arrayPtr = builder->CreateStructGEP(ptr, 0);
+            Value *ptrLd = builder->CreateLoad(arrayPtr);
             Value *ep = builder->CreateGEP(ptrLd, index);
             return builder->CreateLoad(ep);
         } break;
