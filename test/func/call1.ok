@@ -1,0 +1,22 @@
+
+#OUTPUT
+#X: 53
+#END
+
+#RET 0
+
+func printf(line:str, x:int) is extern
+
+func getNumber(x:int, y:int) -> int is
+begin
+    return 20 + x + y;
+end
+
+func main -> int is
+    x : int = getNumber(23, 10);
+begin
+    printf("X: %d\n", x);
+    
+    return 0;
+end
+

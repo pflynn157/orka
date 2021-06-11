@@ -148,7 +148,16 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
             AstExpression *expr = output.top();
             output.pop();
             
-            stmt->addExpression(expr);
+            if (stmt == nullptr) {
+                if ((*dest)->getType() == AstType::FuncCallExpr) {
+                    AstFuncCallExpr *fc = static_cast<AstFuncCallExpr *>(*dest);
+                    fc->addArgument(expr);
+                } else {
+                    *dest = expr;
+                }
+            } else {
+                stmt->addExpression(expr);
+            }
             continue;
         }
     
@@ -173,6 +182,12 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
                     AstArrayAccess *acc = new AstArrayAccess(name);
                     acc->setIndex(index);
                     output.push(acc);
+                } else if (token.type == LParen) {
+                    AstFuncCallExpr *fc = new AstFuncCallExpr(name);
+                    AstExpression *fcExpr = fc;
+                    buildExpression(nullptr, RParen, Comma, &fcExpr);
+                    
+                    output.push(fc);
                 } else {
                     AstID *id = new AstID(name);
                     output.push(id);
@@ -253,7 +268,14 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
     }
     
     if (stmt == nullptr) {
-        *dest = output.top();
+        if ((*dest) == nullptr) {
+            *dest = output.top();
+        } else if ((*dest)->getType() == AstType::FuncCallExpr) {
+            AstFuncCallExpr *fc = static_cast<AstFuncCallExpr *>(*dest);
+            fc->addArgument(output.top());
+        } else {
+            *dest = output.top();
+        }
     } else {
         AstExpression *expr = output.top();
         stmt->addExpression(expr);

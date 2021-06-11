@@ -57,6 +57,7 @@ run_test 'test/basic/*.ok' 'sys' $flags
 run_test 'test/cond/*.ok' 'sys' $flags
 run_test 'test/loop/*.ok' 'sys' $flags
 run_test 'test/array/*.ok' 'sys' $flags
+run_test 'test/func/*.ok' 'sys' $flags
 
 echo ""
 echo "$test_count tests passed successfully."
