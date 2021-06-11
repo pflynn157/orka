@@ -117,7 +117,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
             Type *type = translateType(vd->getDataType(), vd->getPtrType());
             bool isArray = false;
             
-            if (vd->getDataType() == DataType::Ptr) {
+            if (vd->getDataType() == DataType::Array) {
                 type = arrayType;
                 isArray = true;
             }
@@ -148,9 +148,9 @@ void Compiler::compileStatement(AstStatement *stmt) {
             }
         } break;
         
-        // A pointer (array) assignment
-        case AstType::PtrAssign: {
-            AstPtrAssign *pa = static_cast<AstPtrAssign *>(stmt);
+        // An array assignment
+        case AstType::ArrayAssign: {
+            AstArrayAssign *pa = static_cast<AstArrayAssign *>(stmt);
             Value *ptr = symtable[pa->getName()];
             Value *index = compileValue(pa->getExpressions().at(0));
             Value *val = compileValue(pa->getExpressions().at(1));
@@ -237,8 +237,6 @@ Value *Compiler::compileValue(AstExpression *expr) {
         case AstType::ID: {
             AstID *id = static_cast<AstID *>(expr);
             AllocaInst *ptr = symtable[id->getValue()];
-            //Type *type = translateType(typeTable[id->getValue()]);
-            //return builder->CreateLoad(type, ptr);
             return builder->CreateLoad(ptr);
         } break;
         
@@ -325,11 +323,18 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
     switch (dataType) {
         case DataType::Int32: type = Type::getInt32Ty(*context); break;
         
+        case DataType::Array: {
+            switch (subType) {
+                case DataType::Int32: type = arrayType; break;
+                
+                default: {}
+            }
+        } break;
+        
         case DataType::Ptr: {
             switch (subType) {
                 case DataType::Char: type = Type::getInt8PtrTy(*context); break;
-                //case DataType::Int32: type = Type::getInt32PtrTy(*context); break;
-                case DataType::Int32: type = arrayType; break;
+                case DataType::Int32: type = Type::getInt32PtrTy(*context); break;
                 
                 default: {}
             }

@@ -95,10 +95,10 @@ private:
     std::string name = "";
 };
 
-// Represents a pointer (array) assignment
-class AstPtrAssign : public AstStatement {
+// Represents an array assignment
+class AstArrayAssign : public AstStatement {
 public:
-    explicit AstPtrAssign(std::string name) : AstStatement(AstType::PtrAssign) {
+    explicit AstArrayAssign(std::string name) : AstStatement(AstType::ArrayAssign) {
         this->name = name;
     }
     

@@ -56,7 +56,7 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
                 else token = token2;
                 
                 v.subType = v.type;
-                v.type = DataType::Ptr;
+                v.type = DataType::Array;
             }
             
             args.push_back(v);

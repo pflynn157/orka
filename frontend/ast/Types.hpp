@@ -13,7 +13,7 @@ enum class AstType {
     
     VarDec,
     VarAssign,
-    PtrAssign,
+    ArrayAssign,
     Sizeof,
     
     If,
@@ -49,6 +49,7 @@ enum class DataType {
     Void,
     Char,
     Int32,
+    Array,
     Ptr
 };
 

@@ -7,6 +7,7 @@ std::string printDataType(DataType dataType) {
         case DataType::Void: return "void";
         case DataType::Char: return "char";
         case DataType::Int32: return "i32";
+        case DataType::Array: return "array";
         case DataType::Ptr: return "ptr";
     }
     return "";
@@ -85,9 +86,9 @@ void AstVarAssign::print() {
     std::cout << std::endl;
 }
 
-void AstPtrAssign::print() {
+void AstArrayAssign::print() {
     std::cout << "    ";
-    std::cout << "PTR= " << name;
+    std::cout << "ARR= " << name;
     std::cout << std::endl;
 }
 

@@ -29,7 +29,7 @@ bool Parser::buildVariableDec(AstBlock *block, Token idToken) {
     
     // We have an array
     if (token.type == LBracket) {
-        vd->setDataType(DataType::Ptr);
+        vd->setDataType(DataType::Array);
         vd->setPtrType(dataType);
         
         if (!buildExpression(vd, RBracket)) return false;   
@@ -99,7 +99,7 @@ bool Parser::buildVariableAssign(AstBlock *block, Token idToken) {
 
 // Builds an array assignment
 bool Parser::buildArrayAssign(AstBlock *block, Token idToken) {
-    AstPtrAssign *pa = new AstPtrAssign(idToken.id_val);
+    AstArrayAssign *pa = new AstArrayAssign(idToken.id_val);
     block->addStatement(pa);
     
     if (!buildExpression(pa, RBracket)) return false;
