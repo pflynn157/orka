@@ -72,6 +72,9 @@ void AstVarDec::print() {
     std::cout << "VAR " << name << " : " << printDataType(dataType);
     if (ptrType != DataType::Void) {
         std::cout << "*" << printDataType(ptrType);
+        std::cout << "[";
+        size->print();
+        std::cout << "]";
     }
     std::cout << std::endl;
 }

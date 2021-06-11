@@ -61,6 +61,9 @@ bool Parser::buildVariableDec(AstBlock *block, Token idToken) {
         op->setLVal(size);
         op->setRVal(arg);
         callMalloc->addArgument(op);
+        
+        // Finally, set the size of the declaration
+        vd->setPtrSize(arg);
     
     // We're at the end of the declaration
     } else if (token.type == SemiColon) {

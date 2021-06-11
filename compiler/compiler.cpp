@@ -115,14 +115,23 @@ void Compiler::compileStatement(AstStatement *stmt) {
         case AstType::VarDec: {
             AstVarDec *vd = static_cast<AstVarDec *>(stmt);
             Type *type = translateType(vd->getDataType(), vd->getPtrType());
+            bool isArray = false;
             
             if (vd->getDataType() == DataType::Ptr) {
                 type = arrayType;
+                isArray = true;
             }
             
             AllocaInst *var = builder->CreateAlloca(type);
             symtable[vd->getName()] = var;
             typeTable[vd->getName()] = vd->getDataType();
+            
+            // If we have an array, set the size of the structure
+            if (isArray) {
+                Value *size = compileValue(vd->getPtrSize());
+                Value *sizePtr = builder->CreateStructGEP(var, 1);
+                builder->CreateStore(size, sizePtr);
+            }
         } break;
         
         // A variable assignment
@@ -150,10 +159,6 @@ void Compiler::compileStatement(AstStatement *stmt) {
             Value *ptrLd = builder->CreateLoad(arrayPtr);
             Value *ep = builder->CreateGEP(ptrLd, index);
             builder->CreateStore(val, ep);
-            
-            /*Value *ptrLd = builder->CreateLoad(ptr);
-            Value *ep = builder->CreateGEP(ptrLd, index);
-            builder->CreateStore(val, ep);*/
         } break;
         
         // TODO: We should not do error handeling in the compiler. Check for invalid functions in the AST level

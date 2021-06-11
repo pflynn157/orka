@@ -66,14 +66,17 @@ public:
     
     void setDataType(DataType dataType) { this->dataType = dataType; }
     void setPtrType(DataType dataType) { this->ptrType = dataType; }
+    void setPtrSize(AstExpression *size) { this->size = size; }
     
     std::string getName() { return name; }
     DataType getDataType() { return dataType; }
     DataType getPtrType() { return ptrType; }
+    AstExpression *getPtrSize() { return size; }
     
     void print();
 private:
     std::string name = "";
+    AstExpression *size = nullptr;
     DataType dataType = DataType::Void;
     DataType ptrType = DataType::Void;
 };
