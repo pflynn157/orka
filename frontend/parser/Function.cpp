@@ -131,7 +131,20 @@ bool Parser::buildFunction() {
     }
     
     // Build the body
-    return buildBlock(func->getBlock());
+    if (!buildBlock(func->getBlock())) return false;
+    
+    // Make sure we end with a return statement
+    AstType lastType = func->getBlock()->getBlock().back()->getType();
+    if (lastType != AstType::Return) {
+        if (func->getDataType() == DataType::Void) {
+            func->addStatement(new AstReturnStmt);
+        } else {
+            syntax->addError(scanner->getLine(), "Expected return statement.");
+            return false;
+        }
+    }
+    
+    return true;
 }
 
 // Builds a function call
