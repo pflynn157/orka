@@ -1,0 +1,26 @@
+
+#OUTPUT
+#242
+#Size: 10
+#END
+
+#RET 0
+
+func printf(line:str, x:int) is extern
+
+func main is
+    numbers : int[10];
+    x : int = 0;
+    size : int = 0;
+begin
+    numbers[2] = 242;
+    x = numbers[2];
+    
+    printf("%d\n", x);
+    
+    size = sizeof(numbers);
+    printf("Size: %d\n", size);
+    
+    return 0;
+end
+

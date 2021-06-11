@@ -237,8 +237,9 @@ Value *Compiler::compileValue(AstExpression *expr) {
         case AstType::ID: {
             AstID *id = static_cast<AstID *>(expr);
             AllocaInst *ptr = symtable[id->getValue()];
-            Type *type = translateType(typeTable[id->getValue()]);
-            return builder->CreateLoad(type, ptr);
+            //Type *type = translateType(typeTable[id->getValue()]);
+            //return builder->CreateLoad(type, ptr);
+            return builder->CreateLoad(ptr);
         } break;
         
         case AstType::Sizeof: {
@@ -327,7 +328,8 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
         case DataType::Ptr: {
             switch (subType) {
                 case DataType::Char: type = Type::getInt8PtrTy(*context); break;
-                case DataType::Int32: type = Type::getInt32PtrTy(*context); break;
+                //case DataType::Int32: type = Type::getInt32PtrTy(*context); break;
+                case DataType::Int32: type = arrayType; break;
                 
                 default: {}
             }

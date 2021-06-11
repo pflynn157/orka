@@ -39,12 +39,27 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
             }
             
             v.name = t1.id_val;
-            args.push_back(v);
             
             token = scanner->getNext();
             if (token.type == Comma) {
                 token = scanner->getNext();
+            } else if (token.type == LBracket) {
+                Token token1 = scanner->getNext();
+                Token token2 = scanner->getNext();
+                
+                if (token1.type != RBracket) {
+                    syntax->addError(scanner->getLine(), "Invalid type syntax.");
+                    return false;
+                }
+                
+                if (token2.type == Comma) token = scanner->getNext();
+                else token = token2;
+                
+                v.subType = v.type;
+                v.type = DataType::Ptr;
             }
+            
+            args.push_back(v);
         }
     } else {
         scanner->rewind(token);
