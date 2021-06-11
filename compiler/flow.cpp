@@ -214,6 +214,9 @@ void Compiler::compileForStatement(AstStatement *stmt) {
     
     breakStack.pop();
     continueStack.pop();
+    
+    symtable = symtableOld;
+    typeTable = typeTableOld;
 }
 
 // Translates a for-each loop to LLVM
@@ -260,10 +263,6 @@ void Compiler::compileForEachStatement(AstForStmt *loop) {
     Value *sizePtr = builder->CreateStructGEP(arrayPtr, 1);
     Value *sizeVal = builder->CreateLoad(sizePtr);
     
-    // The array pointer
-    Value *arrayStructPtr = builder->CreateStructGEP(arrayPtr, 0);
-    Value *arrayLoad = builder->CreateLoad(arrayStructPtr);
-    
     ///
     // Create the loop comparison
     //
@@ -290,7 +289,11 @@ void Compiler::compileForEachStatement(AstForStmt *loop) {
     //
     builder->SetInsertPoint(loopLoad);
     
-    Value *ep = builder->CreateGEP(arrayLoad, inductionVar);
+    inductionVarVal = builder->CreateLoad(inductionVar);
+    
+    Value *arrayStructPtr = builder->CreateStructGEP(arrayPtr, 0);
+    Value *arrayLoad = builder->CreateLoad(arrayStructPtr);
+    Value *ep = builder->CreateGEP(arrayLoad, inductionVarVal);
     Value *epLd = builder->CreateLoad(ep);
     builder->CreateStore(epLd, indexVar);
     
@@ -309,5 +312,8 @@ void Compiler::compileForEachStatement(AstForStmt *loop) {
     
     breakStack.pop();
     continueStack.pop();
+    
+    symtable = symtableOld;
+    typeTable = typeTableOld;
 }
 

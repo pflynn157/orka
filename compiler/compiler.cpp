@@ -20,10 +20,10 @@ Compiler::Compiler(AstTree *tree, CFlags cflags) {
 void Compiler::compile() {
     // Create the global structure type
     std::vector<Type *> arrayTypes;
-    arrayTypes.push_back(Type::getInt8PtrTy(*context));
+    arrayTypes.push_back(Type::getInt32PtrTy(*context));
     arrayTypes.push_back(Type::getInt32Ty(*context));
     arrayType = StructType::create(*context, arrayTypes);
-    arrayType->setName("ArrayType");
+    arrayType->setName("IntArrayType");
 
     // Add declarations for built-in functions
     FunctionType *FT1 = FunctionType::get(Type::getInt8PtrTy(*context), Type::getInt32Ty(*context), false);
