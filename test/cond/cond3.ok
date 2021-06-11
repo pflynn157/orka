@@ -19,11 +19,9 @@ begin
     elif x > 5 then
         println("X greater than 5.");
     end
-
-    return 0;
 end
 
-func main is
+func main -> int is
 begin
     cmp(25);
     cmp(4);

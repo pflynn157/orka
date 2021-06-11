@@ -8,7 +8,7 @@
 
 func printf(line:str, x:int) is extern
 
-func main is
+func main -> int is
     i : int = 0;
 begin
     loop

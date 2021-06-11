@@ -23,11 +23,9 @@ begin
     else
         println("IDK");
     end
-
-    return 0;
 end
 
-func main is
+func main -> int is
 begin
     cmp(25);
     cmp(4);

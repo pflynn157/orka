@@ -7,7 +7,7 @@
 
 func println(s:str) is extern
 
-func main is
+func main -> int is
 begin
     println("Hi");
     return 2;

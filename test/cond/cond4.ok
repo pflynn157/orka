@@ -28,8 +28,6 @@ begin
     else
         println("NEQ");
     end
-    
-    return;
 end
 
 func cmp2(x:int) is
@@ -39,8 +37,6 @@ begin
     else
         println("Not");
     end
-    
-    return;
 end
 
 func cmp3(x:int) is
@@ -50,8 +46,6 @@ begin
     else
         println("Not");
     end
-    
-    return;
 end
 
 func cmp4(x:int) is
@@ -61,8 +55,6 @@ begin
     else
         println("Not");
     end
-    
-    return;
 end
 
 func cmp5(x:int) is
@@ -72,8 +64,6 @@ begin
     else
         println("Not");
     end
-    
-    return;
 end
 
 func cmp6(x:int) is
@@ -83,11 +73,9 @@ begin
     else
         println("Not");
     end
-    
-    return;
 end
 
-func main is
+func main -> int is
 begin
     cmp1(10);
     cmp1(0);

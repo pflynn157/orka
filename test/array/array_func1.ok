@@ -14,10 +14,9 @@ func printArray(numbers:int[]) is
 begin
     printf("%d\n", x);
     printf("Size: %d\n", size);
-    return;
 end
 
-func main is
+func main -> int is
     numbers : int[10];
 begin
     numbers[2] = 242;

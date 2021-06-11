@@ -29,11 +29,9 @@ begin
     else
         println("Less");
     end
-    
-    return;
 end
 
-func main is
+func main -> int is
     x : int = 40;
 begin
     compare(x);

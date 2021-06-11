@@ -8,7 +8,7 @@
 
 func printf(line:str, x:int) is extern
 
-func main is
+func main -> int is
 begin
     for i in 0 .. 10 do
         printf("%d|", i);

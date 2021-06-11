@@ -14,7 +14,7 @@
 
 func printf(ln:str, x:int) is extern
 
-func main is
+func main -> int is
     x : int = 0;
 begin
     while x < 10 do
