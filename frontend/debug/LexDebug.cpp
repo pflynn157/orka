@@ -40,6 +40,7 @@ void Token::print() {
         case RBracket: std::cout << "]"; break;
         case Comma: std::cout << ", "; break;
         case Range: std::cout << ".. "; break;
+        case Arrow: std::cout << "-> "; break;
         
         case Plus: std::cout << "+ "; break;
         case Minus: std::cout << "- "; break;

@@ -37,9 +37,10 @@ void Compiler::compile() {
 
                 std::vector<Var> astVarArgs = astFunc->getArguments();
                 FunctionType *FT;
+                Type *funcType = translateType(astFunc->getDataType(), astFunc->getPtrType());
                 
                 if (astVarArgs.size() == 0) {
-                    FT = FunctionType::get(Type::getVoidTy(*context), false);
+                    FT = FunctionType::get(funcType, false);
                 } else {
                     std::vector<Type *> args;
                     for (auto var : astVarArgs) {
@@ -47,7 +48,7 @@ void Compiler::compile() {
                         args.push_back(type);
                     }
                     
-                    FT = FunctionType::get(Type::getVoidTy(*context), args, false);
+                    FT = FunctionType::get(funcType, args, false);
                 }
                 
                 Function *func = Function::Create(FT, Function::ExternalLinkage, astFunc->getName(), mod.get());

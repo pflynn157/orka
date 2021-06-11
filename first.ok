@@ -16,7 +16,7 @@ begin
     printf("Size: %d\n", size);
 end
 
-func main is
+func main -> int is
     numbers : int[10];
 begin
     numbers[2] = 242;

@@ -185,7 +185,6 @@ TokenType Scanner::getSymbol(char c) {
         case ']': return RBracket;
         case ',': return Comma;
         case '+': return Plus;
-        case '-': return Minus;
         case '*': return Mul;
         case '/': return Div;
         
@@ -234,6 +233,16 @@ TokenType Scanner::getSymbol(char c) {
                 return Range;
             } else {
                 reader.unget();
+            }
+        } break;
+        
+        case '-': {
+            char c2 = reader.get();
+            if (c2 == '>') {
+                return Arrow;
+            } else {
+                reader.unget();
+                return Minus;
             }
         } break;
     }

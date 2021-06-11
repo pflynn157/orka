@@ -85,6 +85,30 @@ bool Parser::buildFunction() {
     // Check to see if there's any return type
     token = scanner->getNext();
     bool isExtern = false;
+    DataType funcType = DataType::Void;
+    DataType ptrType = DataType::Void;
+    
+    if (token.type == Arrow) {
+        token = scanner->getNext();
+        switch (token.type) {
+            case Int: funcType = DataType::Int32; break;
+            default: {}
+        }
+    
+        token = scanner->getNext();
+        if (token.type == LBracket) {
+            token = scanner->getNext();
+            if (token.type != RBracket) {
+                syntax->addError(scanner->getLine(), "Invalid function type.");
+                return false;
+            }
+            
+            ptrType = funcType;
+            funcType = DataType::Array;
+            
+            token = scanner->getNext();
+        }
+    }
     
     if (token.type == Is) {
         token = scanner->getNext();
@@ -107,6 +131,7 @@ bool Parser::buildFunction() {
     }
     
     AstFunction *func = new AstFunction(funcName);
+    func->setDataType(funcType, ptrType);
     func->setArguments(args);
     tree->addGlobalStatement(func);
     
@@ -135,7 +160,16 @@ bool Parser::buildFunction() {
     
     // Make sure we end with a return statement
     AstType lastType = func->getBlock()->getBlock().back()->getType();
-    if (lastType != AstType::Return) {
+    if (lastType == AstType::Return) {
+        AstStatement *ret = func->getBlock()->getBlock().back();
+        if (func->getDataType() == DataType::Void && ret->getExpressionCount() > 0) {
+            syntax->addError(scanner->getLine(), "Cannot return from void function.");
+            return false;
+        } else if (ret->getExpressionCount() == 0) {
+            syntax->addError(scanner->getLine(), "Expected return value.");
+            return false;
+        }
+    } else {
         if (func->getDataType() == DataType::Void) {
             func->addStatement(new AstReturnStmt);
         } else {

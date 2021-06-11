@@ -47,6 +47,7 @@ enum TokenType {
     RBracket,
     Comma,
     Range,
+    Arrow,
     
     Plus,
     Minus,
