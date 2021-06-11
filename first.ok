@@ -17,6 +17,8 @@ begin
     
     printf("%d\n", x);
     
+    size = sizeof(numbers);
+    printf("Size: %d\n", size);
     
     return 0;
 end

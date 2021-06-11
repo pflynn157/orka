@@ -170,6 +170,7 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "break") return Break;
     else if (buffer == "continue") return Continue;
     else if (buffer == "in") return In;
+    else if (buffer == "sizeof") return Sizeof;
     return EmptyToken;
 }
 

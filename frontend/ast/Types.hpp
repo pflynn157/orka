@@ -14,6 +14,7 @@ enum class AstType {
     VarDec,
     VarAssign,
     PtrAssign,
+    Sizeof,
     
     If,
     Elif,

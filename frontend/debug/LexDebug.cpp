@@ -25,6 +25,7 @@ void Token::print() {
         case Break: std::cout << "BREAK"; break;
         case Continue: std::cout << "CONTINUE"; break;
         case In: std::cout << "IN"; break;
+        case Sizeof: std::cout << "SIZEOF"; break;
         
         case Id: std::cout << "ID "; break;
         case Int32: std::cout << "I32 "; break;

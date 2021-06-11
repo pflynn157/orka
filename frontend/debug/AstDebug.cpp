@@ -328,6 +328,12 @@ void AstID::print() {
     std::cout << val;
 }
 
+void AstSizeof::print() {
+    std::cout << "SIZEOF(";
+    val->print();
+    std::cout << ")";
+}
+
 void AstArrayAccess::print() {
     std::cout << val << "[";
     index->print();

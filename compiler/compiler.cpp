@@ -241,6 +241,15 @@ Value *Compiler::compileValue(AstExpression *expr) {
             return builder->CreateLoad(type, ptr);
         } break;
         
+        case AstType::Sizeof: {
+            AstSizeof *sizeOf = static_cast<AstSizeof *>(expr);
+            AstID *array = sizeOf->getValue();
+            
+            AllocaInst *ptr = symtable[array->getValue()];
+            Value *sizePtr = builder->CreateStructGEP(ptr, 1);
+            return builder->CreateLoad(sizePtr);
+        } break;
+        
         case AstType::ArrayAccess: {
             AstArrayAccess *acc = static_cast<AstArrayAccess *>(expr);
             AllocaInst *ptr = symtable[acc->getValue()];

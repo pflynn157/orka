@@ -29,6 +29,7 @@ enum TokenType {
     Break,
     Continue,
     In,
+    Sizeof,
     
     // Literals
     Id,

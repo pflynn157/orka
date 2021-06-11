@@ -172,6 +172,19 @@ private:
     std::string val = "";
 };
 
+// Represents the sizeof operator
+class AstSizeof : public AstExpression {
+public:
+    explicit AstSizeof(AstID *val) : AstExpression(AstType::Sizeof) {
+        this->val = val;
+    }
+    
+    AstID *getValue() { return val; }
+    void print();
+private:
+    AstID *val;
+};
+
 // Represents an array access
 class AstArrayAccess : public AstExpression {
 public:
