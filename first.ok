@@ -10,7 +10,7 @@ func println(line:str) is extern
 func printf(line:str, x:int) is extern
 
 func main -> int is
-    x : int = 103;
+    x : int = 0x21;
 begin
     printf("%x\n", x);
     

@@ -129,6 +129,9 @@ Token Scanner::getNext() {
             if (isInt()) {
                 token.type = Int32;
                 token.i32_val = std::stoi(buffer);
+            } else if (isHex()) {
+                token.type = Int32;
+                token.i32_val = std::stoi(buffer, 0, 16);
             } else {
                 token.type = Id;
                 token.id_val = buffer;
@@ -271,6 +274,16 @@ TokenType Scanner::getSymbol(char c) {
 bool Scanner::isInt() {
     for (char c : buffer) {
         if (!isdigit(c)) return false;
+    }
+    return true;
+}
+
+bool Scanner::isHex() {
+    if (buffer.length() < 3) return false;
+    if (buffer[0] != '0' || buffer[1] != 'x') return false;
+    
+    for (int i = 2; i<buffer.length(); i++) {
+        if (!isxdigit(buffer[i])) return false;
     }
     return true;
 }

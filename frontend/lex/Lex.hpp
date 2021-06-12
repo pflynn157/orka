@@ -100,5 +100,6 @@ private:
     TokenType getKeyword();
     TokenType getSymbol(char c);
     bool isInt();
+    bool isHex();
 };
 
