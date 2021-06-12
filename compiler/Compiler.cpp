@@ -39,6 +39,10 @@ void Compiler::compile() {
     for (auto global : tree->getGlobalStatements()) {
         switch (global->getType()) {
             case AstType::Func: {
+                symtable.clear();
+                typeTable.clear();
+                ptrTable.clear();
+                
                 compileFunction(global);
             } break;
             
