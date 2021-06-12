@@ -28,10 +28,7 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
             switch (t3.type) {
                 case Char: v.type = DataType::Char; break;
                 case Int: v.type = DataType::Int32; break;
-                case Str: {
-                    v.type = DataType::Ptr;
-                    v.subType = DataType::Char;
-                } break;
+                case Str: v.type = DataType::String; break;
                 
                 default: {
                     syntax->addError(scanner->getLine(), "Invalid function argument: Unknown type.");

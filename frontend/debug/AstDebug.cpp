@@ -7,6 +7,7 @@ std::string printDataType(DataType dataType) {
         case DataType::Void: return "void";
         case DataType::Char: return "char";
         case DataType::Int32: return "i32";
+        case DataType::String: return "string";
         case DataType::Array: return "array";
         case DataType::Ptr: return "ptr";
     }

@@ -15,10 +15,12 @@ bool Parser::buildVariableDec(AstBlock *block, Token idToken) {
     
     token = scanner->getNext();
     DataType dataType = DataType::Void;
+    bool isString = false;
     
     switch (token.type) {
         case Char: dataType = DataType::Char; break;
         case Int: dataType = DataType::Int32; break;
+        case Str: dataType = DataType::String; break;
         
         default: {}
     }

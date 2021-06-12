@@ -95,13 +95,20 @@ void Compiler::compileStatement(AstStatement *stmt) {
         case AstType::ArrayAssign: {
             AstArrayAssign *pa = static_cast<AstArrayAssign *>(stmt);
             Value *ptr = symtable[pa->getName()];
+            DataType ptrType = typeTable[pa->getName()];
             Value *index = compileValue(pa->getExpressions().at(0));
             Value *val = compileValue(pa->getExpressions().at(1));
             
-            Value *arrayPtr = builder->CreateStructGEP(ptr, 0);
-            Value *ptrLd = builder->CreateLoad(arrayPtr);
-            Value *ep = builder->CreateGEP(ptrLd, index);
-            builder->CreateStore(val, ep);
+            if (ptrType == DataType::String) {
+                Value *arrayPtr = builder->CreateLoad(ptr);
+                Value *ep = builder->CreateGEP(arrayPtr, index);
+                builder->CreateStore(val, ep);
+            } else {
+                Value *arrayPtr = builder->CreateStructGEP(ptr, 0);
+                Value *ptrLd = builder->CreateLoad(arrayPtr);
+                Value *ep = builder->CreateGEP(ptrLd, index);
+                builder->CreateStore(val, ep);
+            }
         } break;
         
         // Function call statements
@@ -182,12 +189,19 @@ Value *Compiler::compileValue(AstExpression *expr) {
         case AstType::ArrayAccess: {
             AstArrayAccess *acc = static_cast<AstArrayAccess *>(expr);
             AllocaInst *ptr = symtable[acc->getValue()];
+            DataType ptrType = typeTable[acc->getValue()];
             Value *index = compileValue(acc->getIndex());
             
-            Value *arrayPtr = builder->CreateStructGEP(ptr, 0);
-            Value *ptrLd = builder->CreateLoad(arrayPtr);
-            Value *ep = builder->CreateGEP(ptrLd, index);
-            return builder->CreateLoad(ep);
+            if (ptrType == DataType::String) {
+                Value *arrayPtr = builder->CreateLoad(ptr);
+                Value *ep = builder->CreateGEP(arrayPtr, index);
+                return builder->CreateLoad(ep);
+            } else {
+                Value *arrayPtr = builder->CreateStructGEP(ptr, 0);
+                Value *ptrLd = builder->CreateLoad(arrayPtr);
+                Value *ep = builder->CreateGEP(ptrLd, index);
+                return builder->CreateLoad(ep);
+            }
         } break;
         
         case AstType::FuncCallExpr: {
@@ -253,6 +267,7 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
     switch (dataType) {
         case DataType::Char: type = Type::getInt8Ty(*context); break;
         case DataType::Int32: type = Type::getInt32Ty(*context); break;
+        case DataType::String: type = Type::getInt8PtrTy(*context); break;
         
         case DataType::Array: {
             switch (subType) {
