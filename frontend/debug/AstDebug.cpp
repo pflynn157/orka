@@ -8,6 +8,8 @@ std::string printDataType(DataType dataType) {
         case DataType::Char: return "char";
         case DataType::Byte: return "byte";
         case DataType::UByte: return "ubyte";
+        case DataType::Short: return "short";
+        case DataType::UShort: return "ushort";
         case DataType::Int32: return "i32";
         case DataType::String: return "string";
         case DataType::Array: return "array";

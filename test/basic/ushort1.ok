@@ -9,7 +9,7 @@ func println(line:str) is extern
 func printf(line:str, x:int) is extern
 
 func main -> int is
-    x : short = 0x21;
+    x : ushort = 0x21;
 begin
     printf("%x\n", x);
     

@@ -51,6 +51,8 @@ enum class DataType {
     Char,
     Byte,
     UByte,
+    Short,
+    UShort,
     Int32,
     String,
     Array,

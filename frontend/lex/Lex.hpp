@@ -33,6 +33,8 @@ enum TokenType {
     Char,
     Byte,
     UByte,
+    Short,
+    UShort,
     Int,
     Str,
     

@@ -29,6 +29,8 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
                 case Char: v.type = DataType::Char; break;
                 case Byte: v.type = DataType::Byte; break;
                 case UByte: v.type = DataType::UByte; break;
+                case Short: v.type = DataType::Short; break;
+                case UShort: v.type = DataType::UShort; break;
                 case Int: v.type = DataType::Int32; break;
                 case Str: v.type = DataType::String; break;
                 
