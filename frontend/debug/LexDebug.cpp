@@ -12,6 +12,7 @@ void Token::print() {
         case Begin: std::cout << "BEGIN "; break;
         case End: std::cout << "END "; break;
         case Return: std::cout << "RETURN "; break;
+        case Char: std::cout << "CHAR"; break;
         case Int: std::cout << "INT"; break;
         case Str: std::cout << "STR"; break;
         case If: std::cout << "IF"; break;

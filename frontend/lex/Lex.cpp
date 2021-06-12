@@ -55,6 +55,24 @@ Token Scanner::getNext() {
             }
         }
         
+        // TODO: This needs some kind of error handleing
+        if (next == '\'') {
+            char c = reader.get();
+            if (c == '\\') {
+                c = reader.get();
+                if (c == 'n') {
+                    c = '\n';
+                }
+            }
+        
+            Token charL;
+            charL.i8_val = c;
+            charL.type = CharL;
+            
+            next = reader.get();
+            return charL;
+        }
+        
         if (next == '\"') {
             if (inQuote) {
                 Token str;
@@ -156,6 +174,7 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "begin") return Begin;
     else if (buffer == "end") return End;
     else if (buffer == "return") return Return;
+    else if (buffer == "char") return Char;
     else if (buffer == "int") return Int;
     else if (buffer == "str") return Str;
     else if (buffer == "if") return If;

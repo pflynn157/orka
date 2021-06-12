@@ -133,6 +133,19 @@ public:
     void print();
 };
 
+// Represents a character literal
+class AstChar : public AstExpression {
+public:
+    explicit AstChar(char val) : AstExpression(AstType::CharL) {
+        this->val = val;
+    }
+    
+    char getValue() { return val; }
+    void print();
+private:
+    char val = 0;
+};
+
 // Represents an integer literal
 class AstInt : public AstExpression {
 public:

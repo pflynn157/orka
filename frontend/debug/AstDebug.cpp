@@ -319,6 +319,10 @@ void AstLTEOp::print() {
     std::cout << ")";
 }
 
+void AstChar::print() {
+    std::cout << "CHAR(" << val << ")";
+}
+
 void AstInt::print() {
     std::cout << val;
 }

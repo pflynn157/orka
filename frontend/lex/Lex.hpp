@@ -15,6 +15,7 @@ enum TokenType {
     Begin,
     End,
     Return,
+    Char,
     Int,
     Str,
     If,
@@ -34,6 +35,7 @@ enum TokenType {
     // Literals
     Id,
     String,
+    CharL,
     Int32,
     
     // Symbols
@@ -65,6 +67,7 @@ enum TokenType {
 struct Token {
     TokenType type;
     std::string id_val;
+    char i8_val;
     int i32_val;
     
     Token();

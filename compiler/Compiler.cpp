@@ -22,6 +22,12 @@ Compiler::Compiler(AstTree *tree, CFlags cflags) {
     arrayTypes.push_back(Type::getInt32Ty(*context));
     i32ArrayType = StructType::create(*context, arrayTypes);
     i32ArrayType->setName("IntArrayType");
+    
+    arrayTypes.clear();
+    arrayTypes.push_back(Type::getInt8PtrTy(*context));
+    arrayTypes.push_back(Type::getInt32Ty(*context));
+    i8ArrayType = StructType::create(*context, arrayTypes);
+    i8ArrayType->setName("CharArrayType");
 
     // Add declarations for built-in functions
     FunctionType *FT1 = FunctionType::get(Type::getInt8PtrTy(*context), Type::getInt32Ty(*context), false);
@@ -148,6 +154,11 @@ Value *Compiler::compileValue(AstExpression *expr) {
             return builder->getInt32(ival->getValue());
         } break;
         
+        case AstType::CharL: {
+            AstChar *cval = static_cast<AstChar *>(expr);
+            return builder->getInt8(cval->getValue());
+        } break;
+        
         case AstType::StringL: {
             AstString *str = static_cast<AstString *>(expr);
             return builder->CreateGlobalStringPtr(str->getValue());
@@ -240,10 +251,12 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
     Type *type;
             
     switch (dataType) {
+        case DataType::Char: type = Type::getInt8Ty(*context); break;
         case DataType::Int32: type = Type::getInt32Ty(*context); break;
         
         case DataType::Array: {
             switch (subType) {
+                case DataType::Char: type = i8ArrayType; break;
                 case DataType::Int32: type = i32ArrayType; break;
                 
                 default: {}

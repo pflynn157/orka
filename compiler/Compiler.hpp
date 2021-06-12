@@ -50,6 +50,9 @@ private:
     std::unique_ptr<Module> mod;
     std::unique_ptr<IRBuilder<>> builder;
     Function *currentFunc;
+    
+    // The array types
+    StructType *i8ArrayType;
     StructType *i32ArrayType;
     
     // Symbol table

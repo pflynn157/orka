@@ -67,6 +67,15 @@ void printf(const char *line, int64_t arg1)
             
             print_int(arg1);
             ++i;
+        } else if (line[i] == '%' && line[i+1] == 'c') {
+            syscall_str4(1, 1, (char *)buffer, index);
+            for (int j = 0; j<index; j++) buffer[j] = 0;
+            index = 0;
+            
+            char buf[1];
+            buf[0] = (char)arg1;
+            syscall_str4(1, 1, (char *)buf, 1);
+            ++i;
         } else if (line[i] == '\\' && line[i+1] == 'n') {
             buffer[index] = '\n';
             ++index;
@@ -77,5 +86,17 @@ void printf(const char *line, int64_t arg1)
     }
     
     syscall_str4(1, 1, (char *)buffer, index);
+}
+
+// TODO: Move this elsewhere
+typedef struct
+{
+    char *array;
+    int size;
+} CharArray;
+
+void printCharArray(CharArray array)
+{
+    syscall_str4(1, 1, array.array, array.size);
 }
 

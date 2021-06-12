@@ -39,6 +39,7 @@ enum class AstType {
     GTE,
     LTE,
     
+    CharL,
     IntL,
     StringL,
     ID,

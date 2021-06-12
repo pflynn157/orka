@@ -162,6 +162,11 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
         }
     
         switch (token.type) {
+            case CharL: {
+                AstChar *c = new AstChar(token.i8_val);
+                output.push(c);
+            } break;
+            
             case Int32: {
                 AstInt *i32 = new AstInt(token.i32_val);
                 output.push(i32);
