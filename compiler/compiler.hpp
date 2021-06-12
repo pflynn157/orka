@@ -42,7 +42,7 @@ private:
     std::unique_ptr<Module> mod;
     std::unique_ptr<IRBuilder<>> builder;
     Function *currentFunc;
-    StructType *arrayType;
+    StructType *i32ArrayType;
     
     // Symbol table
     std::map<std::string, AllocaInst *> symtable;

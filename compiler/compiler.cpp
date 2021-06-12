@@ -22,8 +22,8 @@ void Compiler::compile() {
     std::vector<Type *> arrayTypes;
     arrayTypes.push_back(Type::getInt32PtrTy(*context));
     arrayTypes.push_back(Type::getInt32Ty(*context));
-    arrayType = StructType::create(*context, arrayTypes);
-    arrayType->setName("IntArrayType");
+    i32ArrayType = StructType::create(*context, arrayTypes);
+    i32ArrayType->setName("IntArrayType");
 
     // Add declarations for built-in functions
     FunctionType *FT1 = FunctionType::get(Type::getInt8PtrTy(*context), Type::getInt32Ty(*context), false);
@@ -116,12 +116,6 @@ void Compiler::compileStatement(AstStatement *stmt) {
         case AstType::VarDec: {
             AstVarDec *vd = static_cast<AstVarDec *>(stmt);
             Type *type = translateType(vd->getDataType(), vd->getPtrType());
-            bool isArray = false;
-            
-            if (vd->getDataType() == DataType::Array) {
-                type = arrayType;
-                isArray = true;
-            }
             
             AllocaInst *var = builder->CreateAlloca(type);
             symtable[vd->getName()] = var;
@@ -129,7 +123,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
             ptrTable[vd->getName()] = vd->getPtrType();
             
             // If we have an array, set the size of the structure
-            if (isArray) {
+            if (vd->getDataType() == DataType::Array) {
                 Value *size = compileValue(vd->getPtrSize());
                 Value *sizePtr = builder->CreateStructGEP(var, 1);
                 builder->CreateStore(size, sizePtr);
@@ -140,9 +134,10 @@ void Compiler::compileStatement(AstStatement *stmt) {
         case AstType::VarAssign: {
             AstVarAssign *va = static_cast<AstVarAssign *>(stmt);
             AllocaInst *ptr = symtable[va->getName()];
+            DataType ptrType = typeTable[va->getName()];
             Value *val = compileValue(stmt->getExpressions().at(0));
             
-            if (ptr->getType()->getElementType() == arrayType) {
+            if (ptrType == DataType::Array) {
                 Value *arrayPtr = builder->CreateStructGEP(ptr, 0);
                 builder->CreateStore(val, arrayPtr);
             } else {
@@ -327,7 +322,7 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
         
         case DataType::Array: {
             switch (subType) {
-                case DataType::Int32: type = arrayType; break;
+                case DataType::Int32: type = i32ArrayType; break;
                 
                 default: {}
             }
