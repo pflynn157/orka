@@ -4,7 +4,7 @@
 #include <parser/Parser.hpp>
 #include <ast.hpp>
 
-#include <compiler.hpp>
+#include <Compiler.hpp>
 
 int main(int argc, char **argv) {
     if (argc == 1) {

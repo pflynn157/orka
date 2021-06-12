@@ -26,13 +26,21 @@ public:
     void link();
 protected:
     void compileStatement(AstStatement *stmt);
+    Value *compileValue(AstExpression *expr);
+    Type *translateType(DataType dataType, DataType subType = DataType::Void);
+
+    // Function.cpp
+    void compileFunction(AstGlobalStatement *global);
+    void compileExternFunction(AstGlobalStatement *global);
+    void compileFuncCallStatement(AstStatement *stmt);
+    void compileReturnStatement(AstStatement *stmt);
+    
+    // Flow.cpp
     void compileIfStatement(AstStatement *stmt);
     void compileWhileStatement(AstStatement *stmt);
     void compileLoopStatement(AstStatement *stmt);
     void compileForStatement(AstStatement *stmt);
     void compileForEachStatement(AstForStmt *stmt);
-    Value *compileValue(AstExpression *expr);
-    Type *translateType(DataType dataType, DataType subType = DataType::Void);
 private:
     AstTree *tree;
     CFlags cflags;

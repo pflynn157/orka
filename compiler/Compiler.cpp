@@ -6,7 +6,7 @@ using namespace llvm::sys;
 
 #include <iostream>
 
-#include <compiler.hpp>
+#include <Compiler.hpp>
 
 Compiler::Compiler(AstTree *tree, CFlags cflags) {
     this->tree = tree;
@@ -15,9 +15,7 @@ Compiler::Compiler(AstTree *tree, CFlags cflags) {
     context = std::make_unique<LLVMContext>();
     mod = std::make_unique<Module>(cflags.name, *context);
     builder = std::make_unique<IRBuilder<>>(*context);
-}
-
-void Compiler::compile() {
+    
     // Create the global structure type
     std::vector<Type *> arrayTypes;
     arrayTypes.push_back(Type::getInt32PtrTy(*context));
@@ -28,76 +26,18 @@ void Compiler::compile() {
     // Add declarations for built-in functions
     FunctionType *FT1 = FunctionType::get(Type::getInt8PtrTy(*context), Type::getInt32Ty(*context), false);
     Function::Create(FT1, Function::ExternalLinkage, "malloc", mod.get());
+}
 
+void Compiler::compile() {
     // Build all other functions
     for (auto global : tree->getGlobalStatements()) {
         switch (global->getType()) {
             case AstType::Func: {
-                AstFunction *astFunc = static_cast<AstFunction *>(global);
-
-                std::vector<Var> astVarArgs = astFunc->getArguments();
-                FunctionType *FT;
-                Type *funcType = translateType(astFunc->getDataType(), astFunc->getPtrType());
-                
-                if (astVarArgs.size() == 0) {
-                    FT = FunctionType::get(funcType, false);
-                } else {
-                    std::vector<Type *> args;
-                    for (auto var : astVarArgs) {
-                        Type *type = translateType(var.type, var.subType);
-                        args.push_back(type);
-                    }
-                    
-                    FT = FunctionType::get(funcType, args, false);
-                }
-                
-                Function *func = Function::Create(FT, Function::ExternalLinkage, astFunc->getName(), mod.get());
-                currentFunc = func;
-
-                BasicBlock *mainBlock = BasicBlock::Create(*context, "entry", func);
-                builder->SetInsertPoint(mainBlock);
-                
-                // Load and store any arguments
-                if (astVarArgs.size() > 0) {
-                    for (int i = 0; i<astVarArgs.size(); i++) {
-                        Var var = astVarArgs.at(i);
-                        
-                        // Build the alloca for the local var
-                        Type *type = translateType(var.type, var.subType);
-                        AllocaInst *alloca = builder->CreateAlloca(type);
-                        symtable[var.name] = alloca;
-                        typeTable[var.name] = var.type;
-                        
-                        // Store the variable
-                        Value *param = func->getArg(i);
-                        builder->CreateStore(param, alloca);
-                    }
-                }
-
-                for (auto stmt : astFunc->getBlock()->getBlock()) {
-                    compileStatement(stmt);
-                }
+                compileFunction(global);
             } break;
             
             case AstType::ExternFunc: {
-                AstExternFunction *astFunc = static_cast<AstExternFunction *>(global);
-                
-                std::vector<Var> astVarArgs = astFunc->getArguments();
-                FunctionType *FT;
-                
-                if (astVarArgs.size() == 0) {
-                    FT = FunctionType::get(Type::getVoidTy(*context), false);
-                } else {
-                    std::vector<Type *> args;
-                    for (auto var : astVarArgs) {
-                        Type *type = translateType(var.type, var.subType);
-                        args.push_back(type);
-                    }
-                    
-                    FT = FunctionType::get(Type::getVoidTy(*context), args, false);
-                }
-                
-                Function::Create(FT, Function::ExternalLinkage, astFunc->getName(), mod.get());
+                compileExternFunction(global);
             } break;
 
             default: {}
@@ -158,32 +98,14 @@ void Compiler::compileStatement(AstStatement *stmt) {
             builder->CreateStore(val, ep);
         } break;
         
-        // TODO: We should not do error handeling in the compiler. Check for invalid functions in the AST level
         // Function call statements
         case AstType::FuncCallStmt: {
-            AstFuncCallStmt *fc = static_cast<AstFuncCallStmt *>(stmt);
-            std::vector<Value *> args;
-            
-            for (auto stmt : stmt->getExpressions()) {
-                Value *val = compileValue(stmt);
-                args.push_back(val);
-            }
-            
-            Function *callee = mod->getFunction(fc->getName());
-            if (!callee) std::cerr << "Invalid function call statement." << std::endl;
-            builder->CreateCall(callee, args);
+            compileFuncCallStatement(stmt);
         } break;
         
         // A return statement
         case AstType::Return: {
-            if (stmt->getExpressionCount() == 0) {
-                builder->CreateRetVoid();
-            } else if (stmt->getExpressionCount() == 1) {
-                Value *val = compileValue(stmt->getExpressions().at(0));
-                builder->CreateRet(val);
-            } else {
-                builder->CreateRetVoid();
-            }
+            compileReturnStatement(stmt);
         } break;
         
         // An IF statement

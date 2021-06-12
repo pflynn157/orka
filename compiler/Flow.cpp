@@ -1,4 +1,4 @@
-#include <compiler.hpp>
+#include <Compiler.hpp>
 
 // Translates an AST IF statement to LLVM
 void Compiler::compileIfStatement(AstStatement *stmt) {

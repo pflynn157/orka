@@ -2,9 +2,10 @@ cmake_minimum_required(VERSION 3.0.0)
 project(orka_compiler)
 
 set(SRC
-    builder.cpp
-    compiler.cpp
-    flow.cpp
+    Builder.cpp
+    Compiler.cpp
+    Flow.cpp
+    Function.cpp
 )
 
 add_library(occompiler STATIC ${SRC})

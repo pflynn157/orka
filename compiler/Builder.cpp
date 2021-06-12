@@ -10,7 +10,7 @@
 using namespace llvm;
 using namespace llvm::sys;
 
-#include <compiler.hpp>
+#include <Compiler.hpp>
 
 void Compiler::writeAssembly() {
     LLVMInitializeX86TargetInfo();
