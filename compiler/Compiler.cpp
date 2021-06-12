@@ -166,7 +166,8 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
             AstInt *ival = static_cast<AstInt *>(expr);
             
             switch (dataType) {
-                case DataType::Byte: return builder->getInt8(ival->getValue());
+                case DataType::Byte:
+                case DataType::UByte: return builder->getInt8(ival->getValue());
                 default: return builder->getInt32(ival->getValue());
             }
         } break;
@@ -276,7 +277,8 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
             
     switch (dataType) {
         case DataType::Char:
-        case DataType::Byte: type = Type::getInt8Ty(*context); break;
+        case DataType::Byte:
+        case DataType::UByte: type = Type::getInt8Ty(*context); break;
         case DataType::Int32: type = Type::getInt32Ty(*context); break;
         case DataType::String: type = Type::getInt8PtrTy(*context); break;
         

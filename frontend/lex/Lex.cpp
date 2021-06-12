@@ -179,6 +179,7 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "return") return Return;
     else if (buffer == "char") return Char;
     else if (buffer == "byte") return Byte;
+    else if (buffer == "ubyte") return UByte;
     else if (buffer == "int") return Int;
     else if (buffer == "str") return Str;
     else if (buffer == "if") return If;

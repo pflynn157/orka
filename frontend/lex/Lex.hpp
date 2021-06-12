@@ -32,6 +32,7 @@ enum TokenType {
     // Datatype Keywords
     Char,
     Byte,
+    UByte,
     Int,
     Str,
     

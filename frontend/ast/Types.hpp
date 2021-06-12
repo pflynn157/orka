@@ -50,6 +50,7 @@ enum class DataType {
     Void,
     Char,
     Byte,
+    UByte,
     Int32,
     String,
     Array,

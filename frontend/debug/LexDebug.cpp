@@ -27,6 +27,7 @@ void Token::print() {
         
         case Char: std::cout << "CHAR"; break;
         case Byte: std::cout << "BYTE"; break;
+        case UByte: std::cout << "UBYTE"; break;
         case Int: std::cout << "INT"; break;
         case Str: std::cout << "STR"; break;
         
