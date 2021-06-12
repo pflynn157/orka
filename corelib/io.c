@@ -21,7 +21,7 @@ void println(const char *line)
     syscall_str4(1, 1, "\n", 1);
 }
 
-void print_int(int num)
+void printInt(int num)
 {
     // For some reason, weird things happen with just 0
     if (num == 0) {
@@ -53,6 +53,62 @@ void print_int(int num)
     syscall_str4(1, 1, (char *)buf1, size);
 }
 
+char getHex(int num)
+{
+    char hex;
+    switch (num) {
+        case 10: hex = 'A'; break;
+        case 11: hex = 'B'; break;
+        case 12: hex = 'C'; break;
+        case 13: hex = 'D'; break;
+        case 14: hex = 'E'; break;
+        case 15: hex = 'F'; break;
+        default: {
+            hex = num + '0';
+        }
+    }
+    return hex;
+}
+
+void printHex(int num)
+{
+    if (num == 0) {
+        syscall_str4(1, 1, "0", 1);
+        return;
+    }
+    
+    if (num <= 15) {
+        char hex = getHex(num);
+        syscall_str4(1, 1, &hex, 1);
+        return;
+    }
+    
+    // Determine length
+    int length = 1;
+    int num2 = num;
+    while (num2 > 15) {
+        length += 1;
+        num2 /= 16;
+    }
+    
+    char number[length];
+    int index = length - 1;
+    
+    // Now print
+    while (num > 15) {
+        int digit = num % 16;
+        num /= 16;
+        
+        number[index] = getHex(digit);
+        --index;
+    }
+    
+    number[index] = getHex(num);
+    
+    // Print
+    syscall_str4(1, 1, (char *)number, length);
+}
+
 void printf(const char *line, int64_t arg1)
 {
     int size = strlen(line);
@@ -65,7 +121,14 @@ void printf(const char *line, int64_t arg1)
             for (int j = 0; j<index; j++) buffer[j] = 0;
             index = 0;
             
-            print_int(arg1);
+            printInt(arg1);
+            ++i;
+        } else if (line[i] == '%' && line[i+1] == 'x') {
+            syscall_str4(1, 1, (char *)buffer, index);
+            for (int j = 0; j<index; j++) buffer[j] = 0;
+            index = 0;
+            
+            printHex(arg1);
             ++i;
         } else if (line[i] == '%' && line[i+1] == 'c') {
             syscall_str4(1, 1, (char *)buffer, index);

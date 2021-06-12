@@ -10,11 +10,9 @@ func println(line:str) is extern
 func printf(line:str, x:int) is extern
 
 func main -> int is
-    string : str = "Hello!";
-    c : char = string[3];
+    x : int = 103;
 begin
-    println(string);
-    printf("%c\n", c);
+    printf("%x\n", x);
     
     return 0;
 end
