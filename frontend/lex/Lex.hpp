@@ -15,9 +15,6 @@ enum TokenType {
     Begin,
     End,
     Return,
-    Char,
-    Int,
-    Str,
     If,
     Elif,
     Else,
@@ -31,6 +28,12 @@ enum TokenType {
     Continue,
     In,
     Sizeof,
+    
+    // Datatype Keywords
+    Char,
+    Byte,
+    Int,
+    Str,
     
     // Literals
     Id,

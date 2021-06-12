@@ -12,9 +12,6 @@ void Token::print() {
         case Begin: std::cout << "BEGIN "; break;
         case End: std::cout << "END "; break;
         case Return: std::cout << "RETURN "; break;
-        case Char: std::cout << "CHAR"; break;
-        case Int: std::cout << "INT"; break;
-        case Str: std::cout << "STR"; break;
         case If: std::cout << "IF"; break;
         case Elif: std::cout << "ELIF"; break;
         case Else: std::cout << "ELSE"; break;
@@ -27,6 +24,11 @@ void Token::print() {
         case Continue: std::cout << "CONTINUE"; break;
         case In: std::cout << "IN"; break;
         case Sizeof: std::cout << "SIZEOF"; break;
+        
+        case Char: std::cout << "CHAR"; break;
+        case Byte: std::cout << "BYTE"; break;
+        case Int: std::cout << "INT"; break;
+        case Str: std::cout << "STR"; break;
         
         case Id: std::cout << "ID "; break;
         case Int32: std::cout << "I32 "; break;

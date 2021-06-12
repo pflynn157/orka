@@ -85,7 +85,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
             AstVarAssign *va = static_cast<AstVarAssign *>(stmt);
             AllocaInst *ptr = symtable[va->getName()];
             DataType ptrType = typeTable[va->getName()];
-            Value *val = compileValue(stmt->getExpressions().at(0));
+            Value *val = compileValue(stmt->getExpressions().at(0), ptrType);
             
             if (ptrType == DataType::Array) {
                 Value *arrayPtr = builder->CreateStructGEP(ptr, 0);
@@ -100,8 +100,10 @@ void Compiler::compileStatement(AstStatement *stmt) {
             AstArrayAssign *pa = static_cast<AstArrayAssign *>(stmt);
             Value *ptr = symtable[pa->getName()];
             DataType ptrType = typeTable[pa->getName()];
+            DataType subType = ptrTable[pa->getName()];
+            
             Value *index = compileValue(pa->getExpressions().at(0));
-            Value *val = compileValue(pa->getExpressions().at(1));
+            Value *val = compileValue(pa->getExpressions().at(1), subType);
             
             if (ptrType == DataType::String) {
                 Value *arrayPtr = builder->CreateLoad(ptr);
@@ -158,11 +160,15 @@ void Compiler::compileStatement(AstStatement *stmt) {
 }
 
 // Converts an AST value to an LLVM value
-Value *Compiler::compileValue(AstExpression *expr) {
+Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
     switch (expr->getType()) {
         case AstType::IntL: {
             AstInt *ival = static_cast<AstInt *>(expr);
-            return builder->getInt32(ival->getValue());
+            
+            switch (dataType) {
+                case DataType::Byte: return builder->getInt8(ival->getValue());
+                default: return builder->getInt32(ival->getValue());
+            }
         } break;
         
         case AstType::CharL: {
@@ -269,7 +275,8 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
     Type *type;
             
     switch (dataType) {
-        case DataType::Char: type = Type::getInt8Ty(*context); break;
+        case DataType::Char:
+        case DataType::Byte: type = Type::getInt8Ty(*context); break;
         case DataType::Int32: type = Type::getInt32Ty(*context); break;
         case DataType::String: type = Type::getInt8PtrTy(*context); break;
         

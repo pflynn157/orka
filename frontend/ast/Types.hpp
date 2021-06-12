@@ -49,6 +49,7 @@ enum class AstType {
 enum class DataType {
     Void,
     Char,
+    Byte,
     Int32,
     String,
     Array,

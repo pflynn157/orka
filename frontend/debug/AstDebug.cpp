@@ -6,6 +6,7 @@ std::string printDataType(DataType dataType) {
     switch (dataType) {
         case DataType::Void: return "void";
         case DataType::Char: return "char";
+        case DataType::Byte: return "byte";
         case DataType::Int32: return "i32";
         case DataType::String: return "string";
         case DataType::Array: return "array";

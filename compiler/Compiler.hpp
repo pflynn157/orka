@@ -26,7 +26,7 @@ public:
     void link();
 protected:
     void compileStatement(AstStatement *stmt);
-    Value *compileValue(AstExpression *expr);
+    Value *compileValue(AstExpression *expr, DataType dataType = DataType::Void);
     Type *translateType(DataType dataType, DataType subType = DataType::Void);
 
     // Function.cpp
