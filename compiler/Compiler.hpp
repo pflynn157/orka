@@ -50,6 +50,7 @@ private:
     std::unique_ptr<Module> mod;
     std::unique_ptr<IRBuilder<>> builder;
     Function *currentFunc;
+    DataType currentFuncType = DataType::Void;
     
     // The array types
     StructType *i8ArrayType;

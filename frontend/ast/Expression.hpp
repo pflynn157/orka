@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <stdint.h>
 
 #include <ast/Types.hpp>
 
@@ -149,14 +150,14 @@ private:
 // Represents an integer literal
 class AstInt : public AstExpression {
 public:
-    explicit AstInt(int val) : AstExpression(AstType::IntL) {
+    explicit AstInt(uint64_t val) : AstExpression(AstType::IntL) {
         this->val = val;
     }
     
-    int getValue() { return val; }
+    uint64_t getValue() { return val; }
     void print();
 private:
-    int val = 0;
+    uint64_t val = 0;
 };
 
 // Represents a string literal

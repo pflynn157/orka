@@ -1,0 +1,20 @@
+
+#OUTPUT
+#1234
+#4660
+#END
+
+#RET 0
+
+func println(line:str) is extern
+func printf(line:str, x:int) is extern
+
+func main -> int is
+    x : uint = 0x1234;
+begin
+    printf("%x\n", x);
+    printf("%d\n", x);
+    
+    return 0;
+end
+

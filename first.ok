@@ -1,17 +1,32 @@
 
 #OUTPUT
-#21
+#X1: 30
+#X2: 10
+#X3: 200
+#X4: 2
 #END
 
 #RET 0
 
-func println(line:str) is extern
-func printf(line:str, x:int) is extern
+func printf(ln : str, x : int) is extern
 
 func main -> int is
-    x : short = 0x21;
+    x1 : int = 0;
+    x2 : int = 0;
+    x3 : int = 0;
+    x4 : int = 0;
+    
+    y : int = 20;
 begin
-    printf("%x\n", x);
+    x1 = y + 10;
+    x2 = y - 10;
+    x3 = y * 10;
+    x4 = y / 10;
+    
+    printf("X1: %d\n", x1);
+    printf("X2: %d\n", x2);
+    printf("X3: %d\n", x3);
+    printf("X4: %d\n", x4);
     
     return 0;
 end

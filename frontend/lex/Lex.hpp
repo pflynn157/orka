@@ -36,6 +36,7 @@ enum TokenType {
     Short,
     UShort,
     Int,
+    UInt,
     Str,
     
     // Literals

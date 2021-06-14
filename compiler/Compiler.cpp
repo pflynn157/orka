@@ -172,6 +172,9 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
                 case DataType::Short:
                 case DataType::UShort: return builder->getInt16(ival->getValue());
                 
+                //case DataType::Int32:
+                //case DataType::UInt32: return builder->getInt32(ival->getValue());
+                
                 default: return builder->getInt32(ival->getValue());
             }
         } break;
@@ -244,8 +247,8 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
         case AstType::GTE:
         case AstType::LTE: {
             AstBinaryOp *op = static_cast<AstBinaryOp *>(expr);
-            Value *lval = compileValue(op->getLVal());
-            Value *rval = compileValue(op->getRVal());
+            Value *lval = compileValue(op->getLVal(), dataType);
+            Value *rval = compileValue(op->getRVal(), dataType);
             
             if (expr->getType() == AstType::Add)
                 return builder->CreateAdd(lval, rval);
@@ -287,7 +290,8 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
         case DataType::Short:
         case DataType::UShort: type = Type::getInt16Ty(*context); break;
         
-        case DataType::Int32: type = Type::getInt32Ty(*context); break;
+        case DataType::Int32:
+        case DataType::UInt32: type = Type::getInt32Ty(*context); break;
         case DataType::String: type = Type::getInt8PtrTy(*context); break;
         
         case DataType::Array: {

@@ -11,6 +11,7 @@ void Compiler::compileFunction(AstGlobalStatement *global) {
     std::vector<Var> astVarArgs = astFunc->getArguments();
     FunctionType *FT;
     Type *funcType = translateType(astFunc->getDataType(), astFunc->getPtrType());
+    currentFuncType = astFunc->getDataType();
     
     if (astVarArgs.size() == 0) {
         FT = FunctionType::get(funcType, false);
@@ -104,7 +105,7 @@ void Compiler::compileReturnStatement(AstStatement *stmt) {
     if (stmt->getExpressionCount() == 0) {
         builder->CreateRetVoid();
     } else if (stmt->getExpressionCount() == 1) {
-        Value *val = compileValue(stmt->getExpressions().at(0));
+        Value *val = compileValue(stmt->getExpressions().at(0), currentFuncType);
         builder->CreateRet(val);
     } else {
         builder->CreateRetVoid();
