@@ -172,8 +172,8 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
                 case DataType::Short:
                 case DataType::UShort: return builder->getInt16(ival->getValue());
                 
-                //case DataType::Int32:
-                //case DataType::UInt32: return builder->getInt32(ival->getValue());
+                case DataType::Int64:
+                case DataType::UInt64: return builder->getInt64(ival->getValue());
                 
                 default: return builder->getInt32(ival->getValue());
             }
@@ -292,6 +292,10 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
         
         case DataType::Int32:
         case DataType::UInt32: type = Type::getInt32Ty(*context); break;
+        
+        case DataType::Int64:
+        case DataType::UInt64: type = Type::getInt64Ty(*context); break;
+        
         case DataType::String: type = Type::getInt8PtrTy(*context); break;
         
         case DataType::Array: {

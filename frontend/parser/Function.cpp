@@ -33,6 +33,8 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
                 case UShort: v.type = DataType::UShort; break;
                 case Int: v.type = DataType::Int32; break;
                 case UInt: v.type = DataType::UInt32; break;
+                case Int64: v.type = DataType::Int64; break;
+                case UInt64: v.type = DataType::UInt64; break;
                 case Str: v.type = DataType::String; break;
                 
                 default: {

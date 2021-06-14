@@ -184,6 +184,8 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "ushort") return UShort;
     else if (buffer == "int") return Int;
     else if (buffer == "uint") return UInt;
+    else if (buffer == "int64") return Int64;
+    else if (buffer == "uint64") return UInt64;
     else if (buffer == "str") return Str;
     else if (buffer == "if") return If;
     else if (buffer == "elif") return Elif;

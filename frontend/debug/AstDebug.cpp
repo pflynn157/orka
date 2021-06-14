@@ -12,6 +12,8 @@ std::string printDataType(DataType dataType) {
         case DataType::UShort: return "ushort";
         case DataType::Int32: return "int32";
         case DataType::UInt32: return "uint32";
+        case DataType::Int64: return "int64";
+        case DataType::UInt64: return "uint64";
         case DataType::String: return "string";
         case DataType::Array: return "array";
         case DataType::Ptr: return "ptr";

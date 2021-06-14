@@ -32,6 +32,8 @@ void Token::print() {
         case UShort: std::cout << "USHORT"; break;
         case Int: std::cout << "INT"; break;
         case UInt: std::cout << "UINT"; break;
+        case Int64: std::cout << "INT64"; break;
+        case UInt64: std::cout << "UINT64"; break;
         case Str: std::cout << "STR"; break;
         
         case Id: std::cout << "ID "; break;

@@ -55,6 +55,8 @@ enum class DataType {
     UShort,
     Int32,
     UInt32,
+    Int64,
+    UInt64,
     String,
     Array,
     Ptr

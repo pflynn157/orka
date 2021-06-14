@@ -25,6 +25,8 @@ bool Parser::buildVariableDec(AstBlock *block, Token idToken) {
         case UShort: dataType = DataType::UShort; break;
         case Int: dataType = DataType::Int32; break;
         case UInt: dataType = DataType::UInt32; break;
+        case Int64: dataType = DataType::Int64; break;
+        case UInt64: dataType = DataType::UInt64; break;
         case Str: dataType = DataType::String; break;
         
         default: {}
