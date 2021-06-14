@@ -18,8 +18,8 @@
 
 #RET 0
 
-func printf(ln:str, x:int) is extern
-func println(ln:str) is extern
+extern func printf(ln:str, x:int);
+extern func println(ln:str);
 
 func cmp1(x:int) is
 begin

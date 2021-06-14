@@ -6,7 +6,7 @@
 
 #RET 0
 
-func printf(line:str, x:int) is extern
+extern func printf(line:str, x:int);
 
 func printArray(numbers:int[]) is
     x : int = numbers[2];

@@ -5,7 +5,7 @@
 
 #RET 0
 
-func printf(line:str, x:int) is extern
+extern func printf(line:str, x:int);
 
 func main -> int is
     numbers : int[5];

@@ -74,8 +74,23 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
 }
 
 // Builds a function
-bool Parser::buildFunction() {
-    Token token = scanner->getNext();
+bool Parser::buildFunction(Token startToken) {
+    Token token;
+    bool isExtern = false;
+
+    // Handle extern function
+    if (startToken.type == Extern) {
+        isExtern = true;
+        
+        token = scanner->getNext();
+        if (token.type != Func) {
+            syntax->addError(scanner->getLine(), "Expected \"func\" keyword.");
+            return false;
+        }
+    }
+
+    // Make sure we have a function name
+    token = scanner->getNext();
     std::string funcName = token.id_val;
     
     if (token.type != Id) {
@@ -89,7 +104,6 @@ bool Parser::buildFunction() {
 
     // Check to see if there's any return type
     token = scanner->getNext();
-    bool isExtern = false;
     DataType funcType = DataType::Void;
     DataType ptrType = DataType::Void;
     
@@ -115,14 +129,11 @@ bool Parser::buildFunction() {
         }
     }
     
-    if (token.type == Is) {
-        token = scanner->getNext();
-        if (token.type == Extern) {
-            isExtern = true;
-        } else {
-            scanner->rewind(token);
-        }
-    } else {
+    // Do syntax error check
+    if (token.type == SemiColon && !isExtern) {
+        syntax->addError(scanner->getLine(), "Expected \';\' for extern function.");
+        return false;
+    } else if (token.type == Is && isExtern) {
         syntax->addError(scanner->getLine(), "Expected \'is\' keyword.");
         return false;
     }

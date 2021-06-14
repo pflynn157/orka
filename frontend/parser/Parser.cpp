@@ -22,8 +22,9 @@ bool Parser::parse() {
         bool code = true;
         
         switch (token.type) {
+            case Extern:
             case Func: {
-                code = buildFunction();
+                code = buildFunction(token);
             } break;
             
             case Eof:

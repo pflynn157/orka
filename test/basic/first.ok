@@ -5,7 +5,7 @@
 
 #RET 2
 
-func println(s:str) is extern
+extern func println(s:str);
 
 func main -> int is
 begin

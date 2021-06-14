@@ -5,7 +5,7 @@
 
 #RET 0
 
-func printf(line:str, x:int) is extern
+extern func printf(line:str, x:int);
 
 func getNumber(x:int, y:int) -> int is
 begin

@@ -14,7 +14,7 @@
 
 #RET 0
 
-func println(ln : str) is extern
+extern func println(ln : str);
 
 func compare(x:int) is
 begin

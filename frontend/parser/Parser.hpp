@@ -22,7 +22,7 @@ public:
     void debugScanner();
 protected:
     bool getFunctionArgs(std::vector<Var> &args);
-    bool buildFunction();
+    bool buildFunction(Token startToken);
     bool buildVariableDec(AstBlock *block, Token idToken);
     bool buildVariableAssign(AstBlock *block, Token idToken);
     bool buildArrayAssign(AstBlock *block, Token idToken);
