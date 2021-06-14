@@ -8,8 +8,8 @@
 extern func printf(line:str, x:int);
 
 func main -> int is
-    numbers : uint[5];
-    x : uint = 0;
+    numbers : int64[5];
+    x : int64 = 0;
 begin
     numbers[2] = 243;
     x = numbers[2];

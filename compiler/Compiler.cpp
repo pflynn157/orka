@@ -24,6 +24,12 @@ Compiler::Compiler(AstTree *tree, CFlags cflags) {
     i32ArrayType->setName("IntArrayType");
     
     arrayTypes.clear();
+    arrayTypes.push_back(Type::getInt64PtrTy(*context));
+    arrayTypes.push_back(Type::getInt32Ty(*context));
+    i64ArrayType = StructType::create(*context, arrayTypes);
+    i64ArrayType->setName("Int64ArrayType");
+    
+    arrayTypes.clear();
     arrayTypes.push_back(Type::getInt8PtrTy(*context));
     arrayTypes.push_back(Type::getInt32Ty(*context));
     i8ArrayType = StructType::create(*context, arrayTypes);
@@ -301,7 +307,12 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
         case DataType::Array: {
             switch (subType) {
                 case DataType::Char: type = i8ArrayType; break;
+                
+                case DataType::UInt32:
                 case DataType::Int32: type = i32ArrayType; break;
+                
+                case DataType::Int64:
+                case DataType::UInt64: type = i64ArrayType; break;
                 
                 default: {}
             }
