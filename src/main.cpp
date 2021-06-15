@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstdio>
 
 #include <preproc/Preproc.hpp>
 #include <parser/Parser.hpp>
@@ -64,6 +65,7 @@ int main(int argc, char **argv) {
     tree = frontend->getTree();
     
     delete frontend;
+    remove(newInput.c_str());
     
     if (printAst) {
         tree->print();

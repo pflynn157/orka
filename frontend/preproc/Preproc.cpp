@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <cstdio>
 
 #include <lex/Lex.hpp>
 
@@ -64,6 +65,9 @@ std::string preprocessFile(std::string input) {
         while (std::getline(reader, line)) {
             writer << line;
         }
+        
+        reader.close();
+        remove(preprocInclude.c_str());
         
         // Drop the buffer so we don't put the include line back in
         scanner->getRawBuffer();
