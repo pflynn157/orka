@@ -43,25 +43,29 @@ Token Scanner::getNext() {
     
     for (;;) {
         char next = reader.get();
-        
         if (reader.eof()) {
             token.type = Eof;
             break;
         }
         
+        rawBuffer += next;
+        
         if (next == '#') {
             while (next != '\n' && !reader.eof()) {
                 next = reader.get();
+                rawBuffer += next;
             }
         }
         
         // TODO: This needs some kind of error handleing
         if (next == '\'') {
             char c = reader.get();
+            rawBuffer += c;
             if (c == '\\') {
                 c = reader.get();
                 if (c == 'n') {
                     c = '\n';
+                    rawBuffer += c;
                 }
             }
         
@@ -70,6 +74,7 @@ Token Scanner::getNext() {
             charL.type = CharL;
             
             next = reader.get();
+            rawBuffer += next;
             return charL;
         }
         
@@ -91,6 +96,7 @@ Token Scanner::getNext() {
         if (inQuote) {
             if (next == '\\') {
                 next = reader.get();
+                rawBuffer += next;
                 switch (next) {
                     case 'n': buffer += '\n'; break;
                     case 't': buffer += '\t'; break;
@@ -148,6 +154,12 @@ Token Scanner::getNext() {
     return token;
 }
 
+std::string Scanner::getRawBuffer() {
+    std::string ret = rawBuffer;
+    rawBuffer = "";
+    return ret;
+}
+
 bool Scanner::isSymbol(char c) {
     switch (c) {
         case '\n':
@@ -200,6 +212,7 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "continue") return Continue;
     else if (buffer == "in") return In;
     else if (buffer == "sizeof") return Sizeof;
+    else if (buffer == "include") return Include;
     return EmptyToken;
 }
 
@@ -220,6 +233,7 @@ TokenType Scanner::getSymbol(char c) {
         case '>': {
             char c2 = reader.get();
             if (c2 == '=') {
+                rawBuffer += c2;
                 return GTE;
             } else {
                 reader.unget();
@@ -230,6 +244,7 @@ TokenType Scanner::getSymbol(char c) {
         case '<': {
             char c2 = reader.get();
             if (c2 == '=') {
+                rawBuffer += c2;
                 return LTE;
             } else {
                 reader.unget();
@@ -240,6 +255,7 @@ TokenType Scanner::getSymbol(char c) {
         case '=': {
             char c2 = reader.get();
             if (c2 == '=') {
+                rawBuffer += c2;
                 return EQ;
             } else {
                 reader.unget();
@@ -250,6 +266,7 @@ TokenType Scanner::getSymbol(char c) {
         case '!': {
             char c2 = reader.get();
             if (c2 == '=') {
+                rawBuffer += c2;
                 return NEQ;
             } else {
                 reader.unget();
@@ -259,15 +276,18 @@ TokenType Scanner::getSymbol(char c) {
         case '.': {
             char c2 = reader.get();
             if (c2 == '.') {
+                rawBuffer += c2;
                 return Range;
             } else {
                 reader.unget();
+                return Dot;
             }
         } break;
         
         case '-': {
             char c2 = reader.get();
             if (c2 == '>') {
+                rawBuffer += c2;
                 return Arrow;
             } else {
                 reader.unget();

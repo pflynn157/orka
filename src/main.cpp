@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 
+#include <preproc/Preproc.hpp>
 #include <parser/Parser.hpp>
 #include <ast.hpp>
 
@@ -42,7 +43,12 @@ int main(int argc, char **argv) {
         }
     }
     
-    Parser *frontend = new Parser(input);
+    std::string newInput = preprocessFile(input);
+    if (newInput == "") {
+        return 1;
+    }
+    
+    Parser *frontend = new Parser(newInput);
     AstTree *tree;
     
     if (testLex) {

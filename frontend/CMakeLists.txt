@@ -13,6 +13,8 @@ set(SRC
     parser/Function.cpp
     parser/Parser.cpp
     parser/Variable.cpp
+    
+    preproc/Preproc.cpp
 )
 
 add_library(ocparser STATIC ${SRC})

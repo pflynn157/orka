@@ -24,6 +24,7 @@ void Token::print() {
         case Continue: std::cout << "CONTINUE"; break;
         case In: std::cout << "IN"; break;
         case Sizeof: std::cout << "SIZEOF"; break;
+        case Include: std::cout << "INCLUDE"; break;
         
         case Char: std::cout << "CHAR"; break;
         case Byte: std::cout << "BYTE"; break;
@@ -48,6 +49,7 @@ void Token::print() {
         case LBracket: std::cout << "["; break;
         case RBracket: std::cout << "]"; break;
         case Comma: std::cout << ", "; break;
+        case Dot: std::cout << ". "; break;
         case Range: std::cout << ".. "; break;
         case Arrow: std::cout << "-> "; break;
         

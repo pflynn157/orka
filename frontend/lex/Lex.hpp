@@ -10,6 +10,7 @@ enum TokenType {
     Eof,
     
     // Keywords
+    Include,
     Extern,
     Func,
     Begin,
@@ -57,6 +58,7 @@ enum TokenType {
     LBracket,
     RBracket,
     Comma,
+    Dot,
     Range,
     Arrow,
     
@@ -92,8 +94,10 @@ public:
     void rewind(Token token);
     Token getNext();
     
+    std::string getRawBuffer();
     int getLine() { return 0; }
     
+    bool isEof() { return reader.eof(); }
     bool isError() { return error; }
 private:
     std::ifstream reader;
@@ -101,6 +105,7 @@ private:
     std::stack<Token> token_stack;
     
     // Control variables for the scanner
+    std::string rawBuffer = "";
     std::string buffer = "";
     bool inQuote = false;
     

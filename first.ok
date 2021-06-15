@@ -5,7 +5,7 @@
 
 #RET 0
 
-extern func printf(line:str, x:int);
+include std.io;
 
 func main -> int is
     numbers : uint[5];
