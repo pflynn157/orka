@@ -10,7 +10,6 @@ enum TokenType {
     Eof,
     
     // Keywords
-    Include,
     Extern,
     Func,
     Begin,
@@ -29,6 +28,7 @@ enum TokenType {
     Continue,
     In,
     Sizeof,
+    Import,
     
     // Datatype Keywords
     Char,

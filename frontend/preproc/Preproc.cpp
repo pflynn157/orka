@@ -28,7 +28,7 @@ std::string preprocessFile(std::string input) {
     while (!scanner->isEof() && token.type != Eof) {
         token = scanner->getNext();
         
-        if (token.type != Include) {
+        if (token.type != Import) {
             writer << scanner->getRawBuffer();
             continue;
         }

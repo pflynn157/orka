@@ -24,7 +24,7 @@ void Token::print() {
         case Continue: std::cout << "CONTINUE"; break;
         case In: std::cout << "IN"; break;
         case Sizeof: std::cout << "SIZEOF"; break;
-        case Include: std::cout << "INCLUDE"; break;
+        case Import: std::cout << "IMPORT"; break;
         
         case Char: std::cout << "CHAR"; break;
         case Byte: std::cout << "BYTE"; break;

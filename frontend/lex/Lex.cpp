@@ -212,7 +212,7 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "continue") return Continue;
     else if (buffer == "in") return In;
     else if (buffer == "sizeof") return Sizeof;
-    else if (buffer == "include") return Include;
+    else if (buffer == "import") return Import;
     return EmptyToken;
 }
 

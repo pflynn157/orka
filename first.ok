@@ -5,7 +5,7 @@
 
 #RET 0
 
-include std.io;
+import std.io;
 
 func main -> int is
     numbers : uint[5];
