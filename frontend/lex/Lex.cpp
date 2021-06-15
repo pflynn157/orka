@@ -55,6 +55,7 @@ Token Scanner::getNext() {
                 next = reader.get();
                 rawBuffer += next;
             }
+            ++currentLine;
         }
         
         // TODO: This needs some kind of error handleing
@@ -218,7 +219,11 @@ TokenType Scanner::getKeyword() {
 
 TokenType Scanner::getSymbol(char c) {
     switch (c) {
-        case '\n': return Nl;
+        case '\n': {
+            ++currentLine;
+            return Nl;
+        }
+        
         case ';': return SemiColon;
         case ':': return Colon;
         case '(': return LParen;

@@ -95,7 +95,7 @@ public:
     Token getNext();
     
     std::string getRawBuffer();
-    int getLine() { return 0; }
+    int getLine() { return currentLine; }
     
     bool isEof() { return reader.eof(); }
     bool isError() { return error; }
@@ -108,6 +108,7 @@ private:
     std::string rawBuffer = "";
     std::string buffer = "";
     bool inQuote = false;
+    int currentLine = 1;
     
     // Functions
     bool isSymbol(char c);
