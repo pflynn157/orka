@@ -306,10 +306,19 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
 AstExpression *Parser::checkExpression(AstExpression *expr, DataType varType) {
     switch (expr->getType()) {
         case AstType::IntL: {
+            // Change to byte literals
             if (varType == DataType::Byte || varType == DataType::UByte) {
                 AstInt *i32 = static_cast<AstInt *>(expr);
                 AstByte *byte = new AstByte(i32->getValue());
                 expr = byte;
+                
+            // Change to word literals
+            } else if (varType == DataType::Short || varType == DataType::UShort) {
+                AstInt *i32 = static_cast<AstInt *>(expr);
+                AstWord *i16 = new AstWord(i32->getValue());
+                expr = i16;
+                
+            // Change to qword literals
             } else if (varType == DataType::Int64 || varType == DataType::UInt64) {
                 AstInt *i32 = static_cast<AstInt *>(expr);
                 AstQWord *i64 = new AstQWord(i32->getValue());

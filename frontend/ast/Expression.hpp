@@ -160,6 +160,19 @@ private:
     uint8_t val = 0;
 };
 
+// Represents a word literal
+class AstWord : public AstExpression {
+public:
+    explicit AstWord(uint16_t val) : AstExpression(AstType::WordL) {
+        this->val = val;
+    }
+    
+    uint16_t getValue() { return val; }
+    void print();
+private:
+    uint16_t val = 0;
+};
+
 // Represents an integer literal
 class AstInt : public AstExpression {
 public:

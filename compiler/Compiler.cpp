@@ -173,19 +173,14 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
             return builder->getInt8(i8->getValue());
         } break;
         
+        case AstType::WordL: {
+            AstWord *i16 = static_cast<AstWord *>(expr);
+            return builder->getInt16(i16->getValue());
+        } break;
+        
         case AstType::IntL: {
             AstInt *ival = static_cast<AstInt *>(expr);
-            
-            switch (dataType) {
-                
-                case DataType::Short:
-                case DataType::UShort: return builder->getInt16(ival->getValue());
-                
-                case DataType::Int64:
-                case DataType::UInt64: return builder->getInt64(ival->getValue());
-                
-                default: return builder->getInt32(ival->getValue());
-            }
+            return builder->getInt32(ival->getValue());
         } break;
         
         case AstType::QWordL: {

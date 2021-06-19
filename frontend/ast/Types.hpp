@@ -41,6 +41,7 @@ enum class AstType {
     
     CharL,
     ByteL,
+    WordL,
     IntL,
     QWordL,
     StringL,

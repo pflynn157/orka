@@ -339,6 +339,10 @@ void AstByte::print() {
     std::cout << val;
 }
 
+void AstWord::print() {
+    std::cout << val;
+}
+
 void AstInt::print() {
     std::cout << val;
 }
