@@ -5,11 +5,18 @@
 
 // Builds a variable declaration
 // A variable declaration is composed of an Alloca and optionally, an assignment
-bool Parser::buildVariableDec(AstBlock *block, Token idToken) {
+bool Parser::buildVariableDec(AstBlock *block) {
+    Token idToken = scanner->getNext();
+    
+    if (idToken.type != Id) {
+        syntax->addError(scanner->getLine(), "Expected variable name.");
+        return false;
+    }
+    
     Token token = scanner->getNext();
     
     if (token.type != Colon) {
-        syntax->addError(scanner->getLine(), "Error: Expected \':\' in declaration.");
+        syntax->addError(scanner->getLine(), "Expected \':\' in declaration.");
         return false;
     }
     

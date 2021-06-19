@@ -9,9 +9,9 @@ void Token::print() {
         
         case Extern: std::cout << "EXTERN "; break;
         case Func: std::cout << "FUNC "; break;
-        case Begin: std::cout << "BEGIN "; break;
         case End: std::cout << "END "; break;
         case Return: std::cout << "RETURN "; break;
+        case VarD: std::cout << "VAR "; break;
         case If: std::cout << "IF"; break;
         case Elif: std::cout << "ELIF"; break;
         case Else: std::cout << "ELSE"; break;

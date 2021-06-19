@@ -58,6 +58,8 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
         bool end = false;
         
         switch (token.type) {
+            case VarD: code = buildVariableDec(block); break;
+            
             case Id: {
                 Token idToken = token;
                 token = scanner->getNext();

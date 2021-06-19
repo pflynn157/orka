@@ -151,26 +151,6 @@ bool Parser::buildFunction(Token startToken) {
     func->setArguments(args);
     tree->addGlobalStatement(func);
     
-    // Build the variable body
-    token = scanner->getNext();
-    while (token.type != Eof && token.type != Begin) {
-        bool code = true;
-        
-        switch (token.type) {
-            case Id: code = buildVariableDec(func->getBlock(), token); break;
-            
-            case Nl: break;
-            
-            default: {
-                syntax->addError(scanner->getLine(), "Invalid token in expression.");
-                return false;
-            }
-        }
-        
-        if (!code) return false;
-        token = scanner->getNext();
-    }
-    
     // Build the body
     if (!buildBlock(func->getBlock())) return false;
     
