@@ -1,11 +1,52 @@
 #include <parser/Parser.hpp>
 #include <ast.hpp>
 
+// Called if a conditional statement has only one operand. If it does,
+// we have to expand to have two operands before we get down to the
+// compiler layer
+AstExpression *Parser::checkCondExpression(AstExpression *toCheck) {
+    AstExpression *expr = toCheck;
+    
+    switch (toCheck->getType()) {
+        case AstType::ID: {
+            AstID *id = static_cast<AstID *>(toCheck);
+            DataType dataType = typeMap[id->getValue()].first;
+            
+            AstEQOp *eq = new AstEQOp;
+            eq->setLVal(id);
+            
+            switch (dataType) {
+                case DataType::Bool: eq->setRVal(new AstBool(1)); break;
+                case DataType::Byte:
+                case DataType::UByte: eq->setRVal(new AstByte(1)); break;
+                case DataType::Short:
+                case DataType::UShort: eq->setRVal(new AstWord(1)); break;
+                case DataType::Int32:
+                case DataType::UInt32: eq->setRVal(new AstInt(1)); break;
+                case DataType::Int64:
+                case DataType::UInt64: eq->setRVal(new AstQWord(1)); break;
+                
+                default: {}
+            }
+            
+            expr = eq;
+        } break;
+        
+        default: {}
+    }
+    
+    return expr;
+}
+
 // Builds a conditional statement
 bool Parser::buildConditional(AstBlock *block) {
     AstIfStmt *cond = new AstIfStmt;
     if (!buildExpression(cond, DataType::Void, Then)) return false;
     block->addStatement(cond);
+    
+    AstExpression *expr = checkCondExpression(cond->getExpressions().at(0));
+    cond->clearExpressions();
+    cond->addExpression(expr);
 
     ++layer;
     buildBlock(cond->getBlock(), layer, cond);
@@ -18,6 +59,10 @@ bool Parser::buildElif(AstIfStmt *block) {
     AstElifStmt *elif = new AstElifStmt;
     if (!buildExpression(elif, DataType::Void, Then)) return false;
     block->addBranch(elif);
+    
+    AstExpression *expr = checkCondExpression(elif->getExpressions().at(0));
+    elif->clearExpressions();
+    elif->addExpression(expr);
     
     buildBlock(elif->getBlock(), layer, block, true);
     return true;
@@ -37,6 +82,10 @@ bool Parser::buildWhile(AstBlock *block) {
     AstWhileStmt *loop = new AstWhileStmt;
     if (!buildExpression(loop, DataType::Void, Do)) return false;
     block->addStatement(loop);
+    
+    AstExpression *expr = checkCondExpression(loop->getExpressions().at(0));
+    loop->clearExpressions();
+    loop->addExpression(expr);
     
     ++layer;
     buildBlock(loop->getBlock(), layer);

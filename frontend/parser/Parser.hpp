@@ -47,6 +47,7 @@ protected:
                         TokenType stopToken = SemiColon, TokenType separateToken = EmptyToken,
                         AstExpression **dest = nullptr);
     AstExpression *checkExpression(AstExpression *expr, DataType varType);
+    AstExpression *checkCondExpression(AstExpression *toCheck);
 private:
     std::string input = "";
     Scanner *scanner;
