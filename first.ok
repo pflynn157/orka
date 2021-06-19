@@ -9,6 +9,8 @@ import std.io;
 
 func main -> int is
     var x : int = 20;
+    x = 32;
+    
     printf("%d\n", x);
     return 0;
 end

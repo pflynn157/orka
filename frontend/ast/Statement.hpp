@@ -88,11 +88,18 @@ public:
         this->name = name;
     }
     
+    void setDataType(DataType dataType) { this->dataType = dataType; }
+    void setPtrType(DataType dataType) { this->ptrType = dataType; }
+    
     std::string getName() { return name; }
+    DataType getDataType() { return dataType; }
+    DataType getPtrType() { return ptrType; }
     
     void print();
 private:
     std::string name = "";
+    DataType dataType = DataType::Void;
+    DataType ptrType = DataType::Void;
 };
 
 // Represents an array assignment
@@ -102,11 +109,18 @@ public:
         this->name = name;
     }
     
+    void setDataType(DataType dataType) { this->dataType = dataType; }
+    void setPtrType(DataType dataType) { this->ptrType = dataType; }
+    
     std::string getName() { return name; }
+    DataType getDataType() { return dataType; }
+    DataType getPtrType() { return ptrType; }
     
     void print();
 private:
     std::string name = "";
+    DataType dataType = DataType::Void;
+    DataType ptrType = DataType::Void;
 };
 
 // Represents a conditional statement

@@ -78,7 +78,7 @@ void AstReturnStmt::print() {
 
 void AstVarDec::print() {
     std::cout << "    ";
-    std::cout << "VAR " << name << " : " << printDataType(dataType);
+    std::cout << "VAR_DEC " << name << " : " << printDataType(dataType);
     if (ptrType != DataType::Void) {
         std::cout << "*" << printDataType(ptrType);
         std::cout << "[";
@@ -90,7 +90,11 @@ void AstVarDec::print() {
 
 void AstVarAssign::print() {
     std::cout << "    ";
-    std::cout << "VAR= " << name;
+    std::cout << "VAR= " << name << " : " << printDataType(dataType);
+    if (ptrType != DataType::Void) {
+        std::cout << "*" << printDataType(ptrType);
+        std::cout << "[]";
+    }
     std::cout << std::endl;
 }
 

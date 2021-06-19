@@ -59,6 +59,8 @@ bool Parser::buildVariableDec(AstBlock *block) {
         
         // Create an assignment to a malloc call
         AstVarAssign *va = new AstVarAssign(idToken.id_val);
+        va->setDataType(DataType::Array);
+        va->setPtrType(dataType);
         block->addStatement(va);
         
         AstFuncCallExpr *callMalloc = new AstFuncCallExpr("malloc");
@@ -81,6 +83,8 @@ bool Parser::buildVariableDec(AstBlock *block) {
         
         // Finally, set the size of the declaration
         vd->setPtrSize(arg);
+        
+        typeMap[idToken.id_val] = std::pair<DataType, DataType>(DataType::Array, dataType);
     
     // We're at the end of the declaration
     } else if (token.type == SemiColon) {
@@ -88,9 +92,12 @@ bool Parser::buildVariableDec(AstBlock *block) {
         
     // Otherwise, we have a regular variable
     } else {
+        auto typePair = std::pair<DataType, DataType>(dataType, DataType::Void);
+        typeMap[idToken.id_val] = typePair;
         scanner->rewind(token);
 
         AstVarAssign *va = new AstVarAssign(idToken.id_val);
+        va->setDataType(dataType);
         block->addStatement(va);
 
         if (!buildExpression(va)) return false;
@@ -102,6 +109,7 @@ bool Parser::buildVariableDec(AstBlock *block) {
 // Builds a variable assignment
 bool Parser::buildVariableAssign(AstBlock *block, Token idToken) {
     AstVarAssign *va = new AstVarAssign(idToken.id_val);
+    va->setDataType(typeMap[idToken.id_val].first);
     block->addStatement(va);
     
     if (!buildExpression(va)) return false;
@@ -117,6 +125,8 @@ bool Parser::buildVariableAssign(AstBlock *block, Token idToken) {
 // Builds an array assignment
 bool Parser::buildArrayAssign(AstBlock *block, Token idToken) {
     AstArrayAssign *pa = new AstArrayAssign(idToken.id_val);
+    pa->setDataType(typeMap[idToken.id_val].first);
+    pa->setPtrType(typeMap[idToken.id_val].second);
     block->addStatement(pa);
     
     if (!buildExpression(pa, RBracket)) return false;
