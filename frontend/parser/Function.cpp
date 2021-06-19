@@ -65,6 +65,7 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
             }
             
             args.push_back(v);
+            typeMap[v.name] = std::pair<DataType, DataType>(v.type, v.subType);
         }
     } else {
         scanner->rewind(token);
