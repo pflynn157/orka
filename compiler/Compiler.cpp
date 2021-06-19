@@ -185,6 +185,11 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
             }
         } break;
         
+        case AstType::QWordL: {
+            AstQWord *i64 = static_cast<AstQWord *>(expr);
+            return builder->getInt64(i64->getValue());
+        } break;
+        
         case AstType::CharL: {
             AstChar *cval = static_cast<AstChar *>(expr);
             return builder->getInt8(cval->getValue());

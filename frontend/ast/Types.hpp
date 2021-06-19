@@ -41,6 +41,7 @@ enum class AstType {
     
     CharL,
     IntL,
+    QWordL,
     StringL,
     ID,
     ArrayAccess

@@ -160,6 +160,19 @@ private:
     uint64_t val = 0;
 };
 
+// Represents a QWord literal
+class AstQWord : public AstExpression {
+public:
+    explicit AstQWord(uint64_t val) : AstExpression(AstType::QWordL) {
+        this->val = val;
+    }
+    
+    uint64_t getValue() { return val; }
+    void print();
+private:
+    uint64_t val = 0;
+};
+
 // Represents a string literal
 class AstString : public AstExpression {
 public:

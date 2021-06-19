@@ -339,6 +339,10 @@ void AstInt::print() {
     std::cout << val;
 }
 
+void AstQWord::print() {
+    std::cout << val;
+}
+
 void AstString::print() {
     std::cout << "\"" << val << "\"";
 }

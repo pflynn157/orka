@@ -144,6 +144,8 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
 bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType separateToken, AstExpression **dest) {
     std::stack<AstExpression *> output;
     std::stack<AstExpression *> opStack;
+    
+    DataType varType = DataType::Void;
 
     Token token = scanner->getNext();
     while (token.type != Eof && token.type != stopToken) {
@@ -182,6 +184,9 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
             
             case Id: {
                 std::string name = token.id_val;
+                varType = typeMap[name].first;
+                if (varType == DataType::Array) varType = typeMap[name].second;
+                
                 token = scanner->getNext();
                 if (token.type == LBracket) {
                     AstExpression *index = nullptr;
@@ -256,10 +261,10 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
     
     // Build the expression
     while (opStack.size() > 0) {
-        AstExpression *rval = output.top();
+        AstExpression *rval = checkExpression(output.top(), varType);
         output.pop();
         
-        AstExpression *lval = output.top();
+        AstExpression *lval = checkExpression(output.top(), varType);
         output.pop();
         
         AstBinaryOp *op = static_cast<AstBinaryOp *>(opStack.top());
@@ -275,21 +280,41 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
         return true;
     }
     
+    // Type check the top
+    AstExpression *expr = checkExpression(output.top(), varType);
+    
     if (stmt == nullptr) {
         if ((*dest) == nullptr) {
-            *dest = output.top();
+            *dest = expr;
         } else if ((*dest)->getType() == AstType::FuncCallExpr) {
             AstFuncCallExpr *fc = static_cast<AstFuncCallExpr *>(*dest);
-            fc->addArgument(output.top());
+            fc->addArgument(expr);
         } else {
-            *dest = output.top();
+            *dest = expr;
         }
     } else {
-        AstExpression *expr = output.top();
         stmt->addExpression(expr);
     }
     
     return true;
+}
+
+// This is meant mainly for literals; it checks to make sure all the types in
+// the expression agree in type. LLVM will have a problem if not
+AstExpression *Parser::checkExpression(AstExpression *expr, DataType varType) {
+    switch (expr->getType()) {
+        case AstType::IntL: {
+            if (varType == DataType::Int64 || varType == DataType::UInt64) {
+                AstInt *i32 = static_cast<AstInt *>(expr);
+                AstQWord *i64 = new AstQWord(i32->getValue());
+                expr = i64;
+            }
+        } break;
+            
+        default: {}
+    }
+    
+    return expr;
 }
 
 // The debug function for the scanner

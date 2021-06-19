@@ -7,9 +7,14 @@
 
 import std.io;
 
+extern func println(ln:str);
+
 func main -> int is
-    var x : int = 20;
-    x = 32;
+    var x : int64 = 20;
+    
+    if x == 20 then println("True");
+    else println("False");
+    end
     
     printf("%d\n", x);
     return 0;
