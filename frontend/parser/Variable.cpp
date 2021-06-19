@@ -25,6 +25,7 @@ bool Parser::buildVariableDec(AstBlock *block) {
     bool isString = false;
     
     switch (token.type) {
+        case Bool: dataType = DataType::Bool; break;
         case Char: dataType = DataType::Char; break;
         case Byte: dataType = DataType::Byte; break;
         case UByte: dataType = DataType::UByte; break;

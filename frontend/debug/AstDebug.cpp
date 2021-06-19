@@ -5,6 +5,7 @@
 std::string printDataType(DataType dataType) {
     switch (dataType) {
         case DataType::Void: return "void";
+        case DataType::Bool: return "bool";
         case DataType::Char: return "char";
         case DataType::Byte: return "byte";
         case DataType::UByte: return "ubyte";
@@ -329,6 +330,11 @@ void AstLTEOp::print() {
     std::cout << ") <= (";
     rval->print();
     std::cout << ")";
+}
+
+void AstBool::print() {
+    if (val == 0) std::cout << "FALSE";
+    else std::cout << "TRUE";
 }
 
 void AstChar::print() {

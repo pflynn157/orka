@@ -26,6 +26,7 @@ void Token::print() {
         case Sizeof: std::cout << "SIZEOF"; break;
         case Import: std::cout << "IMPORT"; break;
         
+        case Bool: std::cout << "BOOL"; break;
         case Char: std::cout << "CHAR"; break;
         case Byte: std::cout << "BYTE"; break;
         case UByte: std::cout << "UBYTE"; break;
@@ -39,6 +40,8 @@ void Token::print() {
         
         case Id: std::cout << "ID "; break;
         case Int32: std::cout << "I32 "; break;
+        case True: std::cout << "TRUE "; break;
+        case False: std::cout << "FALSE "; break;
         
         case Nl: std::cout << "\\n "; break;
         case SemiColon: std::cout << "; "; break;

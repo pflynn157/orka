@@ -31,6 +31,7 @@ enum TokenType {
     Import,
     
     // Datatype Keywords
+    Bool,
     Char,
     Byte,
     UByte,
@@ -47,6 +48,8 @@ enum TokenType {
     String,
     CharL,
     Int32,
+    True,
+    False,
     
     // Symbols
     Nl,

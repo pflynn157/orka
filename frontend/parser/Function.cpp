@@ -26,6 +26,7 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
             }
             
             switch (t3.type) {
+                case Bool: v.type = DataType::Bool; break;
                 case Char: v.type = DataType::Char; break;
                 case Byte: v.type = DataType::Byte; break;
                 case UByte: v.type = DataType::UByte; break;

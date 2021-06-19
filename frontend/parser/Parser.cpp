@@ -167,6 +167,14 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
         }
     
         switch (token.type) {
+            case True: {
+                output.push(new AstBool(1));
+            } break;
+            
+            case False: {
+                output.push(new AstBool(0));
+            } break;
+            
             case CharL: {
                 AstChar *c = new AstChar(token.i8_val);
                 output.push(c);

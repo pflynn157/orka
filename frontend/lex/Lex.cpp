@@ -190,6 +190,7 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "end") return End;
     else if (buffer == "return") return Return;
     else if (buffer == "var") return VarD;
+    else if (buffer == "bool") return Bool;
     else if (buffer == "char") return Char;
     else if (buffer == "byte") return Byte;
     else if (buffer == "ubyte") return UByte;
@@ -214,6 +215,8 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "in") return In;
     else if (buffer == "sizeof") return Sizeof;
     else if (buffer == "import") return Import;
+    else if (buffer == "true") return True;
+    else if (buffer == "false") return False;
     return EmptyToken;
 }
 
