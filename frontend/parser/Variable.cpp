@@ -49,7 +49,7 @@ bool Parser::buildVariableDec(AstBlock *block) {
         vd->setDataType(DataType::Array);
         vd->setPtrType(dataType);
         
-        if (!buildExpression(vd, RBracket)) return false;   
+        if (!buildExpression(vd, DataType::Int32, RBracket)) return false;   
         
         token = scanner->getNext();
         if (token.type != SemiColon) {
@@ -100,7 +100,7 @@ bool Parser::buildVariableDec(AstBlock *block) {
         va->setDataType(dataType);
         block->addStatement(va);
 
-        if (!buildExpression(va)) return false;
+        if (!buildExpression(va, dataType)) return false;
     }
     
     return true;
@@ -108,11 +108,12 @@ bool Parser::buildVariableDec(AstBlock *block) {
 
 // Builds a variable assignment
 bool Parser::buildVariableAssign(AstBlock *block, Token idToken) {
+    DataType dataType = typeMap[idToken.id_val].first;
     AstVarAssign *va = new AstVarAssign(idToken.id_val);
-    va->setDataType(typeMap[idToken.id_val].first);
+    va->setDataType(dataType);
     block->addStatement(va);
     
-    if (!buildExpression(va)) return false;
+    if (!buildExpression(va, dataType)) return false;
     
     if (va->getExpressionCount() == 0) {
         syntax->addError(scanner->getLine(), "Invalid variable assignment.");
@@ -124,12 +125,13 @@ bool Parser::buildVariableAssign(AstBlock *block, Token idToken) {
 
 // Builds an array assignment
 bool Parser::buildArrayAssign(AstBlock *block, Token idToken) {
+    DataType dataType = typeMap[idToken.id_val].second;
     AstArrayAssign *pa = new AstArrayAssign(idToken.id_val);
     pa->setDataType(typeMap[idToken.id_val].first);
-    pa->setPtrType(typeMap[idToken.id_val].second);
+    pa->setPtrType(dataType);
     block->addStatement(pa);
     
-    if (!buildExpression(pa, RBracket)) return false;
+    if (!buildExpression(pa, DataType::Int32, RBracket)) return false;
     
     Token token = scanner->getNext();
     if (token.type != Assign) {
@@ -137,7 +139,7 @@ bool Parser::buildArrayAssign(AstBlock *block, Token idToken) {
         return false;
     }
     
-    if (!buildExpression(pa)) return false;
+    if (!buildExpression(pa, dataType)) return false;
 
     return true;
 }

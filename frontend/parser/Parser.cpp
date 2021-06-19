@@ -141,11 +141,11 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
 }
 
 // Builds an expression
-bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType separateToken, AstExpression **dest) {
+bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType stopToken, TokenType separateToken, AstExpression **dest) {
     std::stack<AstExpression *> output;
     std::stack<AstExpression *> opStack;
     
-    DataType varType = DataType::Void;
+    DataType varType = currentType;
 
     Token token = scanner->getNext();
     while (token.type != Eof && token.type != stopToken) {
@@ -184,13 +184,15 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
             
             case Id: {
                 std::string name = token.id_val;
-                varType = typeMap[name].first;
-                if (varType == DataType::Array) varType = typeMap[name].second;
+                if (varType == DataType::Void) {
+                    varType = typeMap[name].first;
+                    if (varType == DataType::Array) varType = typeMap[name].second;
+                }
                 
                 token = scanner->getNext();
                 if (token.type == LBracket) {
                     AstExpression *index = nullptr;
-                    buildExpression(nullptr, RBracket, EmptyToken, &index);
+                    buildExpression(nullptr, DataType::Int32, RBracket, EmptyToken, &index);
                     
                     AstArrayAccess *acc = new AstArrayAccess(name);
                     acc->setIndex(index);
@@ -198,7 +200,7 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
                 } else if (token.type == LParen) {
                     AstFuncCallExpr *fc = new AstFuncCallExpr(name);
                     AstExpression *fcExpr = fc;
-                    buildExpression(nullptr, RParen, Comma, &fcExpr);
+                    buildExpression(nullptr, varType, RParen, Comma, &fcExpr);
                     
                     output.push(fc);
                 } else {
@@ -304,7 +306,11 @@ bool Parser::buildExpression(AstStatement *stmt, TokenType stopToken, TokenType 
 AstExpression *Parser::checkExpression(AstExpression *expr, DataType varType) {
     switch (expr->getType()) {
         case AstType::IntL: {
-            if (varType == DataType::Int64 || varType == DataType::UInt64) {
+            if (varType == DataType::Byte || varType == DataType::UByte) {
+                AstInt *i32 = static_cast<AstInt *>(expr);
+                AstByte *byte = new AstByte(i32->getValue());
+                expr = byte;
+            } else if (varType == DataType::Int64 || varType == DataType::UInt64) {
                 AstInt *i32 = static_cast<AstInt *>(expr);
                 AstQWord *i64 = new AstQWord(i32->getValue());
                 expr = i64;

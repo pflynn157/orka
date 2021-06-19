@@ -335,6 +335,10 @@ void AstChar::print() {
     std::cout << "CHAR(" << val << ")";
 }
 
+void AstByte::print() {
+    std::cout << val;
+}
+
 void AstInt::print() {
     std::cout << val;
 }

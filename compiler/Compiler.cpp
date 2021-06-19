@@ -168,12 +168,15 @@ void Compiler::compileStatement(AstStatement *stmt) {
 // Converts an AST value to an LLVM value
 Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
     switch (expr->getType()) {
+        case AstType::ByteL: {
+            AstByte *i8 = static_cast<AstByte *>(expr);
+            return builder->getInt8(i8->getValue());
+        } break;
+        
         case AstType::IntL: {
             AstInt *ival = static_cast<AstInt *>(expr);
             
             switch (dataType) {
-                case DataType::Byte:
-                case DataType::UByte: return builder->getInt8(ival->getValue());
                 
                 case DataType::Short:
                 case DataType::UShort: return builder->getInt16(ival->getValue());

@@ -147,6 +147,19 @@ private:
     char val = 0;
 };
 
+// Represents a byte literal
+class AstByte : public AstExpression {
+public:
+    explicit AstByte(uint8_t val) : AstExpression(AstType::ByteL) {
+        this->val = val;
+    }
+    
+    uint8_t getValue() { return val; }
+    void print();
+private:
+    uint8_t val = 0;
+};
+
 // Represents an integer literal
 class AstInt : public AstExpression {
 public:

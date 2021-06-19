@@ -76,6 +76,7 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
 
 // Builds a function
 bool Parser::buildFunction(Token startToken) {
+    typeMap.clear();
     Token token;
     bool isExtern = false;
 
@@ -183,7 +184,7 @@ bool Parser::buildFunctionCallStmt(AstBlock *block, Token idToken) {
     AstFuncCallStmt *fc = new AstFuncCallStmt(idToken.id_val);
     block->addStatement(fc);
     
-    if (!buildExpression(fc, RParen, Comma)) return false;
+    if (!buildExpression(fc, DataType::Void, RParen, Comma)) return false;
     
     Token token = scanner->getNext();
     if (token.type != SemiColon) {
@@ -200,7 +201,7 @@ bool Parser::buildReturn(AstBlock *block) {
     AstReturnStmt *stmt = new AstReturnStmt;
     block->addStatement(stmt);
     
-    if (!buildExpression(stmt)) return false;
+    if (!buildExpression(stmt, DataType::Void)) return false;
     
     return true;
 }

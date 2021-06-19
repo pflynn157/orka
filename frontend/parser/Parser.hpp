@@ -43,7 +43,9 @@ protected:
     bool buildLoopCtrl(AstBlock *block, bool isBreak);
     
     bool buildBlock(AstBlock *block, int stopLayer = 0, AstIfStmt *parentBlock = nullptr, bool inElif = false);
-    bool buildExpression(AstStatement *stmt, TokenType stopToken = SemiColon, TokenType separateToken = EmptyToken, AstExpression **dest = nullptr);
+    bool buildExpression(AstStatement *stmt, DataType currentType,
+                        TokenType stopToken = SemiColon, TokenType separateToken = EmptyToken,
+                        AstExpression **dest = nullptr);
     AstExpression *checkExpression(AstExpression *expr, DataType varType);
 private:
     std::string input = "";

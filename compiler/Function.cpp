@@ -6,6 +6,10 @@
 // Compiles a function and its body
 //
 void Compiler::compileFunction(AstGlobalStatement *global) {
+    symtable.clear();
+    typeTable.clear();
+    ptrTable.clear();
+    
     AstFunction *astFunc = static_cast<AstFunction *>(global);
 
     std::vector<Var> astVarArgs = astFunc->getArguments();

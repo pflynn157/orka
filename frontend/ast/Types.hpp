@@ -40,6 +40,7 @@ enum class AstType {
     LTE,
     
     CharL,
+    ByteL,
     IntL,
     QWordL,
     StringL,
