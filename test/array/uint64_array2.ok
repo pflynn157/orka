@@ -17,9 +17,9 @@
 extern func printf(line:str, x:int);
 
 func main -> int is
-    numbers : uint64[10];
-    x : uint64 = 0;
-begin
+    var numbers : uint64[10];
+    var x : uint64 = 0;
+    
     for i in 0 .. 10 do
         numbers[i] = i;
     end

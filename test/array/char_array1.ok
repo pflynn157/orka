@@ -10,9 +10,9 @@ extern func printf(line:str, x:int);
 extern func printCharArray(array:char[]);
 
 func main -> int is
-    c : char = 'A';
-    string : char[10];
-begin
+    var c : char = 'A';
+    var string : char[10];
+    
     for i in 0 .. 10 do
         if i == 0 then string[0] = 'A';
         elif i == 1 then string[1] = 'B';

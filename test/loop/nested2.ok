@@ -17,9 +17,9 @@
 extern func printf(ln:str, x:int);
 
 func main -> int is
-    x : int = 0;
-    i : int = 0;
-begin
+    var x : int = 0;
+    var i : int = 0;
+    
     while x < 10 do
         i = 1;
         while i <= x + 1 do

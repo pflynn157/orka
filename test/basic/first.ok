@@ -8,7 +8,6 @@
 extern func println(s:str);
 
 func main -> int is
-begin
     println("Hi");
     return 2;
 end

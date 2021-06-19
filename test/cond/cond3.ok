@@ -11,7 +11,6 @@ extern func printf(ln:str, x:int):
 extern func println(ln:str);
 
 func cmp(x:int) is
-begin
     if x > 20 then
         println("X greater than 20.");
     elif x > 10 then
@@ -22,7 +21,6 @@ begin
 end
 
 func main -> int is
-begin
     cmp(25);
     cmp(4);
     cmp(15);

@@ -22,7 +22,6 @@ extern func printf(ln:str, x:int);
 extern func println(ln:str);
 
 func cmp1(x:int) is
-begin
     if x == 10 then
         println("Equal");
     else
@@ -31,7 +30,6 @@ begin
 end
 
 func cmp2(x:int) is
-begin
     if x > 10 then
         println("GT");
     else
@@ -40,7 +38,6 @@ begin
 end
 
 func cmp3(x:int) is
-begin
     if x < 10 then
         println("LT");
     else
@@ -49,7 +46,6 @@ begin
 end
 
 func cmp4(x:int) is
-begin
     if x != 10 then
         println("NEQ");
     else
@@ -58,7 +54,6 @@ begin
 end
 
 func cmp5(x:int) is
-begin
     if x >= 10 then
         println("GTE");
     else
@@ -67,7 +62,6 @@ begin
 end
 
 func cmp6(x:int) is
-begin
     if x <= 10 then
         println("LTE");
     else
@@ -76,7 +70,6 @@ begin
 end
 
 func main -> int is
-begin
     cmp1(10);
     cmp1(0);
     

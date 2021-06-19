@@ -17,9 +17,9 @@
 extern func printf(ln:str, x:int);
 
 func main -> int is
-    numbers : int[10];
-    x : int = 0;
-begin
+    var numbers : int[10];
+    var x : int = 0;
+    
     for i in 0 .. 10 do
         numbers[i] = i * 2;
     end

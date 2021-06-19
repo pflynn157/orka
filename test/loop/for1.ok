@@ -9,7 +9,6 @@
 extern func printf(ln:str, x:int);
 
 func main -> int is
-begin
     for i in 0 .. 10 do
         printf("%d|", i);
     end

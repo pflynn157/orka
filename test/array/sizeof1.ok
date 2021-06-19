@@ -9,16 +9,13 @@
 extern func printf(line:str, x:int);
 
 func main -> int is
-    numbers : int[10];
-    x : int = 0;
-    size : int = 0;
-begin
+    var numbers : int[10];
     numbers[2] = 242;
-    x = numbers[2];
     
+    var x : int = numbers[2];
     printf("%d\n", x);
     
-    size = sizeof(numbers);
+    var size : int = sizeof(numbers);
     printf("Size: %d\n", size);
     
     return 0;

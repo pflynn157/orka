@@ -9,8 +9,8 @@
 extern func printf(ln:str, x:int);
 
 func main -> int is
-    i : int = 0;
-begin
+    var i : int = 0;
+    
     loop
         printf("%d|", i);
         i = i + 2;

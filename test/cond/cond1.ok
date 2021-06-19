@@ -17,7 +17,6 @@
 extern func println(ln : str);
 
 func compare(x:int) is
-begin
     if x > 10 then
         println("Greater than 10");
         if x > 15 then
@@ -32,8 +31,8 @@ begin
 end
 
 func main -> int is
-    x : int = 40;
-begin
+    var x : int = 40;
+    
     compare(x);
     println("---");
     compare(3);

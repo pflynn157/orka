@@ -10,9 +10,9 @@ extern func println(line:str);
 extern func printf(line:str, x:int);
 
 func main -> int is
-    string : str = "Hello!";
-    c : char = string[3];
-begin
+    var string : str = "Hello!";
+    var c : char = string[3];
+    
     println(string);
     printf("%c\n", c);
     

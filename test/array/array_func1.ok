@@ -9,17 +9,16 @@
 extern func printf(line:str, x:int);
 
 func printArray(numbers:int[]) is
-    x : int = numbers[2];
-    size : int = sizeof(numbers);
-begin
+    var x : int = numbers[2];
+    
     printf("%d\n", x);
-    printf("Size: %d\n", size);
+    printf("Size: %d\n", sizeof(numbers));
 end
 
 func main -> int is
-    numbers : int[10];
-begin
+    var numbers : int[10];
     numbers[2] = 242;
+    
     printArray(numbers);
     
     return 0;

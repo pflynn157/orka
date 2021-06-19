@@ -8,11 +8,10 @@
 extern func printf(line:str, x:int);
 
 func main -> int is
-    numbers : int64[5];
-    x : int64 = 0;
-begin
+    var numbers : int64[5];
     numbers[2] = 243;
-    x = numbers[2];
+    
+    var x : int64 = numbers[2];
     printf("%d\n", x);
     return 0;
 end
