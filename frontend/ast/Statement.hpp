@@ -4,9 +4,11 @@
 #include <vector>
 
 #include <ast/Types.hpp>
+#include <ast/Expression.hpp>
 
 class AstExpression;
 class AstID;
+class AstInt;
 
 // Represents an AST statement
 class AstStatement {
@@ -188,10 +190,12 @@ public:
     explicit AstForStmt() : AstBlockStmt(AstType::For) {}
     
     void setIndex(AstID *indexVar) { this->indexVar = indexVar; }
+    void setStep(int amount) { step->setValue(amount); }
     void setStartBound(AstExpression *expr) { startBound = expr; }
     void setEndBound(AstExpression *expr) { endBound = expr; }
     
     AstID *getIndex() { return indexVar; }
+    AstInt *getStep() { return step; }
     AstExpression *getStartBound() { return startBound; }
     AstExpression *getEndBound() { return endBound; }
     
@@ -199,6 +203,7 @@ public:
 private:
     AstID *indexVar;
     AstExpression *startBound, *endBound;
+    AstInt *step = new AstInt(1);
 };
 
 // Represents a for-all loop

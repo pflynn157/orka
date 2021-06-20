@@ -30,6 +30,7 @@ enum TokenType {
     In,
     Sizeof,
     Import,
+    Step,
     
     // Datatype Keywords
     Bool,

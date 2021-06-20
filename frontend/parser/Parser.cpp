@@ -264,6 +264,22 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
             case GTE: opStack.push(new AstGTEOp); break;
             case LTE: opStack.push(new AstLTEOp); break;
             
+            case Step: {
+                if (stmt->getType() != AstType::For) {
+                    syntax->addError(scanner->getLine(), "Step is only valid with for loops");
+                    return false;
+                }
+                
+                token = scanner->getNext();
+                if (token.type != Int32) {
+                    syntax->addError(scanner->getLine(), "Expected integer literal with \"step\"");
+                    return false;
+                }
+                
+                AstForStmt *forStmt = static_cast<AstForStmt *>(stmt);
+                forStmt->setStep(token.i32_val);
+            } break;
+            
             default: {}
         }
         

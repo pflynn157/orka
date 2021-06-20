@@ -193,7 +193,7 @@ void Compiler::compileForStatement(AstStatement *stmt) {
     builder->SetInsertPoint(loopInc);
     
     indexVal = builder->CreateLoad(indexVar);
-    Value *incVal = builder->getInt32(1);
+    Value *incVal = compileValue(loop->getStep());
     indexVal = builder->CreateAdd(indexVal, incVal);
     builder->CreateStore(indexVal, indexVar);
     

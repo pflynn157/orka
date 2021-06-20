@@ -217,6 +217,8 @@ void AstForStmt::print() {
     startBound->print();
     std::cout << " .. ";
     endBound->print();
+    std::cout << " STEP ";
+    step->print();
     std::cout << std::endl;
     
     std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;

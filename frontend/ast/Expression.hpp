@@ -193,6 +193,8 @@ public:
         this->val = val;
     }
     
+    void setValue(uint64_t val) { this->val = val; }
+    
     uint64_t getValue() { return val; }
     void print();
 private:
