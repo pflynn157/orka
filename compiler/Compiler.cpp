@@ -151,6 +151,9 @@ void Compiler::compileStatement(AstStatement *stmt) {
             compileForStatement(stmt);
         } break;
         
+        // A for-all loop
+        case AstType::ForAll: compileForAllStatement(stmt); break;
+        
         // A break statement
         case AstType::Break: {
             builder->CreateBr(breakStack.top());

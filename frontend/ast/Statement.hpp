@@ -190,21 +190,31 @@ public:
     void setIndex(AstID *indexVar) { this->indexVar = indexVar; }
     void setStartBound(AstExpression *expr) { startBound = expr; }
     void setEndBound(AstExpression *expr) { endBound = expr; }
-    void addStatement(AstStatement *stmt) { block->addStatement(stmt); }
     
     AstID *getIndex() { return indexVar; }
     AstExpression *getStartBound() { return startBound; }
     AstExpression *getEndBound() { return endBound; }
     
-    bool hasEndBound() {
-        if (endBound == nullptr) return false;
-        return true;
-    }
-    
     void print();
 private:
     AstID *indexVar;
     AstExpression *startBound, *endBound;
+};
+
+// Represents a for-all loop
+class AstForAllStmt : public AstBlockStmt {
+public:
+    explicit AstForAllStmt() : AstBlockStmt(AstType::ForAll) {}
+    
+    void setIndex(AstID *indexVar) { this->indexVar = indexVar; }
+    void setArray(AstID *arrayVar) { this->arrayVar = arrayVar; }
+    
+    AstID *getIndex() { return indexVar; }
+    AstID *getArray() { return arrayVar; }
+    
+    void print();
+private:
+    AstID *indexVar, *arrayVar;
 };
 
 // Represents a break statement for a loop

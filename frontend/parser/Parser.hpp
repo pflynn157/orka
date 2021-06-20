@@ -40,6 +40,7 @@ protected:
     bool buildWhile(AstBlock *block);
     bool buildRepeat(AstBlock *block);
     bool buildFor(AstBlock *block);
+    bool buildForAll(AstBlock *block);
     bool buildLoopCtrl(AstBlock *block, bool isBreak);
     
     bool buildBlock(AstBlock *block, int stopLayer = 0, AstIfStmt *parentBlock = nullptr, bool inElif = false);

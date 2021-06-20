@@ -152,10 +152,6 @@ void Compiler::compileRepeatStatement(AstStatement *stmt) {
 // Translates a for loop to LLVM
 void Compiler::compileForStatement(AstStatement *stmt) {
     AstForStmt *loop = static_cast<AstForStmt *>(stmt);
-    if (!loop->hasEndBound()) {
-        compileForEachStatement(loop);
-        return;
-    }
     
     BasicBlock *loopBlock = BasicBlock::Create(*context, "loop_body" + std::to_string(blockCount), currentFunc);
     BasicBlock *loopInc = BasicBlock::Create(*context, "loop_inc" + std::to_string(blockCount), currentFunc);
@@ -219,8 +215,10 @@ void Compiler::compileForStatement(AstStatement *stmt) {
     typeTable = typeTableOld;
 }
 
-// Translates a for-each loop to LLVM
-void Compiler::compileForEachStatement(AstForStmt *loop) {
+// Translates a for-all loop to LLVM
+void Compiler::compileForAllStatement(AstStatement *stmt) {
+    AstForAllStmt *loop = static_cast<AstForAllStmt *>(stmt);
+    
     // Setup the blocks
     BasicBlock *loopLoad = BasicBlock::Create(*context, "loop_load" + std::to_string(blockCount), currentFunc);
     BasicBlock *loopBody = BasicBlock::Create(*context, "loop_body" + std::to_string(blockCount), currentFunc);
@@ -246,7 +244,7 @@ void Compiler::compileForEachStatement(AstForStmt *loop) {
     std::map<std::string, DataType> typeTableOld = typeTable;
     
     // The induction variable
-    std::string arrayName = static_cast<AstID *>(loop->getStartBound())->getValue();
+    std::string arrayName = loop->getArray()->getValue();
     std::string indexName = loop->getIndex()->getValue();
     DataType indexType1 = ptrTable[arrayName];
     

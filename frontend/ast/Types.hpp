@@ -22,6 +22,7 @@ enum class AstType {
     While,
     Repeat,
     For,
+    ForAll,
     End,
     
     Break,

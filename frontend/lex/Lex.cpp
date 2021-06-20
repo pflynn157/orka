@@ -207,6 +207,7 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "while") return While;
     else if (buffer == "repeat") return Repeat;
     else if (buffer == "for") return For;
+    else if (buffer == "forall") return ForAll;
     else if (buffer == "is") return Is;
     else if (buffer == "then") return Then;
     else if (buffer == "do") return Do;

@@ -40,7 +40,7 @@ protected:
     void compileWhileStatement(AstStatement *stmt);
     void compileRepeatStatement(AstStatement *stmt);
     void compileForStatement(AstStatement *stmt);
-    void compileForEachStatement(AstForStmt *stmt);
+    void compileForAllStatement(AstStatement *stmt);
 private:
     AstTree *tree;
     CFlags cflags;

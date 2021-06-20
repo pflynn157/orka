@@ -24,7 +24,7 @@ func main -> int is
         numbers[i] := i * 2;
     end
     
-    for i in numbers do
+    forall i in numbers do
         printf("%d\n", i);
     end
     

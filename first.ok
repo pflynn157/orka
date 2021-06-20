@@ -1,26 +1,32 @@
 
 #OUTPUT
-#X: 20 | Y: 20
-#X: 22 | Y: 66
+#0
+#2
+#4
+#6
+#8
+#10
+#12
+#14
+#16
+#18
 #END
 
 #RET 0
 
-import std.io;
-
-extern println(ln:str);
+extern printf(ln:str, x:int);
 
 func main -> int is
-    var x : int := 0;
+    var numbers : int[10];
     
-    repeat
-        println("Hi");
-        
-        if x = 10 then break; end
-        x := x + 1;
+    for i in 0 .. 10 do
+        numbers[i] := i * 3;
     end
     
-    println("Done");
+    forall i in numbers do
+        printf("%d\n", i);
+    end
     
     return 0;
 end
+

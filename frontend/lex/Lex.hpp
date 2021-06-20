@@ -21,6 +21,7 @@ enum TokenType {
     While,
     Repeat,
     For,
+    ForAll,
     Is,
     Then,
     Do,
