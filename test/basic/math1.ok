@@ -11,11 +11,11 @@
 extern func printf(ln : str, x : int);
 
 func main -> int is
-    var y : int = 20;
-    var x1 : int = y + 10;
-    var x2 : int = y - 10;
-    var x3 : int = y * 10;
-    var x4 : int = y / 10;
+    var y : int := 20;
+    var x1 : int := y + 10;
+    var x2 : int := y - 10;
+    var x3 : int := y * 10;
+    var x4 : int := y / 10;
     
     printf("X1: %d\n", x1);
     printf("X2: %d\n", x2);

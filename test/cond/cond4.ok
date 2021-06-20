@@ -22,7 +22,7 @@ extern func printf(ln:str, x:int);
 extern func println(ln:str);
 
 func cmp1(x:int) is
-    if x == 10 then
+    if x = 10 then
         println("Equal");
     else
         println("NEQ");

@@ -228,7 +228,6 @@ TokenType Scanner::getSymbol(char c) {
         }
         
         case ';': return SemiColon;
-        case ':': return Colon;
         case '(': return LParen;
         case ')': return RParen;
         case '[': return LBracket;
@@ -237,6 +236,18 @@ TokenType Scanner::getSymbol(char c) {
         case '+': return Plus;
         case '*': return Mul;
         case '/': return Div;
+        case '=': return EQ;
+        
+        case ':': {
+            char c2 = reader.get();
+            if (c2 == '=') {
+                rawBuffer += c2;
+                return Assign;
+            } else {
+                reader.unget();
+                return Colon;
+            }
+        } break;
         
         case '>': {
             char c2 = reader.get();
@@ -257,17 +268,6 @@ TokenType Scanner::getSymbol(char c) {
             } else {
                 reader.unget();
                 return LT;
-            }
-        } break;
-        
-        case '=': {
-            char c2 = reader.get();
-            if (c2 == '=') {
-                rawBuffer += c2;
-                return EQ;
-            } else {
-                reader.unget();
-                return Assign;
             }
         } break;
         

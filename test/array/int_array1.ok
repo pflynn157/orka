@@ -9,9 +9,9 @@ extern func printf(line:str, x:int);
 
 func main -> int is
     var numbers : int[5];
-    numbers[2] = 242;
+    numbers[2] := 242;
     
-    var x : int = numbers[2];
+    var x : int := numbers[2];
     printf("%d\n", x);
     return 0;
 end

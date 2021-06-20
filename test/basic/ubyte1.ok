@@ -9,7 +9,7 @@ extern func println(line:str);
 extern func printf(line:str, x:int);
 
 func main -> int is
-    var x : ubyte = 0x21;
+    var x : ubyte := 0x21;
     printf("%x\n", x);
     
     return 0;

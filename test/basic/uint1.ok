@@ -10,7 +10,7 @@ extern func println(line:str);
 extern func printf(line:str, x:int);
 
 func main -> int is
-    var x : uint = 0x1234;
+    var x : uint := 0x1234;
     
     printf("%x\n", x);
     printf("%d\n", x);

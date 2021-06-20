@@ -13,7 +13,7 @@ import std.io;
 extern func println(ln:str);
 
 func test1(x:uint64) is
-    if x == 20 then println("True");
+    if x = 20 then println("True");
     else println("False");
     end
     
@@ -21,7 +21,7 @@ func test1(x:uint64) is
 end
 
 func test2(x:uint64) is
-    if x == 20 then println("True");
+    if x = 20 then println("True");
     else println("False");
     end
     
@@ -29,8 +29,8 @@ func test2(x:uint64) is
 end
 
 func main -> int is
-    var x1 : uint64 = 20;
-    var x2 : uint64 = 31;
+    var x1 : uint64 := 20;
+    var x2 : uint64 := 31;
     
     test1(x1);
     test2(x2);

@@ -18,10 +18,10 @@ extern func printf(ln:str, x:int);
 
 func main -> int is
     var numbers : int[10];
-    var x : int = 0;
+    var x : int := 0;
     
     for i in 0 .. 10 do
-        numbers[i] = i * 2;
+        numbers[i] := i * 2;
     end
     
     for i in numbers do

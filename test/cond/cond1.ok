@@ -31,7 +31,7 @@ func compare(x:int) is
 end
 
 func main -> int is
-    var x : int = 40;
+    var x : int := 40;
     
     compare(x);
     println("---");

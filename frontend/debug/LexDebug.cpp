@@ -46,7 +46,7 @@ void Token::print() {
         case Nl: std::cout << "\\n "; break;
         case SemiColon: std::cout << "; "; break;
         case Colon: std::cout << ": "; break;
-        case Assign: std::cout << "= "; break;
+        case Assign: std::cout << ":= "; break;
         case LParen: std::cout << "("; break;
         case RParen: std::cout << ")"; break;
         case LBracket: std::cout << "["; break;

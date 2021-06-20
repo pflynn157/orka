@@ -18,10 +18,10 @@ extern func printf(line:str, x:int);
 
 func main -> int is
     var numbers : int64[10];
-    var x : int64 = 0;
+    var x : int64 := 0;
     
     for i in 0 .. 10 do
-        numbers[i] = i;
+        numbers[i] := i;
     end
     
     for i in 0 .. 10 do
