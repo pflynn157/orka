@@ -109,11 +109,12 @@ void printHex(int num)
     syscall_str4(1, 1, (char *)number, length);
 }
 
-void printf(const char *line, int64_t arg1)
+void printf(const char *line, int64_t arg1, int64_t arg2, int64_t arg3, int64_t arg4, int64_t arg5)
 {
     int size = strlen(line);
     char buffer[size];
     int index = 0;
+    int argIndex = 0;
     
     for (int i = 0; i<size; i++) {
         if (line[i] == '%' && line[i+1] == 'd') {
@@ -121,24 +122,52 @@ void printf(const char *line, int64_t arg1)
             for (int j = 0; j<index; j++) buffer[j] = 0;
             index = 0;
             
-            printInt(arg1);
+            switch (argIndex) {
+                case 0: printInt(arg1); break;
+                case 1: printInt(arg2); break;
+                case 2: printInt(arg3); break;
+                case 3: printInt(arg4); break;
+                case 4: printInt(arg5); break;
+                default: {}
+            }
+            
             ++i;
+            ++argIndex;
         } else if (line[i] == '%' && line[i+1] == 'x') {
             syscall_str4(1, 1, (char *)buffer, index);
             for (int j = 0; j<index; j++) buffer[j] = 0;
             index = 0;
             
-            printHex(arg1);
+            switch (argIndex) {
+                case 0: printHex(arg1); break;
+                case 1: printHex(arg2); break;
+                case 2: printHex(arg3); break;
+                case 3: printHex(arg4); break;
+                case 4: printHex(arg5); break;
+                default: {}
+            }
+            
             ++i;
+            ++argIndex;
         } else if (line[i] == '%' && line[i+1] == 'c') {
             syscall_str4(1, 1, (char *)buffer, index);
             for (int j = 0; j<index; j++) buffer[j] = 0;
             index = 0;
             
             char buf[1];
-            buf[0] = (char)arg1;
+            
+            switch (argIndex) {
+                case 0: buf[0] = (char)arg1; break;
+                case 1: buf[0] = (char)arg2; break;
+                case 2: buf[0] = (char)arg3; break;
+                case 3: buf[0] = (char)arg4; break;
+                case 4: buf[0] = (char)arg5; break;
+                default: {}
+            }
+            
             syscall_str4(1, 1, (char *)buf, 1);
             ++i;
+            ++argIndex;
         } else if (line[i] == '\\' && line[i+1] == 'n') {
             buffer[index] = '\n';
             ++index;
