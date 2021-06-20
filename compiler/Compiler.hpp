@@ -38,7 +38,7 @@ protected:
     // Flow.cpp
     void compileIfStatement(AstStatement *stmt);
     void compileWhileStatement(AstStatement *stmt);
-    void compileLoopStatement(AstStatement *stmt);
+    void compileRepeatStatement(AstStatement *stmt);
     void compileForStatement(AstStatement *stmt);
     void compileForEachStatement(AstForStmt *stmt);
 private:

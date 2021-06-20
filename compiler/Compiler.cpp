@@ -144,7 +144,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
         } break;
         
         // An infinite loop
-        case AstType::Loop: compileLoopStatement(stmt); break;
+        case AstType::Repeat: compileRepeatStatement(stmt); break;
         
         // A for loop
         case AstType::For: {

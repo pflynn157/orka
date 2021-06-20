@@ -120,9 +120,9 @@ void Compiler::compileWhileStatement(AstStatement *stmt) {
     continueStack.pop();
 }
 
-// Translates an infinite-loop (loop) statement to LLVM
-void Compiler::compileLoopStatement(AstStatement *stmt) {
-    AstLoopStmt *loop = static_cast<AstLoopStmt *>(stmt);
+// Translates a repeat statement to LLVM
+void Compiler::compileRepeatStatement(AstStatement *stmt) {
+    AstRepeatStmt *loop = static_cast<AstRepeatStmt *>(stmt);
     
     BasicBlock *loopBlock = BasicBlock::Create(*context, "loop_body" + std::to_string(blockCount), currentFunc);
     BasicBlock *loopEnd = BasicBlock::Create(*context, "loop_end" + std::to_string(blockCount), currentFunc);

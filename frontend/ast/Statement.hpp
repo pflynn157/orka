@@ -186,9 +186,9 @@ private:
 };
 
 // Represents an infinite loop statement
-class AstLoopStmt : public AstStatement {
+class AstRepeatStmt : public AstStatement {
 public:
-    explicit AstLoopStmt() : AstStatement(AstType::Loop) {
+    explicit AstRepeatStmt() : AstStatement(AstType::Repeat) {
         block = new AstBlock;
     }
     

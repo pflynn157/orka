@@ -191,9 +191,9 @@ void AstWhileStmt::print() {
     std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 }
 
-void AstLoopStmt::print() {
+void AstRepeatStmt::print() {
     std::cout << "    ";
-    std::cout << "LOOP" << std::endl;
+    std::cout << "REPEAT" << std::endl;
     
     std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
     for (auto stmt : block->getBlock()) {

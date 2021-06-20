@@ -20,7 +20,7 @@ enum class AstType {
     Elif,
     Else,
     While,
-    Loop,
+    Repeat,
     For,
     End,
     

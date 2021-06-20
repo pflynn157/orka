@@ -38,7 +38,7 @@ protected:
     bool buildElif(AstIfStmt *block);
     bool buildElse(AstIfStmt *block);
     bool buildWhile(AstBlock *block);
-    bool buildLoop(AstBlock *block);
+    bool buildRepeat(AstBlock *block);
     bool buildFor(AstBlock *block);
     bool buildLoopCtrl(AstBlock *block, bool isBreak);
     

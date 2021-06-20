@@ -11,14 +11,16 @@ import std.io;
 extern func println(ln:str);
 
 func main -> int is
-    var x, y : int := 20;
+    var x : int := 0;
     
-    printf("X: %d | Y: %d\n", x, y);
+    repeat
+        println("Hi");
+        
+        if x = 10 then break; end
+        x := x + 1;
+    end
     
-    x := 22;
-    y := x * 3;
-    
-    printf("X: %d | Y: %d\n", x, y);
+    println("Done");
     
     return 0;
 end

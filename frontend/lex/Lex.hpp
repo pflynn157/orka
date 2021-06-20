@@ -19,7 +19,7 @@ enum TokenType {
     Elif,
     Else,
     While,
-    Loop,
+    Repeat,
     For,
     Is,
     Then,
