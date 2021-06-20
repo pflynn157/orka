@@ -124,88 +124,68 @@ private:
     DataType ptrType = DataType::Void;
 };
 
-// Represents a conditional statement
-class AstIfStmt : public AstStatement {
+// Represents a statement with a sub-block
+class AstBlockStmt : public AstStatement {
 public:
-    explicit AstIfStmt() : AstStatement(AstType::If) {
+    explicit AstBlockStmt(AstType type) : AstStatement(type) {
         block = new AstBlock;
     }
     
     void addStatement(AstStatement *stmt) { block->addStatement(stmt); }
+    
+    AstBlock *getBlockStmt() { return block; }
+    std::vector<AstStatement *> getBlock() { return block->getBlock(); }
+protected:
+    AstBlock *block;
+};
+
+// Represents a conditional statement
+class AstIfStmt : public AstBlockStmt {
+public:
+    explicit AstIfStmt() : AstBlockStmt(AstType::If) {}
+    
     void addBranch(AstStatement *stmt) { branches.push_back(stmt); }
-    AstBlock *getBlock() { return block; }
     std::vector<AstStatement *> getBranches() { return branches; }
     
     void print();
 private:
-    AstBlock *block;
     std::vector<AstStatement *> branches;
 };
 
-class AstElifStmt : public AstStatement {
+class AstElifStmt : public AstBlockStmt {
 public:
-    explicit AstElifStmt() : AstStatement(AstType::Elif) {
-        block = new AstBlock;
-    }
-    
-    void addStatement(AstStatement *stmt) { block->addStatement(stmt); }
-    AstBlock *getBlock() { return block; }
+    explicit AstElifStmt() : AstBlockStmt(AstType::Elif) {}
     
     void print();
-private:
-    AstBlock *block;
 };
 
-class AstElseStmt : public AstStatement {
+class AstElseStmt : public AstBlockStmt {
 public:
-    explicit AstElseStmt() : AstStatement(AstType::Else) {
-        block = new AstBlock;
-    }
-    
-    void addStatement(AstStatement *stmt) { block->addStatement(stmt); }
-    AstBlock *getBlock() { return block; }
+    explicit AstElseStmt() : AstBlockStmt(AstType::Else) {}
     
     void print();
-private:
-    AstBlock *block;
 };
 
 // Represents a while statement
-class AstWhileStmt : public AstStatement {
+class AstWhileStmt : public AstBlockStmt {
 public:
-    explicit AstWhileStmt() : AstStatement(AstType::While) {
-        block = new AstBlock;
-    }
-    
-    void addStatement(AstStatement *stmt) { block->addStatement(stmt); }
-    AstBlock *getBlock() { return block; }
+    explicit AstWhileStmt() : AstBlockStmt(AstType::While) {}
     
     void print();
-private:
-    AstBlock *block;
 };
 
 // Represents an infinite loop statement
-class AstRepeatStmt : public AstStatement {
+class AstRepeatStmt : public AstBlockStmt {
 public:
-    explicit AstRepeatStmt() : AstStatement(AstType::Repeat) {
-        block = new AstBlock;
-    }
-    
-    void addStatement(AstStatement *stmt) { block->addStatement(stmt); }
-    AstBlock *getBlock() { return block; }
+    explicit AstRepeatStmt() : AstBlockStmt(AstType::Repeat) {}
     
     void print();
-private:
-    AstBlock *block;
 };
 
 // Represents a for loop
-class AstForStmt : public AstStatement {
+class AstForStmt : public AstBlockStmt {
 public:
-    explicit AstForStmt() : AstStatement(AstType::For) {
-        block = new AstBlock;
-    }
+    explicit AstForStmt() : AstBlockStmt(AstType::For) {}
     
     void setIndex(AstID *indexVar) { this->indexVar = indexVar; }
     void setStartBound(AstExpression *expr) { startBound = expr; }
@@ -215,7 +195,6 @@ public:
     AstID *getIndex() { return indexVar; }
     AstExpression *getStartBound() { return startBound; }
     AstExpression *getEndBound() { return endBound; }
-    AstBlock *getBlock() { return block; }
     
     bool hasEndBound() {
         if (endBound == nullptr) return false;
@@ -224,7 +203,6 @@ public:
     
     void print();
 private:
-    AstBlock *block;
     AstID *indexVar;
     AstExpression *startBound, *endBound;
 };

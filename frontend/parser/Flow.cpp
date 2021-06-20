@@ -49,7 +49,7 @@ bool Parser::buildConditional(AstBlock *block) {
     cond->addExpression(expr);
 
     ++layer;
-    buildBlock(cond->getBlock(), layer, cond);
+    buildBlock(cond->getBlockStmt(), layer, cond);
     
     return true;
 }
@@ -64,7 +64,7 @@ bool Parser::buildElif(AstIfStmt *block) {
     elif->clearExpressions();
     elif->addExpression(expr);
     
-    buildBlock(elif->getBlock(), layer, block, true);
+    buildBlock(elif->getBlockStmt(), layer, block, true);
     return true;
 }
 
@@ -73,7 +73,7 @@ bool Parser::buildElse(AstIfStmt *block) {
     AstElseStmt *elsee = new AstElseStmt;
     block->addBranch(elsee);
     
-    buildBlock(elsee->getBlock(), layer);
+    buildBlock(elsee->getBlockStmt(), layer);
     return true;
 }
 
@@ -88,7 +88,7 @@ bool Parser::buildWhile(AstBlock *block) {
     loop->addExpression(expr);
     
     ++layer;
-    buildBlock(loop->getBlock(), layer);
+    buildBlock(loop->getBlockStmt(), layer);
     
     return true;
 }
@@ -99,7 +99,7 @@ bool Parser::buildRepeat(AstBlock *block) {
     block->addStatement(loop);
     
     ++layer;
-    buildBlock(loop->getBlock(), layer);
+    buildBlock(loop->getBlockStmt(), layer);
 
     return true;
 }
@@ -145,7 +145,7 @@ bool Parser::buildFor(AstBlock *block) {
     }
     
     ++layer;
-    buildBlock(loop->getBlock(), layer);
+    buildBlock(loop->getBlockStmt(), layer);
     
     return true;
 }

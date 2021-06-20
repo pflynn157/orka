@@ -28,7 +28,7 @@ void Compiler::compileIfStatement(AstStatement *stmt) {
 
     builder->SetInsertPoint(trueBlock);
     bool hasBreak = false;
-    for (auto stmt : condStmt->getBlock()->getBlock()) {
+    for (auto stmt : condStmt->getBlock()) {
         compileStatement(stmt);
         if (stmt->getType() == AstType::Break) hasBreak = true;
     }
@@ -56,7 +56,7 @@ void Compiler::compileIfStatement(AstStatement *stmt) {
             
             builder->SetInsertPoint(trueBlock2);
             bool hasBreak = false;
-            for (auto stmt2 : elifStmt->getBlock()->getBlock()) {
+            for (auto stmt2 : elifStmt->getBlock()) {
                 compileStatement(stmt2);
             }
             if (!hasBreak) builder->CreateBr(endBlock);
@@ -69,7 +69,7 @@ void Compiler::compileIfStatement(AstStatement *stmt) {
             if (!hadElif) builder->SetInsertPoint(falseBlock);
             
             bool hasBreak = false;
-            for (auto stmt2 : elseStmt->getBlock()->getBlock()) {
+            for (auto stmt2 : elseStmt->getBlock()) {
                 compileStatement(stmt2);
             }
             if (!hasBreak) builder->CreateBr(endBlock);
@@ -109,7 +109,7 @@ void Compiler::compileWhileStatement(AstStatement *stmt) {
     builder->CreateCondBr(cond, loopBlock, loopEnd);
 
     builder->SetInsertPoint(loopBlock);
-    for (auto stmt : loop->getBlock()->getBlock()) {
+    for (auto stmt : loop->getBlock()) {
         compileStatement(stmt);
     }
     builder->CreateBr(loopCmp);
@@ -138,7 +138,7 @@ void Compiler::compileRepeatStatement(AstStatement *stmt) {
     builder->CreateBr(loopBlock);
     builder->SetInsertPoint(loopBlock);
     
-    for (auto stmt : loop->getBlock()->getBlock()) {
+    for (auto stmt : loop->getBlock()) {
         compileStatement(stmt);
     }
     builder->CreateBr(loopBlock);
@@ -205,7 +205,7 @@ void Compiler::compileForStatement(AstStatement *stmt) {
 
     // The body
     builder->SetInsertPoint(loopBlock);
-    for (auto stmt : loop->getBlock()->getBlock()) {
+    for (auto stmt : loop->getBlock()) {
         compileStatement(stmt);
     }
     builder->CreateBr(loopInc);
@@ -303,7 +303,7 @@ void Compiler::compileForEachStatement(AstForStmt *loop) {
     // Loop body
     //
     builder->SetInsertPoint(loopBody);
-    for (auto stmt : loop->getBlock()->getBlock()) {
+    for (auto stmt : loop->getBlock()) {
         compileStatement(stmt);
     }
     builder->CreateBr(loopInc);
@@ -316,4 +316,3 @@ void Compiler::compileForEachStatement(AstForStmt *loop) {
     symtable = symtableOld;
     typeTable = typeTableOld;
 }
-
