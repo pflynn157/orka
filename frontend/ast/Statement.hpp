@@ -29,6 +29,7 @@ public:
     }
     
     std::vector<AstExpression *> getExpressions() { return expressions; }
+    AstExpression *getExpression() { return expressions.at(0); }
     AstType getType() { return type; }
     virtual void print() {}
 private:

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <vector>
 
 #include <parser/Parser.hpp>
 #include <ast.hpp>
@@ -6,18 +8,33 @@
 // Builds a variable declaration
 // A variable declaration is composed of an Alloca and optionally, an assignment
 bool Parser::buildVariableDec(AstBlock *block) {
-    Token idToken = scanner->getNext();
+    Token token = scanner->getNext();
+    std::vector<std::string> toDeclare;
+    toDeclare.push_back(token.id_val);
     
-    if (idToken.type != Id) {
+    if (token.type != Id) {
         syntax->addError(scanner->getLine(), "Expected variable name.");
         return false;
     }
     
-    Token token = scanner->getNext();
+    token = scanner->getNext();
     
-    if (token.type != Colon) {
-        syntax->addError(scanner->getLine(), "Expected \':\' in declaration.");
-        return false;
+    while (token.type != Colon) {
+        if (token.type == Comma) {
+            token = scanner->getNext();
+            
+            if (token.type != Id) {
+                syntax->addError(scanner->getLine(), "Expected variable name.");
+                return false;
+            }
+            
+            toDeclare.push_back(token.id_val);
+        } else if (token.type != Colon) {
+            syntax->addError(scanner->getLine(), "Invalid token in variable declaration.");
+            return false;
+        }
+        
+        token = scanner->getNext();
     }
     
     token = scanner->getNext();
@@ -40,17 +57,12 @@ bool Parser::buildVariableDec(AstBlock *block) {
         default: {}
     }
     
-    AstVarDec *vd = new AstVarDec(idToken.id_val, dataType);
-    block->addStatement(vd);
-    
     token = scanner->getNext();
     
     // We have an array
     if (token.type == LBracket) {
-        vd->setDataType(DataType::Array);
-        vd->setPtrType(dataType);
-        
-        if (!buildExpression(vd, DataType::Int32, RBracket)) return false;   
+        AstVarDec *empty = new AstVarDec("", DataType::Array);
+        if (!buildExpression(empty, DataType::Int32, RBracket)) return false;   
         
         token = scanner->getNext();
         if (token.type != SemiColon) {
@@ -58,50 +70,64 @@ bool Parser::buildVariableDec(AstBlock *block) {
             return false;
         }
         
-        // Create an assignment to a malloc call
-        AstVarAssign *va = new AstVarAssign(idToken.id_val);
-        va->setDataType(DataType::Array);
-        va->setPtrType(dataType);
-        block->addStatement(va);
-        
-        AstFuncCallExpr *callMalloc = new AstFuncCallExpr("malloc");
-        callMalloc->setArguments(vd->getExpressions());
-        va->addExpression(callMalloc);
-        
-        // In order to get a proper malloc, we need to multiply the argument by
-        // the size of the type. Get the arguments, and do that
-        AstExpression *arg = callMalloc->getArguments().at(0);
-        callMalloc->clearArguments();
-        
-        AstInt *size;
-        if (dataType == DataType::Int32) size = new AstInt(4);
-        else size = new AstInt(1);
-        
-        AstMulOp *op = new AstMulOp;
-        op->setLVal(size);
-        op->setRVal(arg);
-        callMalloc->addArgument(op);
-        
-        // Finally, set the size of the declaration
-        vd->setPtrSize(arg);
-        
-        typeMap[idToken.id_val] = std::pair<DataType, DataType>(DataType::Array, dataType);
+        for (std::string name : toDeclare) {
+            AstVarDec *vd = new AstVarDec(name, DataType::Array);
+            block->addStatement(vd);
+            vd->addExpression(empty->getExpression());
+            vd->setPtrType(dataType);
+            
+            // Create an assignment to a malloc call
+            AstVarAssign *va = new AstVarAssign(name);
+            va->setDataType(DataType::Array);
+            va->setPtrType(dataType);
+            block->addStatement(va);
+            
+            AstFuncCallExpr *callMalloc = new AstFuncCallExpr("malloc");
+            callMalloc->setArguments(vd->getExpressions());
+            va->addExpression(callMalloc);
+            
+            // In order to get a proper malloc, we need to multiply the argument by
+            // the size of the type. Get the arguments, and do that
+            AstExpression *arg = callMalloc->getArguments().at(0);
+            callMalloc->clearArguments();
+            
+            AstInt *size;
+            if (dataType == DataType::Int32) size = new AstInt(4);
+            else size = new AstInt(1);
+            
+            AstMulOp *op = new AstMulOp;
+            op->setLVal(size);
+            op->setRVal(arg);
+            callMalloc->addArgument(op);
+            
+            // Finally, set the size of the declaration
+            vd->setPtrSize(arg);
+            
+            typeMap[name] = std::pair<DataType, DataType>(DataType::Array, dataType);
+        }
     
     // We're at the end of the declaration
     } else if (token.type == SemiColon) {
-        return true;
+        syntax->addError(scanner->getLine(), "Expected init expression.");
+        return false;
         
     // Otherwise, we have a regular variable
     } else {
-        auto typePair = std::pair<DataType, DataType>(dataType, DataType::Void);
-        typeMap[idToken.id_val] = typePair;
-        scanner->rewind(token);
-
-        AstVarAssign *va = new AstVarAssign(idToken.id_val);
-        va->setDataType(dataType);
-        block->addStatement(va);
-
-        if (!buildExpression(va, dataType)) return false;
+        AstVarAssign *empty = new AstVarAssign("");
+        if (!buildExpression(empty, dataType)) return false;
+    
+        for (std::string name : toDeclare) {
+            AstVarDec *vd = new AstVarDec(name, dataType);
+            block->addStatement(vd);
+            
+            auto typePair = std::pair<DataType, DataType>(dataType, DataType::Void);
+            typeMap[name] = typePair;
+    
+            AstVarAssign *va = new AstVarAssign(name);
+            va->setDataType(dataType);
+            va->addExpression(empty->getExpression());
+            block->addStatement(va);
+        }
     }
     
     return true;
