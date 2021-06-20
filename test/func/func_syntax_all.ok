@@ -13,7 +13,7 @@
 
 import std.io;
 
-extern func println(ln:str);
+extern println(ln:str);
 
 func func1 is
     println("Func1");

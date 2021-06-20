@@ -6,8 +6,8 @@
 
 #RET 0
 
-extern func println(line:str);
-extern func printf(line:str, x:int);
+extern println(line:str);
+extern printf(line:str, x:int);
 
 func main -> int is
     var x : int64 := 0x12345678;

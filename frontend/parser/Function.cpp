@@ -84,12 +84,6 @@ bool Parser::buildFunction(Token startToken) {
     // Handle extern function
     if (startToken.type == Extern) {
         isExtern = true;
-        
-        token = scanner->getNext();
-        if (token.type != Func) {
-            syntax->addError(scanner->getLine(), "Expected \"func\" keyword.");
-            return false;
-        }
     }
 
     // Make sure we have a function name

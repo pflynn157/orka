@@ -5,7 +5,7 @@
 
 #RET 2
 
-extern func println(s:str);
+extern println(s:str);
 
 func main -> int is
     println("Hi");

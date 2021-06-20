@@ -6,8 +6,8 @@
 
 #RET 0
 
-extern func printf(line:str, x:int);
-extern func printCharArray(array:char[]);
+extern printf(line:str, x:int);
+extern printCharArray(array:char[]);
 
 func main -> int is
     var c : char := 'A';

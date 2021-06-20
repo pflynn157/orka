@@ -5,7 +5,7 @@
 
 #RET 0
 
-extern func printf(line:str, x:int);
+extern printf(line:str, x:int);
 
 func getNumber(x:int, y:int) -> int is
     return 20 + x + y;

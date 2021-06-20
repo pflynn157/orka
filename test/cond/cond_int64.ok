@@ -10,7 +10,7 @@
 
 import std.io;
 
-extern func println(ln:str);
+extern println(ln:str);
 
 func test1(x:int64) is
     if x = 20 then println("True");

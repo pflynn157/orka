@@ -14,7 +14,7 @@
 
 #RET 0
 
-extern func printf(ln:str, x:int);
+extern printf(ln:str, x:int);
 
 func main -> int is
     var numbers : int[10];

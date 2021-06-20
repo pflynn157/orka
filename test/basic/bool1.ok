@@ -7,7 +7,7 @@
 
 import std.io;
 
-extern func println(ln:str);
+extern println(ln:str);
 
 func main -> int is
     var x : bool := true;

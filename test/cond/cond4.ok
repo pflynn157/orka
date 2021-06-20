@@ -18,8 +18,8 @@
 
 #RET 0
 
-extern func printf(ln:str, x:int);
-extern func println(ln:str);
+extern printf(ln:str, x:int);
+extern println(ln:str);
 
 func cmp1(x:int) is
     if x = 10 then
