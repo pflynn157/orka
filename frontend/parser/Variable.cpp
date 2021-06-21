@@ -93,6 +93,7 @@ bool Parser::buildVariableDec(AstBlock *block) {
             
             AstInt *size;
             if (dataType == DataType::Int32) size = new AstInt(4);
+            else if (dataType == DataType::String) size = new AstInt(8);
             else size = new AstInt(1);
             
             AstMulOp *op = new AstMulOp;

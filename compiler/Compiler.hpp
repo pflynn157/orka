@@ -56,6 +56,7 @@ private:
     StructType *i8ArrayType;
     StructType *i32ArrayType;
     StructType *i64ArrayType;
+    StructType *strArrayType;
     
     // Symbol table
     std::map<std::string, AllocaInst *> symtable;

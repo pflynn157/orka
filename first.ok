@@ -9,18 +9,14 @@
 
 import std.io;
 
-enum Vals is
-    A,
-    B,
-    C
-end
+extern println(s:str);
 
-func main -> int is
-    var x : int = Vals::B;
+func main(args:str[]) -> int is
     
-    printf("A: %d\n", Vals::A);
-    printf("B: %d\n", x);
-    printf("C: %d\n", Vals::C);
+    for i in 0 .. sizeof(args) do
+        printf("Arg: ");
+        println(args[i]);
+    end
     
     return 0;
 end

@@ -34,6 +34,13 @@ Compiler::Compiler(AstTree *tree, CFlags cflags) {
     arrayTypes.push_back(Type::getInt32Ty(*context));
     i8ArrayType = StructType::create(*context, arrayTypes);
     i8ArrayType->setName("CharArrayType");
+    
+    auto strList = PointerType::getUnqual(Type::getInt8PtrTy(*context));
+    arrayTypes.clear();
+    arrayTypes.push_back(strList);
+    arrayTypes.push_back(Type::getInt32Ty(*context));
+    strArrayType = StructType::create(*context, arrayTypes);
+    strArrayType->setName("StrArrayType");
 
     // Add declarations for built-in functions
     FunctionType *FT1 = FunctionType::get(Type::getInt8PtrTy(*context), Type::getInt32Ty(*context), false);
@@ -326,6 +333,8 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
                 
                 case DataType::Int64:
                 case DataType::UInt64: type = i64ArrayType; break;
+                
+                case DataType::String: type = strArrayType; break;
                 
                 default: {}
             }
