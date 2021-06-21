@@ -60,6 +60,7 @@ void Token::print() {
         case Dot: std::cout << ". "; break;
         case Range: std::cout << ".. "; break;
         case Arrow: std::cout << "-> "; break;
+        case Scope: std::cout << ":: "; break;
         
         case Plus: std::cout << "+ "; break;
         case Minus: std::cout << "- "; break;

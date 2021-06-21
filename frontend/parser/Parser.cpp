@@ -222,6 +222,21 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
                     buildExpression(nullptr, varType, RParen, Comma, &fcExpr);
                     
                     output.push(fc);
+                } else if (token.type == Scope) {
+                    if (enums.find(name) == enums.end()) {
+                        syntax->addError(scanner->getLine(), "Unknown enum.");
+                        return false;
+                    }
+                    
+                    token = scanner->getNext();
+                    if (token.type != Id) {
+                        syntax->addError(scanner->getLine(), "Expected identifier.");
+                        return false;
+                    }
+                    
+                    EnumDec dec = enums[name];
+                    AstExpression *val = dec.values[token.id_val];
+                    output.push(val);
                 } else {
                     int constVal = isConstant(name);
                     if (constVal > 0) {

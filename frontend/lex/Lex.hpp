@@ -68,6 +68,7 @@ enum TokenType {
     Dot,
     Range,
     Arrow,
+    Scope,
     
     Plus,
     Minus,

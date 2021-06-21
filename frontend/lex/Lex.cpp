@@ -241,6 +241,9 @@ TokenType Scanner::getSymbol(char c) {
             if (c2 == '=') {
                 rawBuffer += c2;
                 return Assign;
+            } else if (c2 == ':') {
+                rawBuffer += c2;
+                return Scope;
             } else {
                 reader.unget();
                 return Colon;
