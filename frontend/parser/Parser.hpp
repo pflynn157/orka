@@ -32,6 +32,7 @@ protected:
     bool buildVariableDec(AstBlock *block);
     bool buildVariableAssign(AstBlock *block, Token idToken);
     bool buildArrayAssign(AstBlock *block, Token idToken);
+    bool buildConst(bool isGlobal);
     
     // Flow.cpp
     bool buildConditional(AstBlock *block);
@@ -46,9 +47,10 @@ protected:
     bool buildBlock(AstBlock *block, int stopLayer = 0, AstIfStmt *parentBlock = nullptr, bool inElif = false);
     bool buildExpression(AstStatement *stmt, DataType currentType,
                         TokenType stopToken = SemiColon, TokenType separateToken = EmptyToken,
-                        AstExpression **dest = nullptr);
+                        AstExpression **dest = nullptr, bool isConst = false);
     AstExpression *checkExpression(AstExpression *expr, DataType varType);
     AstExpression *checkCondExpression(AstExpression *toCheck);
+    int isConstant(std::string name);
 private:
     std::string input = "";
     Scanner *scanner;
@@ -57,5 +59,7 @@ private:
     int layer = 0;
     
     std::map<std::string, std::pair<DataType,DataType>> typeMap;
+    std::map<std::string, std::pair<DataType, AstExpression*>> globalConsts;
+    std::map<std::string, std::pair<DataType, AstExpression*>> localConsts;
 };
 

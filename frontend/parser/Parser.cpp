@@ -27,6 +27,8 @@ bool Parser::parse() {
                 code = buildFunction(token);
             } break;
             
+            case Const: code = buildConst(true); break;
+            
             case Eof:
             case Nl: break;
             
@@ -59,6 +61,7 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
         
         switch (token.type) {
             case VarD: code = buildVariableDec(block); break;
+            case Const: code = buildConst(false); break;
             
             case Id: {
                 Token idToken = token;
@@ -142,7 +145,8 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
 }
 
 // Builds an expression
-bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType stopToken, TokenType separateToken, AstExpression **dest) {
+bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType stopToken, TokenType separateToken,
+                             AstExpression **dest, bool isConst) {
     std::stack<AstExpression *> output;
     std::stack<AstExpression *> opStack;
     
@@ -192,6 +196,11 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
             } break;
             
             case Id: {
+                if (isConst) {
+                    syntax->addError(scanner->getLine(), "Invalid constant value.");
+                    return false;
+                }
+            
                 std::string name = token.id_val;
                 if (varType == DataType::Void) {
                     varType = typeMap[name].first;
@@ -213,13 +222,30 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
                     
                     output.push(fc);
                 } else {
-                    AstID *id = new AstID(name);
-                    output.push(id);
+                    int constVal = isConstant(name);
+                    if (constVal > 0) {
+                        if (constVal == 1) {
+                            AstExpression *expr = globalConsts[name].second;
+                            output.push(expr);
+                        } else if (constVal == 2) {
+                            AstExpression *expr = localConsts[name].second;
+                            output.push(expr);
+                        }
+                    } else {
+                        AstID *id = new AstID(name);
+                        output.push(id);
+                    }
+                    
                     scanner->rewind(token);
                 }
             } break;
             
             case Sizeof: {
+                if (isConst) {
+                    syntax->addError(scanner->getLine(), "Invalid constant value.");
+                    return false;
+                }
+                
                 std::string name = token.id_val;
                 
                 Token token1 = scanner->getNext();
@@ -368,3 +394,15 @@ void Parser::debugScanner() {
     } while (t.type != Eof);
 }
 
+// Checks to see if a string is a constant
+int Parser::isConstant(std::string name) {
+    if (globalConsts.find(name) != globalConsts.end()) {
+        return 1;
+    }
+    
+    if (localConsts.find(name) != localConsts.end()) {
+        return 2;
+    }
+    
+    return 0;
+}

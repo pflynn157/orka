@@ -190,6 +190,7 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "end") return End;
     else if (buffer == "return") return Return;
     else if (buffer == "var") return VarD;
+    else if (buffer == "const") return Const;
     else if (buffer == "bool") return Bool;
     else if (buffer == "char") return Char;
     else if (buffer == "byte") return Byte;

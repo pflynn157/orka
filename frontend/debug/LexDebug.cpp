@@ -12,6 +12,7 @@ void Token::print() {
         case End: std::cout << "END "; break;
         case Return: std::cout << "RETURN "; break;
         case VarD: std::cout << "VAR "; break;
+        case Const: std::cout << "CONST "; break;
         case If: std::cout << "IF"; break;
         case Elif: std::cout << "ELIF"; break;
         case Else: std::cout << "ELSE"; break;

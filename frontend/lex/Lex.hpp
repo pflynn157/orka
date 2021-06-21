@@ -15,6 +15,7 @@ enum TokenType {
     End,
     Return,
     VarD,
+    Const,
     If,
     Elif,
     Else,

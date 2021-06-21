@@ -78,6 +78,8 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
 // Builds a function
 bool Parser::buildFunction(Token startToken) {
     typeMap.clear();
+    localConsts.clear();
+    
     Token token;
     bool isExtern = false;
 

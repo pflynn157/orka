@@ -16,4 +16,3 @@ func main -> int is
     
     return 0;
 end
-

@@ -171,3 +171,64 @@ bool Parser::buildArrayAssign(AstBlock *block, Token idToken) {
     return true;
 }
 
+// Builds a constant variable
+bool Parser::buildConst(bool isGlobal) {
+    Token token = scanner->getNext();
+    std::string name = token.id_val;
+    
+    // Make sure we have a name for our constant
+    if (token.type != Id) {
+        syntax->addError(scanner->getLine(), "Expected constant name.");
+        return false;
+    }
+    
+    // Syntax check
+    token = scanner->getNext();
+    if (token.type != Colon) {
+        syntax->addError(scanner->getLine(), "Expected \':\' in constant expression.");
+        return false;
+    }
+    
+    // Get the data type
+    token = scanner->getNext();
+    DataType dataType = DataType::Void;
+    
+    switch (token.type) {
+        case Bool: dataType = DataType::Bool; break;
+        case Char: dataType = DataType::Char; break;
+        case Byte: dataType = DataType::Byte; break;
+        case UByte: dataType = DataType::UByte; break;
+        case Short: dataType = DataType::Short; break;
+        case UShort: dataType = DataType::UShort; break;
+        case Int: dataType = DataType::Int32; break;
+        case UInt: dataType = DataType::UInt32; break;
+        case Int64: dataType = DataType::Int64; break;
+        case UInt64: dataType = DataType::UInt64; break;
+        case Str: dataType = DataType::String; break;
+        
+        default: {
+            syntax->addError(scanner->getLine(), "Unknown data type.");
+            return false;
+        }
+    }
+    
+    // Final syntax check
+    token = scanner->getNext();
+    if (token.type != Assign) {
+        syntax->addError(scanner->getLine(), "Expected \'=\' after const assignment.");
+        return false;
+    }
+    
+    // Build the expression. We create a dummy statement for this
+    AstExpression *expr = nullptr;
+    if (!buildExpression(nullptr, dataType, SemiColon, EmptyToken, &expr, true)) return false;
+    
+    // Put it all together
+    if (isGlobal) {
+        globalConsts[name] = std::pair<DataType, AstExpression*>(dataType, expr);
+    } else {
+        localConsts[name] = std::pair<DataType, AstExpression*>(dataType, expr);
+    }
+    
+    return true;
+}
