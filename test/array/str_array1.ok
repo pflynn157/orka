@@ -17,8 +17,8 @@ func main -> int is
     args[1] := "How are you?";
     args[2] := "Good!";
     
-    forall a in args do
-        println(a);
+    for i in 0 .. 3 do
+        println(args[i]);
     end
     
     return 0;
