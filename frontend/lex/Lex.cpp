@@ -109,7 +109,7 @@ Token Scanner::getNext() {
             continue;
         }
         
-        if (next == ' ' || isSymbol(next)) {
+        if (next == ' ' || next == '\n' || isSymbol(next)) {
             if (buffer.length() == 0) {
                 if (isSymbol(next)) {
                     Token sym;
@@ -163,7 +163,6 @@ std::string Scanner::getRawBuffer() {
 
 bool Scanner::isSymbol(char c) {
     switch (c) {
-        case '\n':
         case ';': 
         case ':': 
         case '.':
@@ -187,6 +186,7 @@ bool Scanner::isSymbol(char c) {
 TokenType Scanner::getKeyword() {
     if (buffer == "extern") return Extern;
     else if (buffer == "func") return Func;
+    else if (buffer == "enum") return Enum;
     else if (buffer == "end") return End;
     else if (buffer == "return") return Return;
     else if (buffer == "var") return VarD;
@@ -225,11 +225,6 @@ TokenType Scanner::getKeyword() {
 
 TokenType Scanner::getSymbol(char c) {
     switch (c) {
-        case '\n': {
-            ++currentLine;
-            return Nl;
-        }
-        
         case ';': return SemiColon;
         case '(': return LParen;
         case ')': return RParen;

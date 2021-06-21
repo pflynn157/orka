@@ -44,6 +44,9 @@ protected:
     bool buildForAll(AstBlock *block);
     bool buildLoopCtrl(AstBlock *block, bool isBreak);
     
+    // Structure.cpp
+    bool buildEnum();
+    
     bool buildBlock(AstBlock *block, int stopLayer = 0, AstIfStmt *parentBlock = nullptr, bool inElif = false);
     bool buildExpression(AstStatement *stmt, DataType currentType,
                         TokenType stopToken = SemiColon, TokenType separateToken = EmptyToken,
@@ -61,5 +64,6 @@ private:
     std::map<std::string, std::pair<DataType,DataType>> typeMap;
     std::map<std::string, std::pair<DataType, AstExpression*>> globalConsts;
     std::map<std::string, std::pair<DataType, AstExpression*>> localConsts;
+    std::map<std::string, EnumDec> enums;
 };
 

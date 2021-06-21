@@ -12,6 +12,7 @@ enum TokenType {
     // Keywords
     Extern,
     Func,
+    Enum,
     End,
     Return,
     VarD,

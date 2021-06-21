@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <map>
 
 enum class AstType {
     EmptyAst,
@@ -72,6 +73,15 @@ struct Var {
     std::string name;
     DataType type;
     DataType subType;
+};
+
+// Represents an ENUM
+class AstExpression;
+
+struct EnumDec {
+    std::string name;
+    DataType type;
+    std::map<std::string, AstExpression*> values;
 };
 
 // Represents a block

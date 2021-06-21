@@ -5,14 +5,15 @@
 
 #RET 0
 
-extern printf(ln:str, x:int);
+import std.io;
 
-const Top : int := 30;
+enum Vals is
+    A,
+    B,
+    C
+end
 
 func main -> int is
-    const x : int := 20;
-    
-    printf("CONST: %d, %d\n", x, Top);
     
     return 0;
 end
