@@ -13,6 +13,7 @@ enum class AstType {
     FuncCallExpr,
     
     VarDec,
+    StructDec,
     VarAssign,
     ArrayAssign,
     Sizeof,
@@ -100,7 +101,7 @@ private:
 class AstStruct {
 public:
     explicit AstStruct(std::string name) {
-        this->name;
+        this->name = name;
     }
     
     void addItem(Var var, AstExpression *defaultExpression) {

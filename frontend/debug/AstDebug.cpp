@@ -89,6 +89,11 @@ void AstVarDec::print() {
     std::cout << std::endl;
 }
 
+void AstStructDec::print() {
+    std::cout << "    ";
+    std::cout << "STRUCT " << varName << " : " << structName << std::endl;
+}
+
 void AstVarAssign::print() {
     std::cout << "    ";
     std::cout << "VAR= " << name << " : " << printDataType(dataType);

@@ -17,6 +17,7 @@ struct Data is
 end
 
 func main -> int is
+    struct MyData : Data;
     
     return 0;
 end

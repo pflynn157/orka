@@ -108,6 +108,15 @@ void Compiler::compileStatement(AstStatement *stmt) {
             }
         } break;
         
+        // A structure declaration
+        case AstType::StructDec: {
+            AstStructDec *sd = static_cast<AstStructDec *>(stmt);
+            StructType *type = structTable[sd->getStructName()];
+            
+            AllocaInst *var = builder->CreateAlloca(type);
+            symtable[sd->getVarName()] = var;
+        } break;
+        
         // A variable assignment
         case AstType::VarAssign: {
             AstVarAssign *va = static_cast<AstVarAssign *>(stmt);

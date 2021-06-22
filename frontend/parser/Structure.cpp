@@ -190,3 +190,55 @@ bool Parser::buildStruct() {
     
     return true;
 }
+
+bool Parser::buildStructDec(AstBlock *block) {
+    Token token = scanner->getNext();
+    std::string name = token.id_val;
+    
+    if (token.type != Id) {
+        syntax->addError(scanner->getLine(), "Expected structure name.");
+        return false;
+    }
+    
+    token = scanner->getNext();
+    if (token.type != Colon) {
+        syntax->addError(scanner->getLine(), "Expected \':\'");
+        return false;
+    }
+    
+    token = scanner->getNext();
+    std::string structName = token.id_val;
+    
+    if (token.type != Id) {
+        syntax->addError(scanner->getLine(), "Expected structure type.");
+        return false;
+    }
+    
+    // Make sure the given structure exists
+    bool found = false;
+    
+    for (auto str : tree->getStructs()) {
+        if (str->getName() == structName) {
+            found = true;
+            break;
+        }    
+    }
+    
+    if (!found) {
+        syntax->addError(scanner->getLine(), "Unknown structure.");
+        return false;
+    }
+    
+    // Now build the declaration and push back
+    AstStructDec *dec = new AstStructDec(name, structName);
+    block->addStatement(dec);
+    
+    // Final syntax check
+    token = scanner->getNext();
+    if (token.type != SemiColon) {
+        syntax->addError(scanner->getLine(), "Expected terminator.");
+        return false;
+    }
+    
+    return true;
+}

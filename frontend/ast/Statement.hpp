@@ -84,6 +84,23 @@ private:
     DataType ptrType = DataType::Void;
 };
 
+// Represents a structure declaration
+class AstStructDec : public AstStatement {
+public:
+    explicit AstStructDec(std::string varName, std::string structName) : AstStatement(AstType::StructDec) {
+        this->varName = varName;
+        this->structName = structName;
+    }
+    
+    std::string getVarName() { return varName; }
+    std::string getStructName() { return structName; }
+    
+    void print();
+private:
+    std::string varName = "";
+    std::string structName = "";
+};
+
 // Represents a variable assignment
 class AstVarAssign : public AstStatement {
 public:
