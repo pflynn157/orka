@@ -48,6 +48,21 @@ Compiler::Compiler(AstTree *tree, CFlags cflags) {
 }
 
 void Compiler::compile() {
+    // Build the structures used by the program
+    for (auto str : tree->getStructs()) {
+        std::vector<Type *> elementTypes;
+        
+        for (auto v : str->getItems()) {
+            Type *t = translateType(v.type, v.subType);
+            elementTypes.push_back(t);
+        }
+        
+        StructType *s = StructType::create(*context, elementTypes);
+        s->setName(str->getName());
+        
+        structTable[str->getName()] = s;
+    }
+
     // Build all other functions
     for (auto global : tree->getGlobalStatements()) {
         switch (global->getType()) {

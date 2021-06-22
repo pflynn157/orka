@@ -58,6 +58,9 @@ private:
     StructType *i64ArrayType;
     StructType *strArrayType;
     
+    // The user-defined structure table
+    std::map<std::string, StructType*> structTable;
+    
     // Symbol table
     std::map<std::string, AllocaInst *> symtable;
     std::map<std::string, DataType> typeTable;

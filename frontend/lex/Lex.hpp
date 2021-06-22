@@ -13,6 +13,7 @@ enum TokenType {
     Extern,
     Func,
     Enum,
+    Struct,
     End,
     Return,
     VarD,

@@ -10,6 +10,7 @@ void Token::print() {
         case Extern: std::cout << "EXTERN "; break;
         case Func: std::cout << "FUNC "; break;
         case Enum: std::cout << "ENUM "; break;
+        case Struct: std::cout << "STRUCT "; break;
         case End: std::cout << "END "; break;
         case Return: std::cout << "RETURN "; break;
         case VarD: std::cout << "VAR "; break;

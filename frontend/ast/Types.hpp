@@ -96,3 +96,26 @@ private:
     std::vector<AstStatement *> block;
 };
 
+// Represents a struct
+class AstStruct {
+public:
+    explicit AstStruct(std::string name) {
+        this->name;
+    }
+    
+    void addItem(Var var, AstExpression *defaultExpression) {
+        items.push_back(var);
+        defaultExpressions[var.name] = defaultExpression;
+    }
+    
+    std::string getName() { return name; }
+    std::vector<Var> getItems() { return items; }
+    
+    AstExpression *getDefaultExpression(std::string name) {
+        return defaultExpressions[name];
+    }
+private:
+    std::string name;
+    std::vector<Var> items;
+    std::map<std::string, AstExpression*> defaultExpressions;
+};
