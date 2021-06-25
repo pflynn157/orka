@@ -13,14 +13,29 @@ using namespace llvm::sys;
 #include <Compiler.hpp>
 
 void Compiler::writeAssembly() {
-    LLVMInitializeX86TargetInfo();
-    LLVMInitializeX86Target();
-    LLVMInitializeX86TargetMC();
-    LLVMInitializeX86AsmParser();
-    LLVMInitializeX86AsmPrinter();
-    
-    auto triple = sys::getDefaultTargetTriple();
-    mod->setTargetTriple(triple);
+    std::string triple = "";
+
+    if (cflags.nvptx) {
+        LLVMInitializeNVPTXTargetInfo();
+        LLVMInitializeNVPTXTarget();
+        LLVMInitializeNVPTXTargetMC();
+        //LLVMInitializeNVPTXAsmParser();
+        LLVMInitializeNVPTXAsmPrinter();
+        
+        triple = "nvptx64-nvidia-cuda";
+        mod->setTargetTriple(triple);
+        
+        mod->setDataLayout("p:64:64:64");
+    } else {
+        LLVMInitializeX86TargetInfo();
+        LLVMInitializeX86Target();
+        LLVMInitializeX86TargetMC();
+        LLVMInitializeX86AsmParser();
+        LLVMInitializeX86AsmPrinter();
+        
+        triple = sys::getDefaultTargetTriple();
+        mod->setTargetTriple(triple);
+    }
     
     std::string error;
     auto target = TargetRegistry::lookupTarget(triple, error);
@@ -35,13 +50,18 @@ void Compiler::writeAssembly() {
     auto CPU = "generic";
     auto features = "";
     
+    if (cflags.nvptx) CPU = "";
+    
     TargetOptions options;
     auto RM = Optional<Reloc::Model>();
     auto machine = target->createTargetMachine(triple, CPU, features, options, RM);
     mod->setDataLayout(machine->createDataLayout());
     
     // Write it out
-    std::string outputPath = "/tmp/" + cflags.name + ".asm";
+    std::string outputPath = cflags.name;
+    if (cflags.nvptx) outputPath += ".ptx";
+    else outputPath = "/tmp/" + outputPath + ".asm";
+    
     std::error_code errorCode;
     raw_fd_ostream writer(outputPath, errorCode, sys::fs::OF_None);
     

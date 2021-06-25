@@ -100,8 +100,11 @@ int main(int argc, char **argv) {
     }
     
     compiler->writeAssembly();
-    compiler->assemble();
-    compiler->link();
+    
+    if (!emitNVPTX) {
+        compiler->assemble();
+        compiler->link();
+    }
     
     return 0;
 }
