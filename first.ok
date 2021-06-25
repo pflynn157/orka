@@ -9,15 +9,9 @@
 
 import std.io;
 
-extern println(s:str);
-
-struct Data is
-    A : int := 1;
-    B : int := 2;
+func vecadd(result:int[], x:int[], y:int[]) is
+    for i in 0 .. sizeof(result) do
+        result[i] := x[i] + y[i];
+    end
 end
 
-func main -> int is
-    struct MyData : Data;
-    
-    return 0;
-end

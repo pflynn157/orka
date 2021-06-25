@@ -17,6 +17,7 @@ int main(int argc, char **argv) {
     // Compiler (codegen) flags
     CFlags flags;
     flags.name = "a.out";
+    flags.nvptx = false;
     
     // Other flags
     std::string input = "";
@@ -24,6 +25,7 @@ int main(int argc, char **argv) {
     bool printAst = false;
     bool printLLVM = false;
     bool emitLLVM = false;
+    bool emitNVPTX = false;
     
     for (int i = 1; i<argc; i++) {
         std::string arg = argv[i];
@@ -36,6 +38,9 @@ int main(int argc, char **argv) {
             printLLVM = true;
         } else if (arg == "--emit-llvm") {
             emitLLVM = true;
+        } else if (arg == "--emit-nvptx") {
+            emitNVPTX = true;
+            flags.nvptx = true;
         } else if (arg == "-o") {
             flags.name = argv[i+1];
             i += 1;
