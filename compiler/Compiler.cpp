@@ -1,5 +1,6 @@
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/Support/TargetRegistry.h"
+#include "llvm/Support/CommandLine.h"
 
 using namespace llvm;
 using namespace llvm::sys;
@@ -85,6 +86,13 @@ void Compiler::compile() {
 
 void Compiler::debug() {
     mod->print(errs(), nullptr);
+}
+
+void Compiler::emitLLVM(std::string path) {
+    std::error_code errorCode;
+    raw_fd_ostream writer(path, errorCode, sys::fs::OF_None);
+    
+    mod->print(writer, NULL);
 }
 
 // Compiles an individual statement

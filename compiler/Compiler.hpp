@@ -21,6 +21,7 @@ public:
     explicit Compiler(AstTree *tree, CFlags flags);
     void compile();
     void debug();
+    void emitLLVM(std::string path);
     void writeAssembly();
     void assemble();
     void link();

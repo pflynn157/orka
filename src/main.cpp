@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
     bool testLex = false;
     bool printAst = false;
     bool printLLVM = false;
+    bool emitLLVM = false;
     
     for (int i = 1; i<argc; i++) {
         std::string arg = argv[i];
@@ -33,6 +34,8 @@ int main(int argc, char **argv) {
             printAst = true;
         } else if (arg == "--llvm") {
             printLLVM = true;
+        } else if (arg == "--emit-llvm") {
+            emitLLVM = true;
         } else if (arg == "-o") {
             flags.name = argv[i+1];
             i += 1;
@@ -78,6 +81,16 @@ int main(int argc, char **argv) {
     
     if (printLLVM) {
         compiler->debug();
+        return 0;
+    }
+    
+    if (emitLLVM) {
+        std::string output = flags.name;
+        if (output == "a.out") {
+            output = "./out.ll";
+        }
+        
+        compiler->emitLLVM(output);
         return 0;
     }
     
