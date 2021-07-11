@@ -14,9 +14,10 @@ if [[ ! -d $INCLUDE_INSTALL ]] ; then
 fi
 
 sudo cp build/occ_start.o $LIB_INSTALL
-sudo cp build/liborka_corelib.a /usr/local/lib
+sudo cp build/liborka_corelib.a /usr/lib
+sudo cp build/stdlib/liborka.so /usr/lib
 
-sudo cp -r corelib/include/* $INCLUDE_INSTALL
+sudo cp -r stdlib/include/* $INCLUDE_INSTALL
 
 sudo ldconfig
 

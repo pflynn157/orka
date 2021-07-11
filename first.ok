@@ -9,9 +9,7 @@
 
 import std.io;
 
-func vecadd(result:int[], x:int[], y:int[]) is
-    for i in 0 .. sizeof(result) do
-        result[i] := x[i] + y[i];
-    end
+func main is
+    #println("Hello!");
+    printf("Hi: %d\n", 202);
 end
-
