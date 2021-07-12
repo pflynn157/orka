@@ -9,7 +9,13 @@
 
 import std.io;
 
+struct S1 is
+    x : int := 10;
+    y : int := 20;
+end
+
 func main is
-    #println("Hello!");
-    printf("Hi: %d\n", 202);
+    struct s : S1;
+
+    var v1 : int = s.x;
 end

@@ -239,6 +239,17 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
                     EnumDec dec = enums[name];
                     AstExpression *val = dec.values[token.id_val];
                     output.push(val);
+                } else if (token.type == Dot) {
+                    // TODO: Search for structures here
+
+                    token = scanner->getNext();
+                    if (token.type != Id) {
+                        syntax->addError(scanner->getLine(), "Expected identifier.");
+                        return false;
+                    }
+
+                    AstStructAccess *val = new AstStructAccess(name, token.id_val);
+                    output.push(val);
                 } else {
                     int constVal = isConstant(name);
                     if (constVal > 0) {

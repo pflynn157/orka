@@ -404,6 +404,10 @@ void AstArrayAccess::print() {
     std::cout << "]";
 }
 
+void AstStructAccess::print() {
+    std::cout << var << "." << member;
+}
+
 void AstFuncCallExpr::print() {
     std::cout << name << "(";
     for (auto arg : args) {

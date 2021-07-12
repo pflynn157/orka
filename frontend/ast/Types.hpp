@@ -50,7 +50,8 @@ enum class AstType {
     QWordL,
     StringL,
     ID,
-    ArrayAccess
+    ArrayAccess,
+    StructAccess
 };
 
 enum class DataType {

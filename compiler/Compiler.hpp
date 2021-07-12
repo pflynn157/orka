@@ -30,6 +30,7 @@ protected:
     void compileStatement(AstStatement *stmt);
     Value *compileValue(AstExpression *expr, DataType dataType = DataType::Void);
     Type *translateType(DataType dataType, DataType subType = DataType::Void);
+    int getStructIndex(std::string name, std::string member);
 
     // Function.cpp
     void compileFunction(AstGlobalStatement *global);

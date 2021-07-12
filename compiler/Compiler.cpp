@@ -277,6 +277,15 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
                 return builder->CreateLoad(ep);
             }
         } break;
+
+        case AstType::StructAccess: {
+            AstStructAccess *sa = static_cast<AstStructAccess *>(expr);
+            AllocaInst *ptr = symtable[sa->getName()];
+            int pos = getStructIndex(sa->getName(), sa->getMember());
+
+            Value *ep = builder->CreateStructGEP(ptr, pos);
+            return builder->CreateLoad(ep);
+        } break;
         
         case AstType::FuncCallExpr: {
             AstFuncCallExpr *fc = static_cast<AstFuncCallExpr *>(expr);
@@ -387,3 +396,15 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
     return type;
 }
 
+int Compiler::getStructIndex(std::string name, std::string member) {
+    for (auto s : tree->getStructs()) {
+        if (s->getName() != name) continue;
+
+        std::vector<Var> members = s->getItems();
+        for (int i = 0; i<members.size(); i++) {
+            if (members.at(i).name == member) return i;
+        }
+    }
+
+    return 0;
+}

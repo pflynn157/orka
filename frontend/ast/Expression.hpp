@@ -270,6 +270,23 @@ private:
     AstExpression *index;
 };
 
+// Represents a structure access
+class AstStructAccess : public AstExpression {
+public:
+    explicit AstStructAccess(std::string var, std::string member) : AstExpression(AstType::StructAccess) {
+        this->var = var;
+        this->member = member;
+    }
+
+    std::string getName() { return var; }
+    std::string getMember() { return member; }
+
+    void print();
+private:
+    std::string var = "";
+    std::string member = "";
+};
+
 // Represents a function call
 class AstFuncCallExpr : public AstExpression {
 public:
