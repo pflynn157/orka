@@ -20,6 +20,9 @@ std::string getInputPath(std::string input) {
 std::string preprocessFile(std::string input) {
     std::string newPath = "/tmp/" + getInputPath(input);
     Scanner *scanner = new Scanner(input);
+    if (scanner->isError()) {
+        return "";
+    }
     
     std::ofstream writer(newPath);
     
