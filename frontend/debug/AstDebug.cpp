@@ -110,6 +110,12 @@ void AstArrayAssign::print() {
     std::cout << std::endl;
 }
 
+void AstStructAssign::print() {
+    std::cout << "    ";
+    std::cout << "STRUCT= " << name << "." << member;
+    std::cout << std::endl;
+}
+
 void AstIfStmt::print() {
     std::cout << "    ";
     std::cout << "IF " << std::endl;

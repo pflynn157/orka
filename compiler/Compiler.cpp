@@ -123,6 +123,29 @@ void Compiler::compileStatement(AstStatement *stmt) {
             
             AllocaInst *var = builder->CreateAlloca(type);
             symtable[sd->getVarName()] = var;
+            
+            AstStruct *str = nullptr;
+            for (AstStruct *s : tree->getStructs()) {
+                if (s->getName() == sd->getStructName()) {
+                    str = s;
+                    break;
+                }
+            }
+            if (str == nullptr) return;
+            
+            // Init the elements
+            int index = 0;
+            for (Var member : str->getItems()) {
+                AstExpression *defaultExpr = str->getDefaultExpression(member.name);
+                
+                Type *type = translateType(member.type, member.subType);
+                Value *defaultVal = compileValue(defaultExpr, member.type);
+                
+                Value *ep = builder->CreateStructGEP(var, index);
+                builder->CreateStore(ep, defaultVal);
+                
+                ++index;
+            }
         } break;
         
         // A variable assignment
@@ -160,6 +183,18 @@ void Compiler::compileStatement(AstStatement *stmt) {
                 Value *ep = builder->CreateGEP(ptrLd, index);
                 builder->CreateStore(val, ep);
             }
+        } break;
+        
+        // A structure assignment
+        case AstType::StructAssign: {
+            AstStructAssign *sa = static_cast<AstStructAssign *>(stmt);
+            Value *ptr = symtable[sa->getName()];
+            int index = getStructIndex(sa->getName(), sa->getMember());
+            
+            Value *val = compileValue(sa->getExpressions().at(0), sa->getMemberType());
+            
+            Value *structPtr = builder->CreateStructGEP(ptr, index);
+            builder->CreateStore(structPtr, val);
         } break;
         
         // Function call statements

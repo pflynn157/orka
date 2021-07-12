@@ -215,16 +215,16 @@ bool Parser::buildStructDec(AstBlock *block) {
     }
     
     // Make sure the given structure exists
-    bool found = false;
+    AstStruct *str = nullptr;
     
-    for (auto str : tree->getStructs()) {
-        if (str->getName() == structName) {
-            found = true;
+    for (auto s : tree->getStructs()) {
+        if (s->getName() == structName) {
+            str = s;
             break;
         }    
     }
     
-    if (!found) {
+    if (str == nullptr) {
         syntax->addError(scanner->getLine(), "Unknown structure.");
         return false;
     }
@@ -239,6 +239,43 @@ bool Parser::buildStructDec(AstBlock *block) {
         syntax->addError(scanner->getLine(), "Expected terminator.");
         return false;
     }
+    
+    return true;
+}
+
+bool Parser::buildStructAssign(AstBlock *block, Token idToken) {
+    Token token = scanner->getNext();
+    std::string member = token.id_val;
+    
+    if (token.type != Id) {
+        syntax->addError(scanner->getLine(), "Expected structure member.");
+        return false;
+    }
+    
+    AstStructAssign *sa = new AstStructAssign(idToken.id_val, member);
+    block->addStatement(sa);
+    
+    // Get the data type of the member
+    DataType memberType = DataType::Void;
+    sa->setMemberType(memberType);
+    
+    for (AstStruct *str : tree->getStructs()) {
+        for (Var item : str->getItems()) {
+            if (item.name == member) {
+                memberType = item.type;
+                break;
+            }
+        }
+    }
+    
+    token = scanner->getNext();
+    if (token.type != Assign) {
+        token.print();
+        syntax->addError(scanner->getLine(), "Expected assignment operator.");
+        return false;
+    }
+    
+    if (!buildExpression(sa, memberType)) return false;
     
     return true;
 }

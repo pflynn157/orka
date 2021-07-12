@@ -48,6 +48,7 @@ protected:
     bool buildEnum();
     bool buildStruct();
     bool buildStructDec(AstBlock *block);
+    bool buildStructAssign(AstBlock *block, Token idToken);
     
     bool buildBlock(AstBlock *block, int stopLayer = 0, AstIfStmt *parentBlock = nullptr, bool inElif = false);
     bool buildExpression(AstStatement *stmt, DataType currentType,

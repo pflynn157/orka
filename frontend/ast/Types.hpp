@@ -16,6 +16,7 @@ enum class AstType {
     StructDec,
     VarAssign,
     ArrayAssign,
+    StructAssign,
     Sizeof,
     
     If,
