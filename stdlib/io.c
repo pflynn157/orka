@@ -10,6 +10,11 @@ void printInt(int num)
         syscall_str4(1, 1, "0", 1);
         return;
     }
+    
+    if (num < 0) {
+        num *= -1;
+        syscall_str4(1, 1, "-", 1);
+    }
 
     // Count the number of digits
     int size = 0;

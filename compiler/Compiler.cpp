@@ -339,6 +339,13 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
             return builder->CreateCall(callee, args);
         } break;
         
+        case AstType::Neg: {
+            AstNegOp *op = static_cast<AstNegOp *>(expr);
+            Value *val = compileValue(op->getVal(), dataType);
+            
+            return builder->CreateNeg(val);
+        } break;
+        
         case AstType::Add:
         case AstType::Sub: 
         case AstType::Mul:

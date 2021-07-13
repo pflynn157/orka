@@ -36,6 +36,8 @@ enum class AstType {
     Break,
     Continue,
     
+    Neg,
+    
     Add,
     Sub,
     Mul,

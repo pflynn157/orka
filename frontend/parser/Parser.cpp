@@ -161,6 +161,8 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
     std::stack<AstExpression *> opStack;
     
     DataType varType = currentType;
+    
+    bool lastWasOp = true;
 
     Token token = scanner->getNext();
     while (token.type != Eof && token.type != stopToken) {
@@ -183,29 +185,36 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
     
         switch (token.type) {
             case True: {
+                lastWasOp = false;
                 output.push(new AstBool(1));
             } break;
             
             case False: {
+                lastWasOp = false;
                 output.push(new AstBool(0));
             } break;
             
             case CharL: {
+                lastWasOp = false;
                 AstChar *c = new AstChar(token.i8_val);
                 output.push(c);
             } break;
             
             case Int32: {
+                lastWasOp = false;
                 AstInt *i32 = new AstInt(token.i32_val);
                 output.push(i32);
             } break;
             
             case String: {
+                lastWasOp = false;
                 AstString *str = new AstString(token.id_val);
                 output.push(str);
             } break;
             
             case Id: {
+                lastWasOp = false;
+                
                 if (isConst) {
                     syntax->addError(scanner->getLine(), "Invalid constant value.");
                     return false;
@@ -277,6 +286,8 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
             } break;
             
             case Sizeof: {
+                lastWasOp = false;
+                
                 if (isConst) {
                     syntax->addError(scanner->getLine(), "Invalid constant value.");
                     return false;
@@ -323,29 +334,39 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
                     AstAddOp *add = new AstAddOp;
                     opStack.push(add);
                 } else {
-                    AstSubOp *sub = new AstSubOp;
-                    opStack.push(sub);
+                    if (lastWasOp) {
+                        opStack.push(new AstNegOp);
+                    } else {
+                        AstSubOp *sub = new AstSubOp;
+                        opStack.push(sub);
+                    }
                 }
+                
+                lastWasOp = true;
             } break;
             
             case Mul: {
+                lastWasOp = true;
                 AstMulOp *mul = new AstMulOp;
                 opStack.push(mul);
             } break;
             
             case Div: {
+                lastWasOp = true;
                 AstDivOp *div = new AstDivOp;
                 opStack.push(div);
             } break;
             
-            case EQ: opStack.push(new AstEQOp); break;
-            case NEQ: opStack.push(new AstNEQOp); break;
-            case GT: opStack.push(new AstGTOp); break;
-            case LT: opStack.push(new AstLTOp); break;
-            case GTE: opStack.push(new AstGTEOp); break;
-            case LTE: opStack.push(new AstLTEOp); break;
+            case EQ: opStack.push(new AstEQOp); lastWasOp = true; break;
+            case NEQ: opStack.push(new AstNEQOp); lastWasOp = true; break;
+            case GT: opStack.push(new AstGTOp); lastWasOp = true; break;
+            case LT: opStack.push(new AstLTOp); lastWasOp = true; break;
+            case GTE: opStack.push(new AstGTEOp); lastWasOp = true; break;
+            case LTE: opStack.push(new AstLTEOp); lastWasOp = true; break;
             
             case Step: {
+                lastWasOp = false;       
+                
                 if (stmt->getType() != AstType::For) {
                     syntax->addError(scanner->getLine(), "Step is only valid with for loops");
                     return false;
@@ -362,6 +383,18 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
             } break;
             
             default: {}
+        }
+        
+        if (!lastWasOp && opStack.size() > 0) {
+            if (opStack.top()->getType() == AstType::Neg) {
+                AstExpression *val = checkExpression(output.top(), varType);
+                output.pop();
+                
+                AstNegOp *op = static_cast<AstNegOp *>(opStack.top());
+                opStack.pop();
+                op->setVal(val);
+                output.push(op);
+            }
         }
         
         token = scanner->getNext();

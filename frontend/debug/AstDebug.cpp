@@ -290,6 +290,12 @@ void AstEnd::print() {
     std::cout << std::endl;
 }
 
+void AstNegOp::print() {
+    std::cout << "(-";
+    val->print();
+    std::cout << ")";
+}
+
 void AstAddOp::print() {
     std::cout << "(";
     lval->print();

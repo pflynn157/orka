@@ -25,6 +25,27 @@ protected:
     AstType type = AstType::EmptyAst;
 };
 
+// Represents the base of a unary expression
+class AstUnaryOp : public AstExpression {
+public:
+    void setVal(AstExpression *val) { this->val = val; }
+    AstExpression *getVal() { return val; }
+    
+    virtual void print() {}
+protected:
+    AstExpression *val;
+};
+
+// Represents a negate expression
+class AstNegOp : public AstUnaryOp {
+public:
+    AstNegOp() {
+        this->type = AstType::Neg;
+    }
+    
+    void print();
+};
+
 // Represents the base of a binary expression
 class AstBinaryOp : public AstExpression {
 public:
