@@ -1,8 +1,8 @@
 
 #OUTPUT
-#Hi!
-#How are you?
-#Good!
+#X: 10
+#Y: 10
+#Changed X: 25
 #END
 
 #RET 0
