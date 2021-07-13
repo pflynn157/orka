@@ -1,3 +1,8 @@
+//
+// Copyright 2021 Patrick Flynn
+// This file is part of the Orka compiler.
+// Orka is licensed under the BSD-3 license. See the COPYING file for more information.
+//
 // Structure.cpp
 // Handles parsing for enums and structs
 #include <map>
