@@ -16,9 +16,12 @@ end
 
 func main is
     struct s : S1;
-    #s.x := 100;
 
-    #var v1 : int = s.x;
+    var v1 : int := s.x;
     
-    #printf("%d\n", v1);
+    printf("X: %d\n", v1);
+    printf("Y: %d\n", s.y);
+    
+    s.x := 25;
+    printf("Changed X: %d\n", s.x);
 end

@@ -137,12 +137,10 @@ void Compiler::compileStatement(AstStatement *stmt) {
             int index = 0;
             for (Var member : str->getItems()) {
                 AstExpression *defaultExpr = str->getDefaultExpression(member.name);
-                
-                Type *type = translateType(member.type, member.subType);
                 Value *defaultVal = compileValue(defaultExpr, member.type);
                 
                 Value *ep = builder->CreateStructGEP(var, index);
-                builder->CreateStore(ep, defaultVal);
+                builder->CreateStore(defaultVal, ep);
                 
                 ++index;
             }
@@ -194,7 +192,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
             Value *val = compileValue(sa->getExpressions().at(0), sa->getMemberType());
             
             Value *structPtr = builder->CreateStructGEP(ptr, index);
-            builder->CreateStore(structPtr, val);
+            builder->CreateStore(val, structPtr);
         } break;
         
         // Function call statements
