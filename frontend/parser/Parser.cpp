@@ -299,14 +299,33 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
                 output.push(size);
             } break;
             
-            case Plus: {
-                AstAddOp *add = new AstAddOp;
-                opStack.push(add);
-            } break;
-            
+            case Plus: 
             case Minus: {
-                AstSubOp *sub = new AstSubOp;
-                opStack.push(sub);
+                if (opStack.size() > 0) {
+                    AstType type = opStack.top()->getType();
+                    if (type == AstType::Mul || type == AstType::Div) {
+                        AstExpression *rval = checkExpression(output.top(), varType);
+                        output.pop();
+                        
+                        AstExpression *lval = checkExpression(output.top(), varType);
+                        output.pop();
+                        
+                        AstBinaryOp *op = static_cast<AstBinaryOp *>(opStack.top());
+                        opStack.pop();
+                        
+                        op->setLVal(lval);
+                        op->setRVal(rval);
+                        output.push(op);
+                    }
+                }
+                
+                if (token.type == Plus) {
+                    AstAddOp *add = new AstAddOp;
+                    opStack.push(add);
+                } else {
+                    AstSubOp *sub = new AstSubOp;
+                    opStack.push(sub);
+                }
             } break;
             
             case Mul: {
