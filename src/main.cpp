@@ -12,6 +12,7 @@
 #include <ast.hpp>
 
 #include <LLVM/Compiler.hpp>
+#include <LLIR/LLIRCompiler.hpp>
 
 int main(int argc, char **argv) {
     if (argc == 1) {
@@ -47,6 +48,8 @@ int main(int argc, char **argv) {
         } else if (arg == "--emit-nvptx") {
             emitNVPTX = true;
             flags.nvptx = true;
+        } else if (arg == "--host") {
+            useLLVM = false;
         } else if (arg == "-o") {
             flags.name = argv[i+1];
             i += 1;
@@ -112,6 +115,10 @@ int main(int argc, char **argv) {
             compiler->assemble();
             compiler->link();
         }
+    } else {
+        LLIRCompiler *compiler = new LLIRCompiler(tree, "output1");
+        compiler->compile();
+        compiler->debug();
     }
     
     return 0;

@@ -10,6 +10,7 @@ class LLIRFunction;
 class LLIRBlock;
 class LLIRValue;
 class LLIRInstruction;
+class LLIRImm;
 
 enum LLIR {
     None,
@@ -43,6 +44,8 @@ public:
     explicit LLIRType(LLIRDataType type) {
         this->type = type;
     }
+    
+    void dump();
 protected:
     LLIRDataType type = LLIRDataType::Void;
 };
@@ -56,8 +59,18 @@ public:
         this->name = name;
     }
     
+    void addConst(LLIRConst *val) {
+        consts.push_back(val);
+    }
+    
+    void addFunction(LLIRFunction *func) {
+        functions.push_back(func);
+    }
+    
     std::vector<LLIRConst *> getConsts() { return consts; }
     std::vector<LLIRFunction *> getFunctions() { return functions; }
+    
+    void dump();
 private:
     std::string name = "";
     std::vector<LLIRConst *> consts;
@@ -112,6 +125,8 @@ public:
     
     std::string getName() { return name; }
     LLIRType *getType() { return type; }
+    
+    void dump();
 private:
     std::string name = "";
     LLIRType *type = new LLIRType(LLIRDataType::Void);
@@ -128,16 +143,19 @@ public:
         this->name = name;
     }
     
-    void addInstruction(LLIRValue *val) {
+    void addInstruction(LLIRInstruction *val) {
         code.push_back(val);
     }
     
-    std::vector<LLIRValue *> getCode() { return code; }
+    std::vector<LLIRInstruction *> getCode() { return code; }
     std::string getName() { return name; }
+    LLIRBlock *getNext() { return next; }
+    
+    void dump();
 private:
     std::string name = "";
     LLIRBlock *next = nullptr;
-    std::vector<LLIRValue *> code;
+    std::vector<LLIRInstruction *> code;
 };
 
 //
@@ -154,6 +172,8 @@ public:
     std::string getName() { return name; }
     LLIRType *getType() { return type; }
     LLIR getOpType() { return opType; }
+    
+    virtual void dump() {}
 protected:
     std::string name = "";
     LLIRType *type = nullptr;
@@ -170,7 +190,27 @@ public:
     LLIRValue *getArg1() { return arg1; }
     LLIRValue *getArg2() { return arg2; }
     LLIRValue *getArg3() { return arg3; }
+    
+    void dump();
 private:
     LLIRValue *arg1, *arg2, *arg3;
+};
+
+//
+// The more specific value classes
+//
+
+// Represents an immediate value
+class LLIRImm : public LLIRValue {
+public:
+    explicit LLIRImm(size_t val, LLIRType *type) : LLIRValue("", type, LLIR::Imm) {
+        this->val = val;
+    }
+    
+    size_t getValue() { return val; }
+    
+    void dump();
+private:
+    size_t val = 0;
 };
 

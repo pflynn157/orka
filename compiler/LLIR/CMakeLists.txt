@@ -3,6 +3,7 @@ project(orka_compiler_llir)
 
 set(SRC
     LLIRCompiler.cpp
+    LLIRDebug.cpp
 )
 
 add_library(occompiler_llir ${SRC})
