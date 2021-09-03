@@ -12,7 +12,7 @@ class LLIRValue;
 class LLIRInstruction;
 class LLIRImm;
 
-enum LLIR {
+enum class LLIR {
     None,
     
     // Constants

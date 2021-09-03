@@ -1,5 +1,6 @@
 #include <LLIR/LLIRCompiler.hpp>
 #include <LLIR/LLIR.hpp>
+#include <LLIR/PASM.hpp>
 
 LLIRCompiler::LLIRCompiler(AstTree *tree, std::string name) {
     this->tree = tree;
@@ -7,7 +8,7 @@ LLIRCompiler::LLIRCompiler(AstTree *tree, std::string name) {
 }
 
 void LLIRCompiler::compile() {
-    LLIRFile *file = new LLIRFile("output1");
+    /*LLIRFile *file = new LLIRFile("output1");
     LLIRType *voidType = new LLIRType(LLIRDataType::Void);
     LLIRType *i32 = new LLIRType(LLIRDataType::I32);
     
@@ -23,7 +24,9 @@ void LLIRCompiler::compile() {
     block->addInstruction(ret);
     
     //db
-    file->dump();
+    file->dump();*/
+    
+    // PASM
 }
 
 void LLIRCompiler::debug() {
