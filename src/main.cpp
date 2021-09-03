@@ -11,7 +11,7 @@
 #include <parser/Parser.hpp>
 #include <ast.hpp>
 
-#include <Compiler.hpp>
+#include <LLVM/Compiler.hpp>
 
 int main(int argc, char **argv) {
     if (argc == 1) {
@@ -31,6 +31,7 @@ int main(int argc, char **argv) {
     bool printLLVM = false;
     bool emitLLVM = false;
     bool emitNVPTX = false;
+    bool useLLVM = true;
     
     for (int i = 1; i<argc; i++) {
         std::string arg = argv[i];
@@ -86,29 +87,31 @@ int main(int argc, char **argv) {
     }
 
     //test
-    Compiler *compiler = new Compiler(tree, flags);
-    compiler->compile();
-    
-    if (printLLVM) {
-        compiler->debug();
-        return 0;
-    }
-    
-    if (emitLLVM) {
-        std::string output = flags.name;
-        if (output == "a.out") {
-            output = "./out.ll";
+    if (useLLVM) {
+        Compiler *compiler = new Compiler(tree, flags);
+        compiler->compile();
+        
+        if (printLLVM) {
+            compiler->debug();
+            return 0;
         }
         
-        compiler->emitLLVM(output);
-        return 0;
-    }
-    
-    compiler->writeAssembly();
-    
-    if (!emitNVPTX) {
-        compiler->assemble();
-        compiler->link();
+        if (emitLLVM) {
+            std::string output = flags.name;
+            if (output == "a.out") {
+                output = "./out.ll";
+            }
+            
+            compiler->emitLLVM(output);
+            return 0;
+        }
+        
+        compiler->writeAssembly();
+        
+        if (!emitNVPTX) {
+            compiler->assemble();
+            compiler->link();
+        }
     }
     
     return 0;

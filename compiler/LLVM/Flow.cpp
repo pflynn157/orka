@@ -3,7 +3,7 @@
 // This file is part of the Orka compiler.
 // Orka is licensed under the BSD-3 license. See the COPYING file for more information.
 //
-#include <Compiler.hpp>
+#include <LLVM/Compiler.hpp>
 
 // Translates an AST IF statement to LLVM
 void Compiler::compileIfStatement(AstStatement *stmt) {

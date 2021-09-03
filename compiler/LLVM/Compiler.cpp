@@ -12,7 +12,7 @@ using namespace llvm::sys;
 
 #include <iostream>
 
-#include <Compiler.hpp>
+#include <LLVM/Compiler.hpp>
 
 Compiler::Compiler(AstTree *tree, CFlags cflags) {
     this->tree = tree;
@@ -453,3 +453,4 @@ int Compiler::getStructIndex(std::string name, std::string member) {
 
     return 0;
 }
+
