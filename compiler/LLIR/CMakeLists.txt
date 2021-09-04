@@ -5,6 +5,7 @@ set(SRC
     LLIRCompiler.cpp
     LLIRDebug.cpp
     PASMDebug.cpp
+    X86Writer.cpp
 )
 
 add_library(occompiler_llir ${SRC})

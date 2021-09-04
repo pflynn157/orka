@@ -43,6 +43,8 @@ public:
         return code;
     }
     
+    std::string getName() { return name; }
+    
     void debug();
 private:
     std::string name = "";
@@ -65,6 +67,8 @@ public:
     PASMOperand *getOperand1() { return op1; }
     PASMOperand *getOperand2() { return op2; }
     PASMOperand *getOperand3() { return op3; }
+    
+    PASM getOpType() { return opType; }
     
     virtual void debug();
 protected:
@@ -95,6 +99,8 @@ public:
     explicit PASMOperand(PASM opType) {
         this->opType = opType;
     }
+    
+    PASM getOpType() { return opType; }
     
     virtual void debug() {}
 protected:

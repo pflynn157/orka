@@ -1,6 +1,7 @@
 #include <LLIR/LLIRCompiler.hpp>
 #include <LLIR/LLIR.hpp>
 #include <LLIR/PASM.hpp>
+#include <LLIR/X86Writer.hpp>
 
 LLIRCompiler::LLIRCompiler(AstTree *tree, std::string name) {
     this->tree = tree;
@@ -41,6 +42,10 @@ void LLIRCompiler::compile() {
     pasm->addCode(ret);
     
     pasm->debug();
+    
+    //x86
+    X86Writer *writer = new X86Writer(pasm);
+    writer->compile();
 }
 
 void LLIRCompiler::debug() {
