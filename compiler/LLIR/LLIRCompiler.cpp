@@ -27,6 +27,20 @@ void LLIRCompiler::compile() {
     file->dump();*/
     
     // PASM
+    PASMFile *pasm = new PASMFile("output1");
+    
+    PASMLabel *mainLbl = new PASMLabel("main");
+    pasm->addCode(mainLbl);
+    
+    PASMInstruction *li = new PASMInstruction(PASM::LI);
+    li->setOperand1(new PASMReg32(0));
+    li->setOperand2(new PASMImm(23));
+    pasm->addCode(li);
+    
+    PASMInstruction *ret = new PASMInstruction(PASM::RET);
+    pasm->addCode(ret);
+    
+    pasm->debug();
 }
 
 void LLIRCompiler::debug() {
