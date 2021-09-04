@@ -12,6 +12,7 @@ enum class PASM {
     None,
     
     Label,
+    Func,
     
     // Instructions
     NOP,
@@ -89,6 +90,22 @@ public:
     void debug();
 private:
     std::string name = "";
+};
+
+class PASMFunc : public PASMInstruction {
+public:
+    explicit PASMFunc(std::string name, int stackSize) : PASMInstruction(PASM::Func) {
+        this->name = name;
+        this->stackSize = stackSize;
+    }
+    
+    std::string getName() { return name; }
+    int getStackSize() { return stackSize; }
+    
+    void debug();
+private:
+    std::string name;
+    int stackSize = 0;
 };
 
 //

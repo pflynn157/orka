@@ -17,10 +17,30 @@ void X86Writer::compile() {
     }
 }
 
+void X86Writer::assemble() {
+    std::string cmd = "as " + outputPath + " -o /tmp/" + file->getName() + ".o";
+    system(cmd.c_str());
+}
+
+void X86Writer::link() {
+    std::string cmd = "ld ";
+    cmd += "/usr/local/lib/orka/occ_start.o ";
+    cmd += "/tmp/" + file->getName() + ".o -o " + file->getName();
+    cmd += " -dynamic-linker /lib64/ld-linux-x86-64.so.2 ";
+    //cmd += "-lc";
+    cmd += "-lorka -lorka_corelib";
+    system(cmd.c_str());
+}
+
 void X86Writer::writeInstruction(PASMInstruction *line) {
     if (line->getOpType() == PASM::Label) {
         PASMLabel *label = static_cast<PASMLabel *>(line);
         writer << label->getName() << ":" << std::endl;
+        return;
+    } else if (line->getOpType() == PASM::Func) {
+        PASMFunc *func = static_cast<PASMFunc *>(line);
+        writer << ".global " << func->getName() << std::endl;
+        writer << func->getName() << ":" << std::endl;
         return;
     }
     

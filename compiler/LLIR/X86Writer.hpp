@@ -9,6 +9,8 @@ class X86Writer {
 public:
     explicit X86Writer(PASMFile *file);
     void compile();
+    void assemble();
+    void link();
 private:
     void writeInstruction(PASMInstruction *line);
     void writeOperand(PASMOperand *op);

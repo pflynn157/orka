@@ -30,8 +30,8 @@ void LLIRCompiler::compile() {
     // PASM
     PASMFile *pasm = new PASMFile("output1");
     
-    PASMLabel *mainLbl = new PASMLabel("main");
-    pasm->addCode(mainLbl);
+    PASMFunc *mainFunc = new PASMFunc("main", 0);
+    pasm->addCode(mainFunc);
     
     PASMInstruction *li = new PASMInstruction(PASM::LI);
     li->setOperand1(new PASMReg32(0));
@@ -46,6 +46,8 @@ void LLIRCompiler::compile() {
     //x86
     X86Writer *writer = new X86Writer(pasm);
     writer->compile();
+    writer->assemble();
+    writer->link();
 }
 
 void LLIRCompiler::debug() {

@@ -38,6 +38,10 @@ void PASMLabel::debug() {
     std::cout << name << ":";
 }
 
+void PASMFunc::debug() {
+    std::cout << "func " << name;
+}
+
 void PASMImm::debug() {
     std::cout << val;
 }
