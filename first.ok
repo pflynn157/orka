@@ -11,6 +11,6 @@
 extern printf(ln : str, x : int);
 
 func main -> int is
-    return 1;
+    return 3;
 end
 
