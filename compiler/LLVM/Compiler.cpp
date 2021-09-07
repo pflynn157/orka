@@ -13,8 +13,12 @@ using namespace llvm::sys;
 #include <iostream>
 
 #include <LLVM/Compiler.hpp>
+#include <llvm-c/Support.h>
 
 Compiler::Compiler(AstTree *tree, CFlags cflags) {
+    char const *args[] = { "", "--x86-asm-syntax=intel" };
+    LLVMParseCommandLineOptions(2, args, NULL);
+    
     this->tree = tree;
     this->cflags = cflags;
 
