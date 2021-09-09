@@ -14,6 +14,75 @@
 #include <LLVM/Compiler.hpp>
 #include <LLIR/LLIRCompiler.hpp>
 
+bool isError = false;
+
+// TODO: I'm not sure actually if the lex testing actually works
+//
+AstTree *getAstTree(std::string input, bool testLex, bool printAst) {
+    Parser *frontend = new Parser(input);
+    AstTree *tree;
+    
+    if (testLex) {
+        frontend->debugScanner();
+        isError = false;
+        return nullptr;
+    }
+    
+    if (!frontend->parse()) {
+        delete frontend;
+        isError = true;
+        return nullptr;
+    }
+    
+    tree = frontend->getTree();
+    
+    delete frontend;
+    remove(input.c_str());
+    
+    if (printAst) {
+        tree->print();
+        return nullptr;
+    }
+    
+    return tree;
+}
+
+int compileLLVM(AstTree *tree, CFlags flags, bool printLLVM, bool emitLLVM, bool emitNVPTX) {
+    Compiler *compiler = new Compiler(tree, flags);
+    compiler->compile();
+        
+    if (printLLVM) {
+        compiler->debug();
+        return 0;
+    }
+    
+    if (emitLLVM) {
+        std::string output = flags.name;
+        if (output == "a.out") {
+            output = "./out.ll";
+        }
+            
+        compiler->emitLLVM(output);
+        return 0;
+    }
+        
+    compiler->writeAssembly();
+    
+    if (!emitNVPTX) {
+        compiler->assemble();
+        compiler->link();
+    }
+    
+    return 0;
+}
+
+int compileLLIR(AstTree *tree, std::string outputName) {
+    LLIRCompiler *compiler = new LLIRCompiler(tree, outputName);
+    compiler->compile();
+    compiler->debug();
+    return 0;
+}
+
 int main(int argc, char **argv) {
     if (argc == 1) {
         std::cerr << "Error: No input file specified." << std::endl;
@@ -66,59 +135,17 @@ int main(int argc, char **argv) {
         return 1;
     }
     
-    Parser *frontend = new Parser(newInput);
-    AstTree *tree;
-    
-    if (testLex) {
-        frontend->debugScanner();
-        return 0;
-    }
-    
-    if (!frontend->parse()) {
-        delete frontend;
-        return 1;
-    }
-    
-    tree = frontend->getTree();
-    
-    delete frontend;
-    remove(newInput.c_str());
-    
-    if (printAst) {
-        tree->print();
+    AstTree *tree = getAstTree(newInput, testLex, printAst);
+    if (tree == nullptr) {
+        if (isError) return 1;
         return 0;
     }
 
     //test
     if (useLLVM) {
-        Compiler *compiler = new Compiler(tree, flags);
-        compiler->compile();
-        
-        if (printLLVM) {
-            compiler->debug();
-            return 0;
-        }
-        
-        if (emitLLVM) {
-            std::string output = flags.name;
-            if (output == "a.out") {
-                output = "./out.ll";
-            }
-            
-            compiler->emitLLVM(output);
-            return 0;
-        }
-        
-        compiler->writeAssembly();
-        
-        if (!emitNVPTX) {
-            compiler->assemble();
-            compiler->link();
-        }
+        return compileLLVM(tree, flags, printLLVM, emitLLVM, emitNVPTX);
     } else {
-        LLIRCompiler *compiler = new LLIRCompiler(tree, "output1");
-        compiler->compile();
-        compiler->debug();
+        return compileLLIR(tree, "output1");
     }
     
     return 0;
