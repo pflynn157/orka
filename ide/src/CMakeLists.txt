@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.0.0)
 project(ide_src)
 
 set(BASE_SRC
+    editor.cpp
     main.cpp
+    tabwidget.cpp
     window.cpp
 )
 
