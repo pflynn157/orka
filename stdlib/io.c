@@ -216,6 +216,7 @@ void printDouble(double num)
        num -= digit;
    }
    
+   flt_num[i++] = '\n';
    flt_num[i++] = '\0';
    
    syscall_str4(1, 1, (char *)flt_num, i);

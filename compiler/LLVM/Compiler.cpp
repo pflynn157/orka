@@ -277,6 +277,13 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
             return builder->getInt64(i64->getValue());
         } break;
         
+        case AstType::FloatL: {
+            AstFloat *flt = static_cast<AstFloat *>(expr);
+            if (dataType == DataType::Double)
+                return ConstantFP::get(Type::getDoubleTy(*context), flt->getValue());
+            return ConstantFP::get(Type::getFloatTy(*context), flt->getValue());
+        } break;
+        
         case AstType::CharL: {
             AstChar *cval = static_cast<AstChar *>(expr);
             return builder->getInt8(cval->getValue());
@@ -413,6 +420,9 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
         case DataType::UInt64: type = Type::getInt64Ty(*context); break;
         
         case DataType::String: type = Type::getInt8PtrTy(*context); break;
+        
+        case DataType::Float: type = Type::getFloatTy(*context); break;
+        case DataType::Double: type = Type::getDoubleTy(*context); break;
         
         case DataType::Array: {
             switch (subType) {
