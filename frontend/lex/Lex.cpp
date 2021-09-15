@@ -125,7 +125,17 @@ Token Scanner::getNext() {
             }
             
             // Check if we have a symbol
-            if (isSymbol(next)) {
+            // Here, we also check to see if we have a floating point
+            if (next == '.') {
+                if (isInt()) {
+                    buffer += ".";
+                    continue;
+                } else {
+                    Token sym;
+                    sym.type = getSymbol(next);
+                    token_stack.push(sym);
+                }
+            } else if (isSymbol(next)) {
                 Token sym;
                 sym.type = getSymbol(next);
                 token_stack.push(sym);
@@ -144,6 +154,9 @@ Token Scanner::getNext() {
             } else if (isHex()) {
                 token.type = Int32;
                 token.i32_val = std::stoi(buffer, 0, 16);
+            } else if (isFloat()) {
+                token.type = FloatL;
+                token.flt_val = std::stof(buffer);
             } else {
                 token.type = Id;
                 token.id_val = buffer;
@@ -226,6 +239,8 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "true") return True;
     else if (buffer == "false") return False;
     else if (buffer == "step") return Step;
+    else if (buffer == "float") return Float;
+    else if (buffer == "double") return Double;
     return EmptyToken;
 }
 
@@ -330,3 +345,16 @@ bool Scanner::isHex() {
     return true;
 }
 
+bool Scanner::isFloat() {
+    bool foundDot = false;
+    for (char c : buffer) {
+        if (c == '.') {
+            if (foundDot) return false;
+            foundDot = true;
+        } else if (!isdigit(c)) {
+            return false;
+        }
+    }
+    if (!foundDot) return false;
+    return true;
+}

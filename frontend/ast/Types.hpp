@@ -56,6 +56,7 @@ enum class AstType {
     WordL,
     IntL,
     QWordL,
+    FloatL,
     StringL,
     ID,
     ArrayAccess,
@@ -76,7 +77,9 @@ enum class DataType {
     UInt64,
     String,
     Array,
-    Ptr
+    Ptr,
+    Double,
+    Float
 };
 
 struct Var {

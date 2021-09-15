@@ -52,12 +52,15 @@ enum TokenType {
     Int64,
     UInt64,
     Str,
+    Float,
+    Double,
     
     // Literals
     Id,
     String,
     CharL,
     Int32,
+    FloatL,
     True,
     False,
     
@@ -94,6 +97,7 @@ struct Token {
     std::string id_val;
     char i8_val;
     int i32_val;
+    double flt_val;
     
     Token();
     void print();
@@ -130,5 +134,6 @@ private:
     TokenType getSymbol(char c);
     bool isInt();
     bool isHex();
+    bool isFloat();
 };
 
