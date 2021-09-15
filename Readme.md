@@ -4,13 +4,11 @@ Welcome to Orka! Orka is yet another one of my compiler/programming language pro
 
 Note that this is not ready for heavy production use. It's mainly meant as a learning project, so treat it as such :)
 
-*Note*: You are on the dev branch. For the latest stable version, please see the main branch.
-
 ### The Language
 
 For full language documenation, see here: [https://patrickflynn.co/orka-language](https://patrickflynn.co/orka-language/). Language features include:
 
-* i8, i16, i32, i64, char, string, and bool data types
+* i8, i16, i32, i64, char, string, float, and bool data types
 * Arrays (all dynamically allocated on the heap)
 * Integer-based enums
 * Structs
