@@ -10,8 +10,12 @@
 
 import std.io;
 
-func main -> int is
-    var x : double := 3.14;
-    printDouble(x);
+extern println(s:str);
+
+func main(args:str[]) -> int is
+    printf("Arg count: %d\n", sizeof(args));
+    for i in 0 .. sizeof(args) do
+        println(args[i]);
+    end
     return 0;
 end

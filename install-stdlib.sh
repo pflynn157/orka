@@ -2,6 +2,11 @@
 
 ./build-stdlib.sh
 
+if [ "$EUID" -ne 0 ] ; then
+    echo "Error: Please run as root."
+    exit 1
+fi
+
 LIB_INSTALL=/usr/local/lib/orka
 INCLUDE_INSTALL=/usr/local/include/orka
 
