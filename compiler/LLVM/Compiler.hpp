@@ -34,7 +34,7 @@ public:
 protected:
     void compileStatement(AstStatement *stmt);
     Value *compileValue(AstExpression *expr, DataType dataType = DataType::Void);
-    Type *translateType(DataType dataType, DataType subType = DataType::Void);
+    Type *translateType(DataType dataType, DataType subType = DataType::Void, std::string typeName = "");
     int getStructIndex(std::string name, std::string member);
 
     // Function.cpp

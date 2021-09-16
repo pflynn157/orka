@@ -412,7 +412,7 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
     return nullptr;
 }
 
-Type *Compiler::translateType(DataType dataType, DataType subType) {
+Type *Compiler::translateType(DataType dataType, DataType subType, std::string typeName) {
     Type *type;
             
     switch (dataType) {
@@ -461,6 +461,10 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
                 
                 default: {}
             }
+        } break;
+        
+        case DataType::Struct: {
+            return structTable[typeName];
         } break;
         
         default: type = Type::getVoidTy(*context);

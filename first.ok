@@ -10,10 +10,32 @@
 
 import std.io;
 
+struct Lex is
+    input : str := "";
+    index : int := 0;
+end
+
+enum Token is
+    None,
+    
+    Int,
+    
+    ID,
+    IntL,
+    
+    Assign,
+    SemiColon
+end
+
+func getNext(lex : Lex) -> int is
+    println(lex.input);
+    return 0;
+end
+
 func main(args:str[]) -> int is
-    printf("Arg count: %d\n", sizeof(args));
-    forall ln in args do
-        println(ln);
-    end
+    struct lex : Lex;
+    lex.input := "int x = 30;";
+    
+    getNext(lex);
     return 0;
 end

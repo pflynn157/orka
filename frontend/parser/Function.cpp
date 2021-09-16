@@ -45,6 +45,21 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
                 case Float: v.type = DataType::Float; break;
                 case Double: v.type = DataType::Double; break;
                 
+                case Id: {
+                    bool isStruct = false;
+                    for (auto s : tree->getStructs()) {
+                        if (s->getName() == t3.id_val) {
+                            isStruct = true;
+                            break;
+                        }
+                    }
+                    
+                    if (isStruct) {
+                        v.type = DataType::Struct;
+                        v.typeName = t3.id_val;
+                    }
+                } break;
+                
                 default: {
                     syntax->addError(scanner->getLine(), "Invalid function argument: Unknown type.");
                     return false;

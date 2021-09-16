@@ -55,6 +55,7 @@ public:
     std::string getName() { return name; }
     DataType getDataType() { return dataType; }
     DataType getPtrType() { return ptrType; }
+    std::string getDataTypeName() { return dtName; }
     std::vector<Var> getArguments() { return args; }
     AstBlock *getBlock() { return block; }
     
@@ -69,6 +70,10 @@ public:
         this->ptrType = ptrType;
     }
     
+    void setDataTypeName(std::string name) {
+        this->dtName = name;
+    }
+    
     void print() override;
 private:
     std::string name = "";
@@ -76,5 +81,6 @@ private:
     AstBlock *block;
     DataType dataType = DataType::Void;
     DataType ptrType = DataType::Void;
+    std::string dtName = "";
 };
 

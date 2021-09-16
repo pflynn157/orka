@@ -79,13 +79,15 @@ enum class DataType {
     Array,
     Ptr,
     Double,
-    Float
+    Float,
+    Struct
 };
 
 struct Var {
     std::string name;
     DataType type;
     DataType subType;
+    std::string typeName;
 };
 
 // Represents an ENUM

@@ -27,7 +27,7 @@ void Compiler::compileFunction(AstGlobalStatement *global) {
     } else {
         std::vector<Type *> args;
         for (auto var : astVarArgs) {
-            Type *type = translateType(var.type, var.subType);
+            Type *type = translateType(var.type, var.subType, var.typeName);
             args.push_back(type);
         }
         
@@ -50,7 +50,7 @@ void Compiler::compileFunction(AstGlobalStatement *global) {
             Var var = astVarArgs.at(i);
             
             // Build the alloca for the local var
-            Type *type = translateType(var.type, var.subType);
+            Type *type = translateType(var.type, var.subType, var.typeName);
             AllocaInst *alloca = builder->CreateAlloca(type);
             symtable[var.name] = alloca;
             typeTable[var.name] = var.type;

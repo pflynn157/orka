@@ -25,6 +25,7 @@ std::string printDataType(DataType dataType) {
         case DataType::Ptr: return "ptr";
         case DataType::Float: return "float";
         case DataType::Double: return "double";
+        case DataType::Struct: return "struct";
     }
     return "";
 }
@@ -55,6 +56,8 @@ void AstFunction::print() {
         std::cout << printDataType(var.type);
         if (var.subType != DataType::Void)
             std::cout << "*" << printDataType(var.subType);
+        if (var.type == DataType::Struct)
+            std::cout << "[" << var.typeName << "]";
         std::cout << ", ";
     }
     std::cout << ")" << std::endl;
