@@ -15,7 +15,7 @@ fi
 
 ./install-stdlib.sh
 
-install ./build/src/occ /usr/local/bin
+install ./build/src/occ /usr/local/bin/okcc
 
 echo "Done"
 

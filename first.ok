@@ -10,8 +10,6 @@
 
 import std.io;
 
-extern println(s:str);
-
 func main(args:str[]) -> int is
     printf("Arg count: %d\n", sizeof(args));
     for i in 0 .. sizeof(args) do

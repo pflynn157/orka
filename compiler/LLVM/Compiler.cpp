@@ -52,9 +52,21 @@ Compiler::Compiler(AstTree *tree, CFlags cflags) {
     strArrayType = StructType::create(*context, arrayTypes);
     strArrayType->setName("StrArrayType");
 
+    //
     // Add declarations for built-in functions
+    //
+    
+    // Malloc
     FunctionType *FT1 = FunctionType::get(Type::getInt8PtrTy(*context), Type::getInt32Ty(*context), false);
     Function::Create(FT1, Function::ExternalLinkage, "malloc", mod.get());
+    
+    // Println
+    FunctionType *FT2 = FunctionType::get(Type::getInt8PtrTy(*context), Type::getVoidTy(*context), false);
+    Function::Create(FT2, Function::ExternalLinkage, "println", mod.get());
+    
+    // strlen
+    FunctionType *FT3 = FunctionType::get(Type::getInt8PtrTy(*context), Type::getVoidTy(*context), false);
+    Function::Create(FT3, Function::ExternalLinkage, "strlen", mod.get());
 }
 
 void Compiler::compile() {
