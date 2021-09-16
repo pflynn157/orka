@@ -54,6 +54,7 @@ void Compiler::compileFunction(AstGlobalStatement *global) {
             AllocaInst *alloca = builder->CreateAlloca(type);
             symtable[var.name] = alloca;
             typeTable[var.name] = var.type;
+            ptrTable[var.name] = var.subType;
             
             // Store the variable
             Value *param = func->getArg(i);

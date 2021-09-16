@@ -219,7 +219,8 @@ void Compiler::compileForStatement(AstStatement *stmt) {
     symtable = symtableOld;
     typeTable = typeTableOld;
 }
-
+#include <debug/AstDebug.hpp>
+#include <iostream>
 // Translates a for-all loop to LLVM
 void Compiler::compileForAllStatement(AstStatement *stmt) {
     AstForAllStmt *loop = static_cast<AstForAllStmt *>(stmt);

@@ -457,6 +457,8 @@ Type *Compiler::translateType(DataType dataType, DataType subType) {
                 case DataType::Char: type = Type::getInt8PtrTy(*context); break;
                 case DataType::Int32: type = Type::getInt32PtrTy(*context); break;
                 
+                case DataType::String: type = strArrayType; break;
+                
                 default: {}
             }
         } break;
