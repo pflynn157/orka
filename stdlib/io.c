@@ -2,6 +2,7 @@
 
 extern void syscall_str4(int code, int fd, const char *buf, int size);
 extern int strlen(const char *line);
+extern int stringcmp(const char *l1, const char *l2);
 
 // Needed for the floating point stuff
 int precision = 6;

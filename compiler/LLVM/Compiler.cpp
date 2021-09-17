@@ -61,12 +61,20 @@ Compiler::Compiler(AstTree *tree, CFlags cflags) {
     Function::Create(FT1, Function::ExternalLinkage, "malloc", mod.get());
     
     // Println
-    FunctionType *FT2 = FunctionType::get(Type::getInt8PtrTy(*context), Type::getVoidTy(*context), false);
+    FunctionType *FT2 = FunctionType::get(Type::getVoidTy(*context), Type::getInt8PtrTy(*context), false);
     Function::Create(FT2, Function::ExternalLinkage, "println", mod.get());
     
     // strlen
-    FunctionType *FT3 = FunctionType::get(Type::getInt8PtrTy(*context), Type::getVoidTy(*context), false);
+    FunctionType *FT3 = FunctionType::get(Type::getInt32Ty(*context), Type::getInt8PtrTy(*context), false);
     Function::Create(FT3, Function::ExternalLinkage, "strlen", mod.get());
+    
+    // strcmp
+    std::vector<Type *> targs;
+    targs.push_back(Type::getInt8PtrTy(*context));
+    targs.push_back(Type::getInt8PtrTy(*context));
+    
+    FunctionType *FT4 = FunctionType::get(Type::getInt32Ty(*context), targs, false);
+    Function::Create(FT4, Function::ExternalLinkage, "stringcmp", mod.get());
 }
 
 void Compiler::compile() {
@@ -380,9 +388,49 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
         case AstType::GTE:
         case AstType::LTE: {
             AstBinaryOp *op = static_cast<AstBinaryOp *>(expr);
-            Value *lval = compileValue(op->getLVal(), dataType);
-            Value *rval = compileValue(op->getRVal(), dataType);
+            AstExpression *lvalExpr = op->getLVal();
+            AstExpression *rvalExpr = op->getRVal();
             
+            Value *lval = compileValue(lvalExpr, dataType);
+            Value *rval = compileValue(rvalExpr, dataType);
+            
+            bool strOp = false;
+            
+            if (lvalExpr->getType() == AstType::StringL || rvalExpr->getType() == AstType::StringL) {
+                strOp = true;
+            } else if (lvalExpr->getType() == AstType::ID && rvalExpr->getType() == AstType::ID) {
+                AstID *lvalID = static_cast<AstID *>(lvalExpr);
+                AstID *rvalID = static_cast<AstID *>(rvalExpr);
+                
+                if (typeTable[lvalID->getValue()] == DataType::String) strOp = true;
+                if (typeTable[rvalID->getValue()] == DataType::String) strOp = true;
+            }
+            
+            // Build a string comparison if necessary
+            if (strOp) {
+                std::vector<Value *> args;
+                args.push_back(lval);
+                args.push_back(rval);
+            
+                if (op->getType() == AstType::EQ || op->getType() == AstType::NEQ) {
+                    Function *strcmp = mod->getFunction("stringcmp");
+                    if (!strcmp) std::cerr << "Error: Corelib function \"stringcmp\" not found." << std::endl;
+                    Value *strcmpCall = builder->CreateCall(strcmp, args);
+                    
+                    int cmpVal = 1;
+                    if (op->getType() == AstType::NEQ) cmpVal = 0;
+                    Value *cmpValue = builder->getInt32(cmpVal);
+                    
+                    return builder->CreateICmpEQ(strcmpCall, cmpValue);
+                } else if (op->getType() == AstType::Add) {
+                    return nullptr;
+                } else {
+                    // Invalid
+                    return nullptr;
+                }
+            }
+            
+            // Otherwise, build a normal comparison
             if (expr->getType() == AstType::Add)
                 return builder->CreateAdd(lval, rval);
             else if (expr->getType() == AstType::Sub)
