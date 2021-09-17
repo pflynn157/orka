@@ -61,6 +61,7 @@ run_test 'test/array/*.ok' 'sys' $flags
 run_test 'test/func/*.ok' 'sys' $flags
 run_test 'test/enum/*.ok' 'sys' $flags
 run_test 'test/struct/*.ok' 'sys' $flags
+run_test 'test/str/*.ok' 'sys' $flags
 
 echo ""
 echo "$test_count tests passed successfully."

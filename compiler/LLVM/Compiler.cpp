@@ -75,6 +75,18 @@ Compiler::Compiler(AstTree *tree, CFlags cflags) {
     
     FunctionType *FT4 = FunctionType::get(Type::getInt32Ty(*context), targs, false);
     Function::Create(FT4, Function::ExternalLinkage, "stringcmp", mod.get());
+    
+    // strcat_str(str, str)
+    FunctionType *FT5 = FunctionType::get(Type::getInt8PtrTy(*context), targs, false);
+    Function::Create(FT5, Function::ExternalLinkage, "strcat_str", mod.get());
+    
+    // strcat_char(str, char)
+    targs.clear();
+    targs.push_back(Type::getInt8PtrTy(*context));
+    targs.push_back(Type::getInt8Ty(*context));
+    
+    FunctionType *FT6 = FunctionType::get(Type::getInt8PtrTy(*context), targs, false);
+    Function::Create(FT6, Function::ExternalLinkage, "strcat_char", mod.get());
 }
 
 void Compiler::compile() {
