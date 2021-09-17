@@ -395,15 +395,28 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
             Value *rval = compileValue(rvalExpr, dataType);
             
             bool strOp = false;
+            bool rvalStr = false;
             
             if (lvalExpr->getType() == AstType::StringL || rvalExpr->getType() == AstType::StringL) {
                 strOp = true;
+                rvalStr = true;
+            } else if (lvalExpr->getType() == AstType::StringL && rvalExpr->getType() == AstType::CharL) {
+                strOp = true;
+            } else if (lvalExpr->getType() == AstType::ID && rvalExpr->getType() == AstType::CharL) {
+                AstID *lvalID = static_cast<AstID *>(lvalExpr);
+                if (typeTable[lvalID->getValue()] == DataType::String) strOp = true;
             } else if (lvalExpr->getType() == AstType::ID && rvalExpr->getType() == AstType::ID) {
                 AstID *lvalID = static_cast<AstID *>(lvalExpr);
                 AstID *rvalID = static_cast<AstID *>(rvalExpr);
                 
                 if (typeTable[lvalID->getValue()] == DataType::String) strOp = true;
-                if (typeTable[rvalID->getValue()] == DataType::String) strOp = true;
+                if (typeTable[rvalID->getValue()] == DataType::String) {
+                    strOp = true;
+                    rvalStr = true;
+                } else if (typeTable[rvalID->getValue()] == DataType::Char ||
+                           typeTable[rvalID->getValue()] == DataType::Byte) {
+                    strOp = true;          
+                }
             }
             
             // Build a string comparison if necessary
@@ -423,7 +436,15 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
                     
                     return builder->CreateICmpEQ(strcmpCall, cmpValue);
                 } else if (op->getType() == AstType::Add) {
-                    return nullptr;
+                    if (rvalStr) {
+                        Function *callee = mod->getFunction("strcat_str");
+                        if (!callee) std::cerr << "Error: corelib function \"strcat_str\" not found." << std::endl;
+                        return builder->CreateCall(callee, args);
+                    } else {
+                        Function *callee = mod->getFunction("strcat_char");
+                        if (!callee) std::cerr << "Error: corelib function \"strcat_char\" not found." << std::endl;
+                        return builder->CreateCall(callee, args);
+                    }
                 } else {
                     // Invalid
                     return nullptr;

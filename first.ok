@@ -11,6 +11,7 @@
 import std.io;
 
 extern strcat_str(str1:str, str2:str) -> str;
+extern strcat_char(str1:str, c:char) -> str;
 
 func main(args:str[]) -> int is
     var str1 : str := "Hello!";
@@ -19,8 +20,11 @@ func main(args:str[]) -> int is
     println(str1);
     println(str2);
     
-    var str3 : str := strcat_str(str1, str2);
+    var str3 : str := str1 + str2;
     println(str3);
+    
+    var str4 : str := str1 + '!';
+    println(str4);
     
     return 0;
 end
