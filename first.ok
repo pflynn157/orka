@@ -27,9 +27,9 @@ enum Token is
     SemiColon
 end
 
-func getNext(lex : Lex) -> int is
+func getNext(lex : Lex) -> Token is
     println(lex.input);
-    return 0;
+    return Token::None;
 end
 
 func main(args:str[]) -> int is

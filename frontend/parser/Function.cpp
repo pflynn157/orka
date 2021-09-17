@@ -132,6 +132,14 @@ bool Parser::buildFunction(Token startToken) {
         token = scanner->getNext();
         switch (token.type) {
             case Int: funcType = DataType::Int32; break;
+            
+            case Id: {
+                if (enums.find(token.id_val) != enums.end()) {
+                    EnumDec dec = enums[token.id_val];
+                    funcType = dec.type;
+                }
+            } break;
+            
             default: {}
         }
     
