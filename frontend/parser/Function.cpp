@@ -132,6 +132,7 @@ bool Parser::buildFunction(Token startToken) {
         token = scanner->getNext();
         switch (token.type) {
             case Int: funcType = DataType::Int32; break;
+            case Str: funcType = DataType::String; break;
             
             case Id: {
                 if (enums.find(token.id_val) != enums.end()) {
@@ -171,6 +172,7 @@ bool Parser::buildFunction(Token startToken) {
     if (isExtern) {
         AstExternFunction *ex = new AstExternFunction(funcName);
         ex->setArguments(args);
+        ex->setDataType(funcType);
         tree->addGlobalStatement(ex);
         return true;
     }

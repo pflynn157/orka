@@ -47,7 +47,9 @@ void AstExternFunction::print() {
             std::cout << "*" << printDataType(var.subType);
         std::cout << ", ";
     }
-    std::cout << ")" << std::endl;
+    std::cout << ") ";
+    std::cout << " -> " << printDataType(dataType);
+    std::cout << std::endl;
 }
 
 void AstFunction::print() {
@@ -60,7 +62,9 @@ void AstFunction::print() {
             std::cout << "[" << var.typeName << "]";
         std::cout << ", ";
     }
-    std::cout << ")" << std::endl;
+    std::cout << ") -> ";
+    std::cout << printDataType(dataType);
+    std::cout << std::endl;
     
     for (auto stmt : block->getBlock()) {
         stmt->print();
@@ -438,6 +442,7 @@ void AstFuncCallExpr::print() {
     std::cout << name << "(";
     for (auto arg : args) {
         arg->print();
+        std::cout << ", ";
     }
     std::cout << ")";
 }

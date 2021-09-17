@@ -36,12 +36,18 @@ public:
     
     void setArguments(std::vector<Var> args) { this->args = args; }
     
+    void setDataType(DataType dataType) {
+        this->dataType = dataType;
+    }
+    
     std::string getName() { return name; }
+    DataType getDataType() { return dataType; }
     std::vector<Var> getArguments() { return args; }
     void print() override;
 private:
     std::string name = "";
     std::vector<Var> args;
+    DataType dataType = DataType::Void;
 };
 
 // Represents a function
