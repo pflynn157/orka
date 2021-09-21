@@ -3,7 +3,7 @@
 #2.398099
 #99.123001
 #---------------
-#390.087986
+#101.521100
 #END
 
 #RET 0
@@ -18,7 +18,7 @@ func main(args:str[]) -> int is
     printDouble(y);
     println("---------------");
     
-    var answer : double := x + y * 3.9112;
+    var answer : double := x + y;
     printDouble(answer);
     
     return 0;
