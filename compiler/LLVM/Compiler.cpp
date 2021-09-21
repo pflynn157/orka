@@ -406,6 +406,20 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
             Value *lval = compileValue(lvalExpr, dataType);
             Value *rval = compileValue(rvalExpr, dataType);
             
+            bool fltOp = false;
+            if (lvalExpr->getType() == AstType::FloatL || rvalExpr->getType() == AstType::FloatL) {
+                fltOp = true;
+            } else if (lvalExpr->getType() == AstType::ID && rvalExpr->getType() == AstType::ID) {
+                AstID *lvalID = static_cast<AstID *>(lvalExpr);
+                AstID *rvalID = static_cast<AstID *>(rvalExpr);
+                
+                DataType lvalType = typeTable[lvalID->getValue()];
+                DataType rvalType = typeTable[rvalID->getValue()];
+                
+                if (lvalType == DataType::Float || lvalType == DataType::Double) fltOp = true;
+                if (rvalType == DataType::Float || rvalType == DataType::Double) fltOp = true;
+            }
+            
             bool strOp = false;
             bool rvalStr = false;
             
@@ -464,7 +478,7 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
             }
             
             // Otherwise, build a normal comparison
-            if (dataType == DataType::Float || dataType == DataType::Double) {
+            if ((dataType == DataType::Float || dataType == DataType::Double) || fltOp) {
                 switch (expr->getType()) {
                     case AstType::Add: return builder->CreateFAdd(lval, rval);
                     case AstType::Sub: return builder->CreateFSub(lval, rval);
@@ -472,7 +486,7 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
                     case AstType::Div: return builder->CreateFDiv(lval, rval);
                     
                     case AstType::EQ: return builder->CreateFCmpOEQ(lval, rval);
-                    case AstType::NEQ: return builder->CreateFCmpONE(lval, rval);
+                    case AstType::NEQ: return builder->CreateFCmpUNE(lval, rval);
                     case AstType::GT: return builder->CreateFCmpOGT(lval, rval);
                     case AstType::LT: return builder->CreateFCmpOLT(lval, rval);
                     case AstType::GTE: return builder->CreateFCmpOGE(lval, rval);
