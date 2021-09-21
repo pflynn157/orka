@@ -21,8 +21,5 @@ func main(args:str[]) -> int is
     var answer : float := x + y;
     printFloat(answer);
     
-    var ix : int := answer;
-    printf("%d\n", ix);
-    
     return 0;
 end
