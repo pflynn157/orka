@@ -11,8 +11,8 @@
 import std.io;
 
 func main(args:str[]) -> int is
-    var x : float := 2.398100;
-    var y : float := 99.12300;
+    var x : float := 2.3981;
+    var y : float := 99.123;
     
     printFloat(x);
     printFloat(y);
@@ -20,9 +20,6 @@ func main(args:str[]) -> int is
     
     var answer : float := x + y;
     printFloat(answer);
-    
-    var ix : int := answer;
-    printf("%d\n", ix);
     
     return 0;
 end

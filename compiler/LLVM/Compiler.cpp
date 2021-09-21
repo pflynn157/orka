@@ -464,27 +464,39 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
             }
             
             // Otherwise, build a normal comparison
-            if (expr->getType() == AstType::Add)
-                return builder->CreateAdd(lval, rval);
-            else if (expr->getType() == AstType::Sub)
-                return builder->CreateSub(lval, rval);
-            else if (expr->getType() == AstType::Mul)
-                return builder->CreateMul(lval, rval);
-            else if (expr->getType() == AstType::Div)
-                return builder->CreateSDiv(lval, rval);
-                
-            else if (expr->getType() == AstType::EQ)
-                return builder->CreateICmpEQ(lval, rval);
-            else if (expr->getType() == AstType::NEQ)
-                return builder->CreateICmpNE(lval, rval);
-            else if (expr->getType() == AstType::GT)
-                return builder->CreateICmpSGT(lval, rval);
-            else if (expr->getType() == AstType::LT)
-                return builder->CreateICmpSLT(lval, rval);
-            else if (expr->getType() == AstType::GTE)
-                return builder->CreateICmpSGE(lval, rval);
-            else if (expr->getType() == AstType::LTE)
-                return builder->CreateICmpSLE(lval, rval);
+            if (dataType == DataType::Float || dataType == DataType::Double) {
+                switch (expr->getType()) {
+                    case AstType::Add: return builder->CreateFAdd(lval, rval);
+                    case AstType::Sub: return builder->CreateFSub(lval, rval);
+                    case AstType::Mul: return builder->CreateFMul(lval, rval);
+                    case AstType::Div: return builder->CreateFDiv(lval, rval);
+                    
+                    case AstType::EQ: return builder->CreateFCmpOEQ(lval, rval);
+                    case AstType::NEQ: return builder->CreateFCmpONE(lval, rval);
+                    case AstType::GT: return builder->CreateFCmpOGT(lval, rval);
+                    case AstType::LT: return builder->CreateFCmpOLT(lval, rval);
+                    case AstType::GTE: return builder->CreateFCmpOGE(lval, rval);
+                    case AstType::LTE: return builder->CreateFCmpOLE(lval, rval);
+                    
+                    default: {}
+                }
+            } else {
+                switch (expr->getType()) {
+                    case AstType::Add: return builder->CreateAdd(lval, rval);
+                    case AstType::Sub: return builder->CreateSub(lval, rval);
+                    case AstType::Mul: return builder->CreateMul(lval, rval);
+                    case AstType::Div: return builder->CreateSDiv(lval, rval);
+                    
+                    case AstType::EQ: return builder->CreateICmpEQ(lval, rval);
+                    case AstType::NEQ: return builder->CreateICmpNE(lval, rval);
+                    case AstType::GT: return builder->CreateICmpSGT(lval, rval);
+                    case AstType::LT: return builder->CreateICmpSLT(lval, rval);
+                    case AstType::GTE: return builder->CreateICmpSGE(lval, rval);
+                    case AstType::LTE: return builder->CreateICmpSLE(lval, rval);
+                    
+                    default: {}
+                }
+            }
         } break;
         
         default: {}
