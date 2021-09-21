@@ -486,7 +486,7 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
                     case AstType::Div: return builder->CreateFDiv(lval, rval);
                     
                     case AstType::EQ: return builder->CreateFCmpOEQ(lval, rval);
-                    case AstType::NEQ: return builder->CreateFCmpUNE(lval, rval);
+                    case AstType::NEQ: return builder->CreateFCmpONE(lval, rval);
                     case AstType::GT: return builder->CreateFCmpOGT(lval, rval);
                     case AstType::LT: return builder->CreateFCmpOLT(lval, rval);
                     case AstType::GTE: return builder->CreateFCmpOGE(lval, rval);
