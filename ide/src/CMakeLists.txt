@@ -4,7 +4,6 @@ project(ide_src)
 set(BASE_SRC
     editor.cpp
     main.cpp
-    tabwidget.cpp
     window.cpp
 )
 

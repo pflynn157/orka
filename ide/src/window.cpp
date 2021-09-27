@@ -4,10 +4,10 @@ Window::Window() {
     this->setWindowTitle("Orka IDE");
     this->resize(800, 500);
     
-    tabs = new TabWidget;
-    this->setCentralWidget(tabs);
+    editor = new Editor;
+    this->setCentralWidget(editor);
 }
 
 Window::~Window() {
-    if (tabs) delete tabs;
+    if (editor) delete editor;
 }
