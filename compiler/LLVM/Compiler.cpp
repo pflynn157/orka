@@ -409,6 +409,16 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
             bool fltOp = false;
             if (lvalExpr->getType() == AstType::FloatL || rvalExpr->getType() == AstType::FloatL) {
                 fltOp = true;
+                
+                if (lvalExpr->getType() == AstType::ID) {
+                    AstID *lvalID = static_cast<AstID *>(lvalExpr);
+                    if (typeTable[lvalID->getValue()] == DataType::Double)
+                        rval = compileValue(rvalExpr, DataType::Double);
+                } else if (rvalExpr->getType() == AstType::ID) {
+                    AstID *rvalID = static_cast<AstID *>(rvalExpr);
+                    if (typeTable[rvalID->getValue()] == DataType::Double)
+                        lval = compileValue(lvalExpr, DataType::Double);
+                }
             } else if (lvalExpr->getType() == AstType::ID && rvalExpr->getType() == AstType::ID) {
                 AstID *lvalID = static_cast<AstID *>(lvalExpr);
                 AstID *rvalID = static_cast<AstID *>(rvalExpr);
