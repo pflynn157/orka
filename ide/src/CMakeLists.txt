@@ -7,8 +7,14 @@ set(BASE_SRC
     window.cpp
 )
 
+set(MENUBAR_SRC
+    menubar/dosiero_menuo.cpp
+    menubar/edito_menuo.cpp
+)
+
 set(SRC
     ${BASE_SRC}
+    ${MENUBAR_SRC}
 )
 
 add_executable(oride ${SRC})
