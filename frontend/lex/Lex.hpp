@@ -19,6 +19,7 @@ enum TokenType {
     Func,
     Enum,
     Struct,
+    Class,
     End,
     Return,
     VarD,

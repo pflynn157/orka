@@ -35,6 +35,7 @@ bool Parser::parse() {
             case Const: code = buildConst(true); break;
             case Enum: code = buildEnum(); break;
             case Struct: code = buildStruct(); break;
+            case Class: code = buildClass(); break;
             
             case Eof:
             case Nl: break;

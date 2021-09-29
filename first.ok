@@ -10,27 +10,12 @@
 
 import std.io;
 
-func test1(x:double) is
-    if x = 3.14 then println("True");
-    else println("False");
+class C1 is
+    func C1 is
+        println("hi");
     end
-    
-    printDouble(x);
-end
-
-func test2(x:double) is
-    if x = 3.14 then println("True");
-    else println("False");
-    end
-    
-    printDouble(x);
 end
 
 func main -> int is
-    var x1 : double := 3.14;
-    var x2 : double := 30.23;
-    
-    test1(x1);
-    test2(x2);
     return 0;
 end

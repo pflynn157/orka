@@ -98,7 +98,7 @@ bool Parser::getFunctionArgs(std::vector<Var> &args) {
 }
 
 // Builds a function
-bool Parser::buildFunction(Token startToken) {
+bool Parser::buildFunction(Token startToken, std::string className) {
     typeMap.clear();
     localConsts.clear();
     
@@ -113,6 +113,9 @@ bool Parser::buildFunction(Token startToken) {
     // Make sure we have a function name
     token = scanner->getNext();
     std::string funcName = token.id_val;
+    if (className != "") {
+        funcName = className + "_" + funcName;
+    }
     
     if (token.type != Id) {
         syntax->addError(scanner->getLine(), "Expected function name.");
@@ -180,10 +183,18 @@ bool Parser::buildFunction(Token startToken) {
     AstFunction *func = new AstFunction(funcName);
     func->setDataType(funcType, ptrType);
     func->setArguments(args);
-    tree->addGlobalStatement(func);
+    
+    if (className == "") tree->addGlobalStatement(func);
+    else currentClass->addFunction(func);
     
     // Build the body
-    if (!buildBlock(func->getBlock())) return false;
+    int stopLayer = 0;
+    if (className != "") {
+        stopLayer = 1;
+        ++layer;
+    }
+    
+    if (!buildBlock(func->getBlock(), stopLayer)) return false;
     
     // Make sure we end with a return statement
     AstType lastType = func->getBlock()->getBlock().back()->getType();

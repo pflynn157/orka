@@ -29,7 +29,7 @@ public:
 protected:
     // Function.cpp
     bool getFunctionArgs(std::vector<Var> &args);
-    bool buildFunction(Token startToken);
+    bool buildFunction(Token startToken, std::string className = "");
     bool buildFunctionCallStmt(AstBlock *block, Token idToken);
     bool buildReturn(AstBlock *block);
     
@@ -54,6 +54,7 @@ protected:
     bool buildStruct();
     bool buildStructDec(AstBlock *block);
     bool buildStructAssign(AstBlock *block, Token idToken);
+    bool buildClass();
     
     bool buildBlock(AstBlock *block, int stopLayer = 0, AstIfStmt *parentBlock = nullptr, bool inElif = false);
     bool buildExpression(AstStatement *stmt, DataType currentType,
@@ -68,6 +69,7 @@ private:
     AstTree *tree;
     ErrorManager *syntax;
     int layer = 0;
+    AstClass *currentClass = nullptr;
     
     std::map<std::string, std::pair<DataType,DataType>> typeMap;
     std::map<std::string, std::pair<DataType, AstExpression*>> globalConsts;

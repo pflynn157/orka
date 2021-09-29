@@ -284,3 +284,47 @@ bool Parser::buildStructAssign(AstBlock *block, Token idToken) {
     
     return true;
 }
+
+bool Parser::buildClass() {
+    Token token = scanner->getNext();
+    std::string name = token.id_val;
+    
+    if (token.type != Id) {
+        syntax->addError(scanner->getLine(), "Expected class name.");
+        return false;
+    }
+    
+    token = scanner->getNext();
+    if (token.type != Is) {
+        syntax->addError(scanner->getLine(), "Expected \"is\".");
+        return false;
+    }
+    
+    AstClass *clazz = new AstClass(name);
+    currentClass = clazz;
+    
+    do {
+        token = scanner->getNext();
+        bool code = true;
+        
+        switch (token.type) {
+            case Func: code = buildFunction(token, name); break;
+            case Const: code = buildConst(true); break;
+            
+            case End:
+            case Nl: break;
+            
+            default: {
+                syntax->addError(scanner->getLine(), "Invalid token in class.");
+                token.print();
+                code = false;
+            }
+        }
+        
+        if (!code) break;
+    } while (token.type != End);
+    
+    tree->addClass(clazz);
+    
+    return true;
+}
