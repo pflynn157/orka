@@ -164,6 +164,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
             
             AllocaInst *var = builder->CreateAlloca(type);
             symtable[sd->getVarName()] = var;
+            typeTable[sd->getVarName()] = DataType::Struct;
             
             AstStruct *str = nullptr;
             for (AstStruct *s : tree->getStructs()) {
@@ -280,7 +281,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
         default: {}
     }
 }
-
+#include <debug/AstDebug.hpp>
 // Converts an AST value to an LLVM value
 Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
     switch (expr->getType()) {
@@ -329,6 +330,8 @@ Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
         case AstType::ID: {
             AstID *id = static_cast<AstID *>(expr);
             AllocaInst *ptr = symtable[id->getValue()];
+            
+            if (typeTable[id->getValue()] == DataType::Struct) return ptr;
             return builder->CreateLoad(ptr);
         } break;
         
