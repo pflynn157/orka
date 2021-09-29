@@ -36,6 +36,8 @@ void AstTree::print() {
     
     for (auto c : classes) c->print();
     
+    for (auto str : structs) str->print();
+    
     for (auto stmt : global_statements) {
         stmt->print();
     }
@@ -78,6 +80,23 @@ void AstFunction::print() {
             std::cout << std::endl;
         }
     }
+    std::cout << std::endl;
+}
+
+void AstStruct::print() {
+    std::cout << "STRUCT " << name << std::endl;
+    
+    for (auto var : items) {
+        std::cout << var.name << " : " << printDataType(var.type);
+        if (var.subType != DataType::Void)
+            std::cout << "*" << printDataType(var.subType);
+        if (var.type == DataType::Struct)
+            std::cout << "[" << var.typeName << "]";
+        std::cout << " ";
+        defaultExpressions[var.name]->print();
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
 }
 
 void AstClass::print() {

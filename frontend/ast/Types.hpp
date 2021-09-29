@@ -130,6 +130,8 @@ public:
     AstExpression *getDefaultExpression(std::string name) {
         return defaultExpressions[name];
     }
+    
+    void print();
 private:
     std::string name;
     std::vector<Var> items;

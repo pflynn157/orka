@@ -124,6 +124,14 @@ bool Parser::buildFunction(Token startToken, std::string className) {
     
     // Get arguments
     std::vector<Var> args;
+    if (className != "") {
+        Var classV;
+        classV.type = DataType::Struct;
+        classV.subType = DataType::Void;
+        classV.typeName = className;
+        args.push_back(classV);
+    }
+    
     if (!getFunctionArgs(args)) return false;
 
     // Check to see if there's any return type
@@ -184,8 +192,9 @@ bool Parser::buildFunction(Token startToken, std::string className) {
     func->setDataType(funcType, ptrType);
     func->setArguments(args);
     
-    if (className == "") tree->addGlobalStatement(func);
-    else currentClass->addFunction(func);
+    //if (className == "") tree->addGlobalStatement(func);
+    //else currentClass->addFunction(func);
+    tree->addGlobalStatement(func);
     
     // Build the body
     int stopLayer = 0;

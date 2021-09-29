@@ -300,6 +300,9 @@ bool Parser::buildClass() {
         return false;
     }
     
+    AstStruct *clazzStruct = new AstStruct(name);
+    tree->addStruct(clazzStruct);
+    
     AstClass *clazz = new AstClass(name);
     currentClass = clazz;
     
@@ -309,7 +312,7 @@ bool Parser::buildClass() {
         
         switch (token.type) {
             case Func: code = buildFunction(token, name); break;
-            case Const: code = buildConst(true); break;
+            //case Const: code = buildConst(true); break;
             
             case End:
             case Nl: break;
