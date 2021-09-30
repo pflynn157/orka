@@ -103,7 +103,7 @@ public:
         functions.push_back(func);
     }
     
-    std::string getName();
+    std::string getName() { return name; }
     std::vector<AstFunction *> getFunctions() {
         return functions;
     }

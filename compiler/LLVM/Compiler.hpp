@@ -68,6 +68,7 @@ private:
     
     // The user-defined structure table
     std::map<std::string, StructType*> structTable;
+    std::map<std::string, std::string> structVarTable;
     
     // Symbol table
     std::map<std::string, AllocaInst *> symtable;

@@ -58,6 +58,7 @@ void Compiler::compileFunction(AstGlobalStatement *global) {
                 symtable[var.name] = (AllocaInst *)func->getArg(i);
                 typeTable[var.name] = var.type;
                 ptrTable[var.name] = var.subType;
+                structVarTable[var.name] = var.typeName;
                 continue;
             }
             

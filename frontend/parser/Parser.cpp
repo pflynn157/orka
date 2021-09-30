@@ -296,7 +296,7 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
                     } else {
                         scanner->rewind(token);
                         
-                        AstStructAccess *val = new AstStructAccess(name, token.id_val);
+                        AstStructAccess *val = new AstStructAccess(name, idToken.id_val);
                         output.push(val);
                     }
                 } else {

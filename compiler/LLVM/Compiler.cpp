@@ -594,6 +594,9 @@ Type *Compiler::translateType(DataType dataType, DataType subType, std::string t
 }
 
 int Compiler::getStructIndex(std::string name, std::string member) {
+    std::string name2 = structVarTable[name];
+    if (name2 != "") name = name2;
+    
     for (auto s : tree->getStructs()) {
         if (s->getName() != name) continue;
 

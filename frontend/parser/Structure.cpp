@@ -346,7 +346,11 @@ bool Parser::buildClass() {
     AstStruct *clazzStruct = new AstStruct(name);
     tree->addStruct(clazzStruct);
     
+    AstClass *clazz = new AstClass(name);
+    currentClass = clazz;
+    
     if (baseClass != "") {
+        // First, build the inherited structure
         AstStruct *baseStruct = nullptr;
         for (auto s : tree->getStructs()) {
             if (s->getName() == baseClass) {
@@ -363,10 +367,38 @@ bool Parser::buildClass() {
         for (auto var : baseStruct->getItems()) {
             clazzStruct->addItem(var, baseStruct->getDefaultExpression(var.name));
         }
+        
+        // Next, build the inherited class
+        AstClass *baseAstClass = nullptr;
+        for (auto c : tree->getClasses()) {
+            if (c->getName() == baseClass) {
+                baseAstClass = c;
+                break;
+            }
+        }
+        
+        if (baseAstClass == nullptr) {
+            syntax->addError(scanner->getLine(), "Unknown base class.");
+            return false;
+        }
+        
+        for (auto func : baseAstClass->getFunctions()) {
+            if (func->getName() == baseClass) continue;
+            clazz->addFunction(func);
+            
+            // Add it to the function scope in the AST tree
+            std::string newName = name + "_" + func->getName();
+            
+            // Copy it
+            AstFunction *func2 = new AstFunction(newName);
+            func2->setDataType(func->getDataType(), func->getPtrType());
+            func2->setArguments(func->getArguments());
+            tree->addGlobalStatement(func2);
+            
+            AstBlock *block2 = func->getBlock();
+            func2->getBlock()->addStatements(block2->getBlock());
+        }
     }
-    
-    AstClass *clazz = new AstClass(name);
-    currentClass = clazz;
     
     do {
         token = scanner->getNext();
