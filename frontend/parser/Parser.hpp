@@ -73,6 +73,7 @@ private:
     AstClass *currentClass = nullptr;
     
     std::map<std::string, std::pair<DataType,DataType>> typeMap;
+    std::map<std::string, std::string> classMap;
     std::map<std::string, std::pair<DataType, AstExpression*>> globalConsts;
     std::map<std::string, std::pair<DataType, AstExpression*>> localConsts;
     std::map<std::string, EnumDec> enums;

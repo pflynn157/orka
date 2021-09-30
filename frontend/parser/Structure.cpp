@@ -248,6 +248,12 @@ bool Parser::buildStructDec(AstBlock *block) {
     return true;
 }
 
+//
+// Builds a structure assignment
+// Despite the name, it also handles class calls since the syntax is similar
+//
+// TODO: SHould we get our own syntax?
+//
 bool Parser::buildStructAssign(AstBlock *block, Token idToken) {
     Token token = scanner->getNext();
     std::string member = token.id_val;
@@ -257,30 +263,47 @@ bool Parser::buildStructAssign(AstBlock *block, Token idToken) {
         return false;
     }
     
-    AstStructAssign *sa = new AstStructAssign(idToken.id_val, member);
-    block->addStatement(sa);
-    
-    // Get the data type of the member
-    DataType memberType = DataType::Void;
-    sa->setMemberType(memberType);
-    
-    for (AstStruct *str : tree->getStructs()) {
-        for (Var item : str->getItems()) {
-            if (item.name == member) {
-                memberType = item.type;
-                break;
+    token = scanner->getNext();
+    if (token.type == Assign) {
+        AstStructAssign *sa = new AstStructAssign(idToken.id_val, member);
+        block->addStatement(sa);
+        
+        // Get the data type of the member
+        DataType memberType = DataType::Void;
+        sa->setMemberType(memberType);
+        
+        for (AstStruct *str : tree->getStructs()) {
+            for (Var item : str->getItems()) {
+                if (item.name == member) {
+                    memberType = item.type;
+                    break;
+                }
             }
         }
-    }
-    
-    token = scanner->getNext();
-    if (token.type != Assign) {
-        token.print();
-        syntax->addError(scanner->getLine(), "Expected assignment operator.");
+        
+        if (!buildExpression(sa, memberType)) return false;
+    } else if (token.type == LParen) {
+        std::string className = classMap[idToken.id_val];
+        className += "_" + member;
+        
+        AstFuncCallStmt *fc = new AstFuncCallStmt(className);
+        block->addStatement(fc);
+        
+        AstID *id = new AstID(idToken.id_val);
+        fc->addExpression(id);
+        
+        if (!buildExpression(fc, DataType::Void, RParen, Comma)) return false;
+        
+        Token token = scanner->getNext();
+        if (token.type != SemiColon) {
+            syntax->addError(scanner->getLine(), "Expected \';\'.");
+            token.print();
+            return false;
+        }
+    } else {
+        syntax->addError(scanner->getLine(), "Invalid structure or class operation.");
         return false;
     }
-    
-    if (!buildExpression(sa, memberType)) return false;
     
     return true;
 }
@@ -377,6 +400,8 @@ bool Parser::buildClassDec(AstBlock *block) {
     // Build the structure declaration
     AstStructDec *dec = new AstStructDec(name, className);
     block->addStatement(dec);
+    
+    classMap[name] = className;
     
     // Call the constructor
     AstID *classRef = new AstID(name);
