@@ -266,14 +266,39 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
                 } else if (token.type == Dot) {
                     // TODO: Search for structures here
 
-                    token = scanner->getNext();
-                    if (token.type != Id) {
+                    Token idToken = scanner->getNext();
+                    if (idToken.type != Id) {
                         syntax->addError(scanner->getLine(), "Expected identifier.");
                         return false;
                     }
-
-                    AstStructAccess *val = new AstStructAccess(name, token.id_val);
-                    output.push(val);
+                    
+                    token = scanner->getNext();
+                    if (token.type == LParen) {
+                        std::string className = classMap[name];
+                        className += "_" + idToken.id_val;
+                        
+                        AstFuncCallExpr *fc = new AstFuncCallExpr(className);
+                        
+                        AstID *id = new AstID(name);
+                        fc->addArgument(id);
+                        
+                        AstExpression *fcExpr;
+                        buildExpression(nullptr, varType, RParen, Comma, &fcExpr);
+                        output.push(fc);
+                        
+                        /*AstFuncCallStmt *fc = new AstFuncCallStmt(className);
+                        output.push(fc);
+                        
+                        AstID *id = new AstID(idToken.id_val);
+                        fc->addExpression(id);
+                        
+                        if (!buildExpression(fc, DataType::Void, RParen, Comma)) return false;*/
+                    } else {
+                        scanner->rewind(token);
+                        
+                        AstStructAccess *val = new AstStructAccess(name, token.id_val);
+                        output.push(val);
+                    }
                 } else {
                     int constVal = isConstant(name);
                     if (constVal > 0) {

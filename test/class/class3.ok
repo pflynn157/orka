@@ -2,6 +2,8 @@
 #OUTPUT
 #hi
 #Hello!
+#X (before): 20
+#X (After): 40
 #END
 
 #RET 0

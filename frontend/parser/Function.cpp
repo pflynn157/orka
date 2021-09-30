@@ -126,10 +126,13 @@ bool Parser::buildFunction(Token startToken, std::string className) {
     std::vector<Var> args;
     if (className != "") {
         Var classV;
+        classV.name = "this";
         classV.type = DataType::Struct;
         classV.subType = DataType::Void;
         classV.typeName = className;
         args.push_back(classV);
+        
+        typeMap["this"] = std::pair<DataType, DataType>(classV.type, classV.subType);
     }
     
     if (!getFunctionArgs(args)) return false;
