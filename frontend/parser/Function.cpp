@@ -113,9 +113,6 @@ bool Parser::buildFunction(Token startToken, std::string className) {
     // Make sure we have a function name
     token = scanner->getNext();
     std::string funcName = token.id_val;
-    if (className != "") {
-        funcName = className + "_" + funcName;
-    }
     
     if (token.type != Id) {
         syntax->addError(scanner->getLine(), "Expected function name.");
@@ -198,6 +195,10 @@ bool Parser::buildFunction(Token startToken, std::string className) {
     //if (className == "") tree->addGlobalStatement(func);
     //else currentClass->addFunction(func);
     tree->addGlobalStatement(func);
+    if (className != "") {
+        std::string fullName = className + "_" + funcName;
+        func->setName(fullName);
+    }
     
     // Build the body
     int stopLayer = 0;
@@ -226,6 +227,16 @@ bool Parser::buildFunction(Token startToken, std::string className) {
             syntax->addError(scanner->getLine(), "Expected return statement.");
             return false;
         }
+    }
+    
+    if (className != "") {
+        AstFunction *func2 = new AstFunction(funcName);
+        func2->setDataType(funcType, ptrType);
+        func2->setArguments(args);
+        currentClass->addFunction(func2);
+        
+        AstBlock *block2 = func->getBlock();
+        func2->getBlock()->addStatements(block2->getBlock());
     }
     
     return true;

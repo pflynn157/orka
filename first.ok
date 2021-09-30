@@ -2,19 +2,17 @@
 #OUTPUT
 #hi
 #Hello!
+#X (before): 20
+#X (After): 40
 #END
 
 #RET 0
 
 import std.io;
 
-class C1 is
-    func C1 is
-        println("hi");
-    end
-    
-    func sayHello is
-        println("Hello!");    
+class Square is
+    func Square is
+        println("square");
     end
     
     func getX -> int is
@@ -28,14 +26,22 @@ class C1 is
     var x : int := 20;
 end
 
-func main -> int is
-    class var1 : C1;
-    var1.sayHello();
+class Rectangle extends Square is
+    func Rectangle is
+        println("Rectangle");
+    end
     
-    var x : int := var1.getX();
+    var y : int := 30;
+end
+
+func main -> int is
+    class sq : Square;
+    class rect : Rectangle;
+    
+    var x : int := rect.getX();
     printf("X (before): %d\n", x);
     
-    var1.setX(40);
-    printf("X (After): %d\n", var1.getX());
+    rect.setX(40);
+    printf("X (After): %d\n", rect.getX());
     return 0;
 end

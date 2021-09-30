@@ -242,6 +242,7 @@ TokenType Scanner::getKeyword() {
     else if (buffer == "step") return Step;
     else if (buffer == "float") return Float;
     else if (buffer == "double") return Double;
+    else if (buffer == "extends") return Extends;
     return EmptyToken;
 }
 

@@ -65,6 +65,8 @@ public:
     std::vector<Var> getArguments() { return args; }
     AstBlock *getBlock() { return block; }
     
+    void setName(std::string name) { this->name = name; }
+    
     void setArguments(std::vector<Var> args) { this->args = args; }
     
     void addStatement(AstStatement *statement) {

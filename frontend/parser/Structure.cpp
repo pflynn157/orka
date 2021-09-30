@@ -316,6 +316,7 @@ bool Parser::buildStructAssign(AstBlock *block, Token idToken) {
 bool Parser::buildClass() {
     Token token = scanner->getNext();
     std::string name = token.id_val;
+    std::string baseClass = "";
     
     if (token.type != Id) {
         syntax->addError(scanner->getLine(), "Expected class name.");
@@ -323,13 +324,46 @@ bool Parser::buildClass() {
     }
     
     token = scanner->getNext();
-    if (token.type != Is) {
-        syntax->addError(scanner->getLine(), "Expected \"is\".");
+    if (token.type == Extends) {
+        token = scanner->getNext();
+        if (token.type != Id) {
+            syntax->addError(scanner->getLine(), "Expected extending class name.");
+            return false;
+        }
+        
+        baseClass = token.id_val;
+        
+        token = scanner->getNext();
+        if (token.type != Is) {
+            syntax->addError(scanner->getLine(), "Expected \"is\".");
+            return false;
+        }
+    } else if (token.type != Is) {
+        syntax->addError(scanner->getLine(), "Expected \"is\" or \"extends\".");
         return false;
     }
     
     AstStruct *clazzStruct = new AstStruct(name);
     tree->addStruct(clazzStruct);
+    
+    if (baseClass != "") {
+        AstStruct *baseStruct = nullptr;
+        for (auto s : tree->getStructs()) {
+            if (s->getName() == baseClass) {
+                baseStruct = s;
+                break;
+            }
+        }
+        
+        if (baseStruct == nullptr) {
+            syntax->addError(scanner->getLine(), "Unknown base class.");
+            return false;
+        }
+        
+        for (auto var : baseStruct->getItems()) {
+            clazzStruct->addItem(var, baseStruct->getDefaultExpression(var.name));
+        }
+    }
     
     AstClass *clazz = new AstClass(name);
     currentClass = clazz;
@@ -358,6 +392,7 @@ bool Parser::buildClass() {
         if (!code) break;
     } while (token.type != End);
     
+    currentClass = clazz;
     tree->addClass(clazz);
     
     return true;
