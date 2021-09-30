@@ -52,6 +52,7 @@ protected:
     // Structure.cpp
     bool buildEnum();
     bool buildStruct();
+    bool buildStructMember(AstStruct *str, Token token);
     bool buildStructDec(AstBlock *block);
     bool buildStructAssign(AstBlock *block, Token idToken);
     bool buildClass();
