@@ -331,3 +331,67 @@ bool Parser::buildClass() {
     
     return true;
 }
+
+// Builds a class declaration
+// A class declaration is basically a structure declaration with a function call
+//
+bool Parser::buildClassDec(AstBlock *block) {
+    Token token = scanner->getNext();
+    std::string name = token.id_val;
+    
+    if (token.type != Id) {
+        syntax->addError(scanner->getLine(), "Expected class name.");
+        return false;
+    }
+    
+    token = scanner->getNext();
+    if (token.type != Colon) {
+        syntax->addError(scanner->getLine(), "Expected \":\"");
+        return false;
+    }
+    
+    token = scanner->getNext();
+    std::string className = token.id_val;
+    
+    if (token.type != Id) {
+        syntax->addError(scanner->getLine(), "Expected class name.");
+        return false;
+    }
+    
+    // Make sure the structure exists, and names a class
+    // TODO: Do the class check
+    AstStruct *str = nullptr;
+    
+    for (auto s : tree->getStructs()) {
+        if (s->getName() == className) {
+            str = s;
+            break;
+        }
+    }
+    
+    if (str == nullptr) {
+        syntax->addError(scanner->getLine(), "Unknown class.");
+        return false;
+    }
+    
+    // Build the structure declaration
+    AstStructDec *dec = new AstStructDec(name, className);
+    block->addStatement(dec);
+    
+    // Call the constructor
+    AstID *classRef = new AstID(name);
+    
+    std::string constructor = className + "_" + className;
+    AstFuncCallStmt *fc = new AstFuncCallStmt(constructor);
+    block->addStatement(fc);
+    fc->addExpression(classRef);
+    
+    // Do the final syntax check
+    token = scanner->getNext();
+    if (token.type != SemiColon) {
+        syntax->addError(scanner->getLine(), "Expected terminator.");
+        return false;
+    }
+    
+    return true;
+}

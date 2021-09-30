@@ -281,7 +281,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
         default: {}
     }
 }
-#include <debug/AstDebug.hpp>
+
 // Converts an AST value to an LLVM value
 Value *Compiler::compileValue(AstExpression *expr, DataType dataType) {
     switch (expr->getType()) {

@@ -70,6 +70,7 @@ bool Parser::buildBlock(AstBlock *block, int stopLayer, AstIfStmt *parentBlock, 
         switch (token.type) {
             case VarD: code = buildVariableDec(block); break;
             case Struct: code = buildStructDec(block); break;
+            case Class: code = buildClassDec(block); break;
             case Const: code = buildConst(false); break;
             
             case Id: {

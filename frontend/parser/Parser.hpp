@@ -55,6 +55,7 @@ protected:
     bool buildStructDec(AstBlock *block);
     bool buildStructAssign(AstBlock *block, Token idToken);
     bool buildClass();
+    bool buildClassDec(AstBlock *block);
     
     bool buildBlock(AstBlock *block, int stopLayer = 0, AstIfStmt *parentBlock = nullptr, bool inElif = false);
     bool buildExpression(AstStatement *stmt, DataType currentType,
