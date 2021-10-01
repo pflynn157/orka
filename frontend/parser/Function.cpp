@@ -138,6 +138,7 @@ bool Parser::buildFunction(Token startToken, std::string className) {
     token = scanner->getNext();
     DataType funcType = DataType::Void;
     DataType ptrType = DataType::Void;
+    std::string retName = "";
     
     if (token.type == Arrow) {
         token = scanner->getNext();
@@ -149,7 +150,23 @@ bool Parser::buildFunction(Token startToken, std::string className) {
                 if (enums.find(token.id_val) != enums.end()) {
                     EnumDec dec = enums[token.id_val];
                     funcType = dec.type;
+                    break;
                 }
+                
+                bool isStruct = false;
+                    for (auto s : tree->getStructs()) {
+                        if (s->getName() == token.id_val) {
+                            isStruct = true;
+                            break;
+                        }
+                    }
+                    
+                    if (isStruct) {
+                        //v.type = DataType::Struct;
+                        //v.typeName = token.id_val;
+                        funcType = DataType::Struct;
+                        retName = token.id_val;
+                    }
             } break;
             
             default: {}
@@ -190,6 +207,7 @@ bool Parser::buildFunction(Token startToken, std::string className) {
     
     AstFunction *func = new AstFunction(funcName);
     func->setDataType(funcType, ptrType);
+    if (funcType == DataType::Struct) func->setDataTypeName(retName);
     func->setArguments(args);
     
     //if (className == "") tree->addGlobalStatement(func);

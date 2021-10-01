@@ -136,7 +136,9 @@ void AstVarDec::print() {
 
 void AstStructDec::print() {
     std::cout << "    ";
-    std::cout << "STRUCT " << varName << " : " << structName << std::endl;
+    std::cout << "STRUCT " << varName << " : " << structName;
+    if (noInit) std::cout << " NOINIT";
+    std::cout << std::endl;
 }
 
 void AstVarAssign::print() {

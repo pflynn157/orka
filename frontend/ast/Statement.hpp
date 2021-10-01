@@ -97,13 +97,17 @@ public:
         this->structName = structName;
     }
     
+    void setNoInit(bool init) { noInit = init; }
+    
     std::string getVarName() { return varName; }
     std::string getStructName() { return structName; }
+    bool isNoInit() { return noInit; }
     
     void print();
 private:
     std::string varName = "";
     std::string structName = "";
+    bool noInit = false;
 };
 
 // Represents a variable assignment

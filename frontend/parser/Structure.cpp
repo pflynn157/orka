@@ -245,9 +245,16 @@ bool Parser::buildStructDec(AstBlock *block) {
     
     // Final syntax check
     token = scanner->getNext();
-    if (token.type != SemiColon) {
-        syntax->addError(scanner->getLine(), "Expected terminator.");
-        return false;
+    if (token.type == SemiColon) {
+        return true;
+    } else if (token.type == Assign) {
+        dec->setNoInit(true);
+        AstVarAssign *empty = new AstVarAssign(name);
+        if (!buildExpression(empty, DataType::Struct)) return false;
+        block->addStatement(empty);
+        
+        // TODO: The body should only be a function call expression or an ID
+        // Do a syntax check
     }
     
     return true;

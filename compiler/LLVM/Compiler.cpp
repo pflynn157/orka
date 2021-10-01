@@ -165,6 +165,7 @@ void Compiler::compileStatement(AstStatement *stmt) {
             AllocaInst *var = builder->CreateAlloca(type);
             symtable[sd->getVarName()] = var;
             typeTable[sd->getVarName()] = DataType::Struct;
+            structVarTable[sd->getVarName()] = sd->getStructName();
             
             AstStruct *str = nullptr;
             for (AstStruct *s : tree->getStructs()) {
@@ -176,15 +177,17 @@ void Compiler::compileStatement(AstStatement *stmt) {
             if (str == nullptr) return;
             
             // Init the elements
-            int index = 0;
-            for (Var member : str->getItems()) {
-                AstExpression *defaultExpr = str->getDefaultExpression(member.name);
-                Value *defaultVal = compileValue(defaultExpr, member.type);
-                
-                Value *ep = builder->CreateStructGEP(var, index);
-                builder->CreateStore(defaultVal, ep);
-                
-                ++index;
+            if (!sd->isNoInit()) {
+                int index = 0;
+                for (Var member : str->getItems()) {
+                    AstExpression *defaultExpr = str->getDefaultExpression(member.name);
+                    Value *defaultVal = compileValue(defaultExpr, member.type);
+                    
+                    Value *ep = builder->CreateStructGEP(var, index);
+                    builder->CreateStore(defaultVal, ep);
+                    
+                    ++index;
+               }
             }
         } break;
         

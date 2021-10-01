@@ -14,12 +14,16 @@ void Compiler::compileFunction(AstGlobalStatement *global) {
     symtable.clear();
     typeTable.clear();
     ptrTable.clear();
+    structVarTable.clear();
     
     AstFunction *astFunc = static_cast<AstFunction *>(global);
 
     std::vector<Var> astVarArgs = astFunc->getArguments();
     FunctionType *FT;
-    Type *funcType = translateType(astFunc->getDataType(), astFunc->getPtrType());
+    Type *funcType = translateType(astFunc->getDataType(), astFunc->getPtrType(), astFunc->getDataTypeName());
+    //if (astFunc->getDataType() == DataType::Struct) {
+    //    funcType = PointerType::getUnqual(funcType);
+    //}
     currentFuncType = astFunc->getDataType();
     
     if (astVarArgs.size() == 0) {
@@ -133,7 +137,12 @@ void Compiler::compileReturnStatement(AstStatement *stmt) {
         builder->CreateRetVoid();
     } else if (stmt->getExpressionCount() == 1) {
         Value *val = compileValue(stmt->getExpressions().at(0), currentFuncType);
-        builder->CreateRet(val);
+        if (currentFuncType == DataType::Struct) {
+            Value *ld = builder->CreateLoad(val);
+            builder->CreateRet(ld);
+        } else {
+            builder->CreateRet(val);
+        }
     } else {
         builder->CreateRetVoid();
     }
