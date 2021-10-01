@@ -223,10 +223,10 @@ bool Parser::buildExpression(AstStatement *stmt, DataType currentType, TokenType
             case Id: {
                 lastWasOp = false;
                 
-                if (isConst) {
+                /*if (isConst) {
                     syntax->addError(scanner->getLine(), "Invalid constant value.");
                     return false;
-                }
+                }*/
             
                 std::string name = token.id_val;
                 if (varType == DataType::Void) {

@@ -160,6 +160,13 @@ bool Parser::buildStructMember(AstStruct *str, Token token) {
         case UInt64: dataType = DataType::UInt64; break;
         case Str: dataType = DataType::String; break;
         
+        case Id: {
+            if (enums.find(token.id_val) != enums.end()) {
+                EnumDec dec = enums[token.id_val];
+                dataType = dec.type;
+            }
+        } break;
+        
         default: {}
     }
         
