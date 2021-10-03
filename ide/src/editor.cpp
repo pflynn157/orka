@@ -3,6 +3,9 @@
 Editor::Editor() {
     highlight = new SyntaxHighlighter(this->document());
     highlight->setLanguage("orka");
+    
+    QFont font("Liberation Mono", 12);
+    this->setFont(font);
 }
 
 Editor::~Editor() {}
