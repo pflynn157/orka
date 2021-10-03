@@ -4,8 +4,8 @@
 #include <QMenuBar>
 
 #include <editor.hpp>
-#include <menubar/dosiero_menuo.hpp>
-#include <menubar/edito_menuo.hpp>
+#include <menubar/file_menu.hpp>
+#include <menubar/edit_menu.hpp>
 
 class Window : public QMainWindow {
     Q_OBJECT
@@ -16,6 +16,6 @@ private:
     Editor *editor;
     QMenuBar *menubar;
     
-    DosieroMenuo *dosieroMenuo;
-    EditoMenuo *editoMenuo;
+    FileMenu *fileMenu;
+    EditMenu *editMenu;
 };
