@@ -3,6 +3,9 @@
 #include <QPlainTextEdit>
 #include <QString>
 
+#include <highlighter.hpp>
+#include <repository.hpp>
+
 class Editor : public QPlainTextEdit {
     Q_OBJECT
 public:
@@ -14,4 +17,5 @@ public:
     QString getPath() { return path; }
 private:
     QString path = "";
+    SyntaxHighlighter *highlight;
 };
