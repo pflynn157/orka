@@ -12,9 +12,16 @@ public:
     Editor();
     ~Editor();
     void setText(QString text);
+    QString getText();
     
     void setPath(QString path) { this->path = path; }
     QString getPath() { return path; }
+    
+    void setUntitled() { path = ""; }
+    bool isUntitled() {
+        if (path == "") return true;
+        return false;
+    }
 private:
     QString path = "";
     SyntaxHighlighter *highlight;

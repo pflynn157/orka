@@ -12,6 +12,8 @@ FileMenu::FileMenu() {
     quit = new QAction("Quit");
     
     connect(openFile, &QAction::triggered, this, &FileMenu::onOpenFileClicked);
+    connect(saveFile, &QAction::triggered, this, &FileMenu::onSaveFileClicked);
+    connect(saveFileAs, &QAction::triggered, this, &FileMenu::onSaveFileAsClicked);
     
     this->addAction(newWindow);
     this->addAction(newFile);
@@ -29,4 +31,12 @@ FileMenu::~FileMenu() {
 
 void FileMenu::onOpenFileClicked() {
     Actions::openFile();
+}
+
+void FileMenu::onSaveFileClicked() {
+    Actions::saveFile();
+}
+
+void FileMenu::onSaveFileAsClicked() {
+    Actions::saveFileAs();
 }

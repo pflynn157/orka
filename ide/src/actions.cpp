@@ -2,6 +2,7 @@
 #include <QString>
 #include <QFile>
 #include <QTextStream>
+#include <QDir>
 
 #include <actions.hpp>
 
@@ -27,4 +28,43 @@ void Actions::openFile() {
     
     editor->setText(content);
     editor->setPath(selected);
+}
+
+// The save-file handler
+void Actions::saveFile() {
+    if (editor->isUntitled()) {
+        saveFileAs();
+        return;
+    }
+    
+    QString path = editor->getPath();
+    QFile file(path);
+    
+    if (!file.exists()) {
+        saveFileAs();
+        return;
+    }
+    
+    if (file.open(QFile::WriteOnly)) {
+        QTextStream writer(&file);
+        writer << editor->getText();
+    }
+}
+
+// The save-file-as action handler
+void Actions::saveFileAs() {
+    QFileDialog dialog;
+    dialog.setDirectory(QDir::homePath());
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setWindowTitle("Save File As");
+    
+    if (dialog.exec() != QFileDialog::Accepted) {
+        return;
+    }
+    
+    QString path = dialog.selectedFiles().at(0);
+    editor->setPath(path);
+    
+    QFile(path).open(QFile::ReadWrite);
+    saveFile();
 }

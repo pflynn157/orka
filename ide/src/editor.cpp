@@ -13,3 +13,7 @@ Editor::~Editor() {}
 void Editor::setText(QString text) {
     this->setPlainText(text);
 }
+
+QString Editor::getText() {
+    return this->toPlainText();
+}

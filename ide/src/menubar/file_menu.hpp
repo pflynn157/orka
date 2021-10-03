@@ -14,4 +14,6 @@ private:
     QAction *quit;
 private slots:
     void onOpenFileClicked();
+    void onSaveFileClicked();
+    void onSaveFileAsClicked();
 };
