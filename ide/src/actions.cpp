@@ -8,6 +8,12 @@
 
 Editor *Actions::editor = nullptr;
 
+// Creates a new untitled file
+void Actions::newFile() {
+    editor->setText("");
+    editor->setUntitled();
+}
+
 // Process an open file
 void Actions::openFile() {
     QFileDialog dialog;

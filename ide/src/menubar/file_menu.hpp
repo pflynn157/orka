@@ -9,10 +9,11 @@ public:
     FileMenu();
     ~FileMenu();
 private:
-    QAction *newWindow, *newFile, *openFile;
+    QAction *newFile, *openFile;
     QAction *saveFile, *saveFileAs;
     QAction *quit;
 private slots:
+    void onNewFileClicked();
     void onOpenFileClicked();
     void onSaveFileClicked();
     void onSaveFileAsClicked();

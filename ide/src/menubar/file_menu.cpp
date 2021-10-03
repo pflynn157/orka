@@ -1,21 +1,23 @@
+#include <QApplication>
+
 #include <menubar/file_menu.hpp>
 #include <actions.hpp>
 
 FileMenu::FileMenu() {
     this->setTitle("File");
     
-    newWindow = new QAction("New Window");
-    newFile = new QAction("New File");
-    openFile = new QAction("Open File");
-    saveFile = new QAction("Save File");
-    saveFileAs = new QAction("Save File As");
+    newFile = new QAction("New");
+    openFile = new QAction("Open");
+    saveFile = new QAction("Save");
+    saveFileAs = new QAction("Save As");
     quit = new QAction("Quit");
     
+    connect(newFile, &QAction::triggered, this, &FileMenu::onNewFileClicked);
     connect(openFile, &QAction::triggered, this, &FileMenu::onOpenFileClicked);
     connect(saveFile, &QAction::triggered, this, &FileMenu::onSaveFileClicked);
     connect(saveFileAs, &QAction::triggered, this, &FileMenu::onSaveFileAsClicked);
+    connect(quit, &QAction::triggered, qApp, &QApplication::quit);
     
-    this->addAction(newWindow);
     this->addAction(newFile);
     this->addAction(openFile);
     this->addSeparator();
@@ -27,6 +29,10 @@ FileMenu::FileMenu() {
 
 FileMenu::~FileMenu() {
 
+}
+
+void FileMenu::onNewFileClicked() {
+    Actions::newFile();
 }
 
 void FileMenu::onOpenFileClicked() {
