@@ -1,7 +1,5 @@
 <RCC version="1.0">
     <qresource>
-        <file>data/syntax/c.xml</file>
-        <file>data/syntax/cpp.xml</file>
         <file>data/syntax/test.xml</file>
         <file>data/syntax/orka.xml</file>
         
