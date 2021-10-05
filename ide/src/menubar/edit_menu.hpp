@@ -13,8 +13,11 @@ public:
 private:
     Editor *editor;
     QAction *cut, *copy, *paste;
+    QAction *undo, *redo;
 private slots:
     void onCutClicked();
     void onCopyClicked();
     void onPasteClicked();
+    void onUndoClicked();
+    void onRedoClicked();
 };
