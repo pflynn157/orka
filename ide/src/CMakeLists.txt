@@ -5,6 +5,7 @@ set(BASE_SRC
     actions.cpp
     editor.cpp
     main.cpp
+    toolbar.cpp
     window.cpp
     icons.qrc
 )

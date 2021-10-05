@@ -4,6 +4,7 @@
 #include <QMenuBar>
 
 #include <editor.hpp>
+#include <toolbar.hpp>
 #include <menubar/file_menu.hpp>
 #include <menubar/edit_menu.hpp>
 
@@ -14,6 +15,7 @@ public:
     ~Window();
 private:
     Editor *editor;
+    ToolBar *toolbar;
     QMenuBar *menubar;
     
     FileMenu *fileMenu;

@@ -9,6 +9,11 @@ Window::Window() {
     this->setCentralWidget(editor);
     Actions::editor = editor;
     
+    toolbar = new ToolBar(editor);
+    toolbar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+    toolbar->setFloatable(false);
+    this->addToolBar(Qt::TopToolBarArea, toolbar);
+    
     menubar = new QMenuBar;
     this->setMenuBar(menubar);
     
