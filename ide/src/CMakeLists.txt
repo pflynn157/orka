@@ -6,6 +6,7 @@ set(BASE_SRC
     editor.cpp
     main.cpp
     window.cpp
+    icons.qrc
 )
 
 set(MENUBAR_SRC

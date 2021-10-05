@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QPixmap>
 
 #include <menubar/file_menu.hpp>
 #include <actions.hpp>
@@ -6,11 +7,11 @@
 FileMenu::FileMenu() {
     this->setTitle("File");
     
-    newFile = new QAction("New");
-    openFile = new QAction("Open");
-    saveFile = new QAction("Save");
-    saveFileAs = new QAction("Save As");
-    quit = new QAction("Quit");
+    newFile = new QAction(QPixmap(":/icons/document-new.svg"), "New");
+    openFile = new QAction(QPixmap(":/icons/document-open.svg"), "Open");
+    saveFile = new QAction(QPixmap(":/icons/document-save.svg"), "Save");
+    saveFileAs = new QAction(QPixmap(":/icons/document-save-as.svg"), "Save As");
+    quit = new QAction(QPixmap(":/icons/window-close.svg"), "Quit");
     
     connect(newFile, &QAction::triggered, this, &FileMenu::onNewFileClicked);
     connect(openFile, &QAction::triggered, this, &FileMenu::onOpenFileClicked);

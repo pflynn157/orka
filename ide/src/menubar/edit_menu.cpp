@@ -1,12 +1,14 @@
+#include <QPixmap>
+
 #include <menubar/edit_menu.hpp>
 
 EditMenu::EditMenu(Editor *editor) {
     this->editor = editor;
     this->setTitle("Edit");
     
-    cut = new QAction("Cut");
-    copy = new QAction("Copy");
-    paste = new QAction("Paste");
+    cut = new QAction(QPixmap(":/icons/edit-cut.svg"), "Cut");
+    copy = new QAction(QPixmap(":/icons/edit-copy.svg"), "Copy");
+    paste = new QAction(QPixmap(":/icons/edit-paste.svg"), "Paste");
     
     connect(cut, &QAction::triggered, this, &EditMenu::onCutClicked);
     connect(copy, &QAction::triggered, this, &EditMenu::onCopyClicked);
