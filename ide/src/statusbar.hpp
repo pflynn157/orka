@@ -17,6 +17,11 @@ public:
         if (isSaved) saveStatus->setText("saved");
         else saveStatus->setText("unsaved");
     }
+    
+    bool isSaved() {
+        if (saveStatus->text() == "saved") return true;
+        return false;
+    }
 private:
     QLabel *openFile, *saveStatus;
 };

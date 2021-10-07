@@ -1,3 +1,5 @@
+#include <QMessageBox>
+
 #include <window.hpp>
 #include <actions.hpp>
 
@@ -34,4 +36,22 @@ Window::~Window() {
     if (editor) delete editor;
     if (menubar) delete menubar;
     if (statusbar) delete statusbar;
+}
+
+void Window::closeEvent(QCloseEvent *event) {
+    if (Actions::isSaved()) {
+        event->accept();
+        return;
+    }
+    
+    QMessageBox msg;
+    msg.setWindowTitle("Warning!");
+    msg.setText("Your file is not saved!\n"
+                "Do you wish to exit?");
+    msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msg.setDefaultButton(QMessageBox::No);
+    msg.setIcon(QMessageBox::Warning);
+
+    if (msg.exec() ==QMessageBox::Yes) event->accept();
+    else event->ignore();
 }

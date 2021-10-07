@@ -2,6 +2,7 @@
 
 #include <QMainWindow>
 #include <QMenuBar>
+#include <QCloseEvent>
 
 #include <editor.hpp>
 #include <toolbar.hpp>
@@ -14,6 +15,8 @@ class Window : public QMainWindow {
 public:
     Window();
     ~Window();
+protected:
+    void closeEvent(QCloseEvent *event);
 private:
     Editor *editor;
     ToolBar *toolbar;

@@ -12,6 +12,10 @@ public:
     static void saveFile();
     static void saveFileAs();
     
+    static bool isSaved() {
+        return statusbar->isSaved();
+    }
+    
     static Editor *editor;
     static StatusBar *statusbar;
 };
