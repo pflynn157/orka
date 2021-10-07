@@ -30,6 +30,10 @@ Window::Window() {
     // Add the edit menu
     editMenu = new EditMenu(editor);
     menubar->addMenu(editMenu);
+    
+    // Add the help menu
+    helpMenu = new HelpMenu;
+    menubar->addMenu(helpMenu);
 }
 
 Window::~Window() {

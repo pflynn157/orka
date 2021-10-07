@@ -14,6 +14,7 @@ set(BASE_SRC
 set(MENUBAR_SRC
     menubar/file_menu.cpp
     menubar/edit_menu.cpp
+    menubar/help_menu.cpp
 )
 
 set(SRC

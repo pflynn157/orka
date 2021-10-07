@@ -9,6 +9,7 @@
 #include <statusbar.hpp>
 #include <menubar/file_menu.hpp>
 #include <menubar/edit_menu.hpp>
+#include <menubar/help_menu.hpp>
 
 class Window : public QMainWindow {
     Q_OBJECT
@@ -25,4 +26,5 @@ private:
     
     FileMenu *fileMenu;
     EditMenu *editMenu;
+    HelpMenu *helpMenu;
 };
