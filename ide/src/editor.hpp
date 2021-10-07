@@ -25,4 +25,6 @@ public:
 private:
     QString path = "";
     SyntaxHighlighter *highlight;
+private slots:
+    void onModified();
 };

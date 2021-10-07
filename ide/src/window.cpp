@@ -14,6 +14,10 @@ Window::Window() {
     toolbar->setFloatable(false);
     this->addToolBar(Qt::TopToolBarArea, toolbar);
     
+    statusbar = new StatusBar;
+    this->setStatusBar(statusbar);
+    Actions::statusbar = statusbar;
+    
     menubar = new QMenuBar;
     this->setMenuBar(menubar);
     
@@ -29,4 +33,5 @@ Window::Window() {
 Window::~Window() {
     if (editor) delete editor;
     if (menubar) delete menubar;
+    if (statusbar) delete statusbar;
 }

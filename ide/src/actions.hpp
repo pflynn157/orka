@@ -3,6 +3,7 @@
 #include <QString>
 
 #include <editor.hpp>
+#include <statusbar.hpp>
 
 class Actions {
 public:
@@ -12,4 +13,5 @@ public:
     static void saveFileAs();
     
     static Editor *editor;
+    static StatusBar *statusbar;
 };

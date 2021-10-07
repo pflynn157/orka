@@ -7,11 +7,15 @@
 #include <actions.hpp>
 
 Editor *Actions::editor = nullptr;
+StatusBar *Actions::statusbar = nullptr;
 
 // Creates a new untitled file
 void Actions::newFile() {
     editor->setText("");
     editor->setUntitled();
+    
+    statusbar->setCurrentFile("untitled");
+    statusbar->setSaved(true);
 }
 
 // Process an open file
@@ -34,6 +38,9 @@ void Actions::openFile() {
     
     editor->setText(content);
     editor->setPath(selected);
+    
+    statusbar->setCurrentFile(selected);
+    statusbar->setSaved(true);
 }
 
 // The save-file handler
@@ -54,6 +61,8 @@ void Actions::saveFile() {
     if (file.open(QFile::WriteOnly)) {
         QTextStream writer(&file);
         writer << editor->getText();
+        
+        statusbar->setSaved(true);
     }
 }
 
@@ -70,6 +79,8 @@ void Actions::saveFileAs() {
     
     QString path = dialog.selectedFiles().at(0);
     editor->setPath(path);
+    
+    statusbar->setCurrentFile(path);
     
     QFile(path).open(QFile::ReadWrite);
     saveFile();

@@ -5,6 +5,7 @@
 
 #include <editor.hpp>
 #include <toolbar.hpp>
+#include <statusbar.hpp>
 #include <menubar/file_menu.hpp>
 #include <menubar/edit_menu.hpp>
 
@@ -17,6 +18,7 @@ private:
     Editor *editor;
     ToolBar *toolbar;
     QMenuBar *menubar;
+    StatusBar *statusbar;
     
     FileMenu *fileMenu;
     EditMenu *editMenu;
