@@ -22,6 +22,7 @@ add_definitions(${LLVM_DEFINITIONS})
 add_subdirectory(frontend)
 add_subdirectory(compiler)
 add_subdirectory(src)
+add_subdirectory(llir)
 
 if (BUILD_GUI)
     set(CMAKE_AUTOMOC ON)
