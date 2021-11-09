@@ -11,8 +11,7 @@
 #include <parser/Parser.hpp>
 #include <ast.hpp>
 
-#include <LLVM/Compiler.hpp>
-#include <LLIR/LLIRCompiler.hpp>
+#include <Compiler.hpp>
 
 bool isError = false;
 
@@ -76,13 +75,6 @@ int compileLLVM(AstTree *tree, CFlags flags, bool printLLVM, bool emitLLVM, bool
     return 0;
 }
 
-int compileLLIR(AstTree *tree, std::string outputName) {
-    LLIRCompiler *compiler = new LLIRCompiler(tree, outputName);
-    compiler->compile();
-    compiler->debug();
-    return 0;
-}
-
 int main(int argc, char **argv) {
     if (argc == 1) {
         std::cerr << "Error: No input file specified." << std::endl;
@@ -117,8 +109,6 @@ int main(int argc, char **argv) {
         } else if (arg == "--emit-nvptx") {
             emitNVPTX = true;
             flags.nvptx = true;
-        } else if (arg == "--host") {
-            useLLVM = false;
         } else if (arg == "-o") {
             flags.name = argv[i+1];
             i += 1;
@@ -142,11 +132,7 @@ int main(int argc, char **argv) {
     }
 
     //test
-    if (useLLVM) {
-        return compileLLVM(tree, flags, printLLVM, emitLLVM, emitNVPTX);
-    } else {
-        return compileLLIR(tree, "output1");
-    }
+    return compileLLVM(tree, flags, printLLVM, emitLLVM, emitNVPTX);
     
     return 0;
 }

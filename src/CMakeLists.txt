@@ -10,6 +10,5 @@ add_executable(occ ${SRC})
 target_link_libraries(occ
     ocparser
     occompiler_llvm
-    occompiler_llir
 )
 
