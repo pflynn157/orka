@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include <LLIR/Type.hpp>
+
 class Module;            // Represents a translation unit
 class Function;          // Represents a function within a translation unit
 class GlobalConstant;    // Represents a global constant (ie, string, float, etc)
@@ -26,6 +28,7 @@ enum class GConstType {
 
 enum class ValueType {
     None,
+    Instr,
     Reg,
     I8,
     I16,
@@ -37,6 +40,8 @@ enum class ValueType {
 
 enum class InstrType {
     None,
+    
+    LdI,
     
     Add,
     
@@ -54,6 +59,10 @@ public:
         this->name = name;
     }
     
+    void addFunction(Function *func) {
+        functions.push_back(func);
+    }
+    
     std::string getName() {
         return name;
     }
@@ -65,6 +74,8 @@ public:
     std::vector<GlobalConstant *> getGlobalConstants() {
         return globalConstants;
     }
+    
+    void dump();
 private:
     std::string name = "";
     std::vector<Function *> functions;
@@ -82,6 +93,12 @@ public:
         this->type = type;
         this->linkType = linkType;
     }
+    
+    void addBlock(Block *block) {
+        blocks.push_back(block);
+    }
+    
+    void dump();
 private:
     std::string name = "";
     FunctionType *type = nullptr;
@@ -98,6 +115,12 @@ public:
     explicit Block(std::string name) {
         this->name = name;
     }
+    
+    void addInstruction(Instruction *i) {
+        instructions.push_back(i);
+    }
+    
+    void dump();
 private:
     std::string name = "";
     std::vector<Instruction *> instructions;
@@ -114,21 +137,75 @@ public:
         this->type = type;
         this->name = name;
     }
-private:
+    
+    ValueType getValueType() {
+        return valueType;
+    }
+    
+    std::string getName() {
+        return name;
+    }
+    
+    virtual void dump(bool nl = false) {}
+protected:
     std::string name = "";
     Type *type = nullptr;
     ValueType valueType = ValueType::None;
+};
+
+class ConstI32 : public Value {
+public:
+    explicit ConstI32(int val) : Value(ValueType::I32, new I32Type(), "") {
+        this->val = val;
+    }
+    
+    int getValue() {
+        return val;
+    }
+    
+    void dump(bool nl = false) override;
+private:
+    int val = 0;
 };
 
 //
 // Instruction
 // Represents an instruction
 //
-class Instruction {
+class Instruction : public Value {
 public:
-    explicit Instruction(InstrType type) {
-        this->type = type;
+    explicit Instruction(InstrType instrType, Type *type, std::string name, bool voidInstr = false)
+        : Value(ValueType::Instr, type, name) {
+        this->instrType = instrType;
+        this->voidInstr = voidInstr;
     }
+    
+    bool isVoidInstr() {
+        return this->voidInstr;
+    }
+    
+    void setOperand(Value *val, int pos) {
+        switch (pos) {
+            case 1: this->src1 = val; break;
+            case 2: this->src2 = val; break;
+            case 3: this->src3 = val; break;
+        }
+    }
+    
+    Value *getOperand(Value *val, int pos) {
+        switch (pos) {
+            case 1: return this->src1;
+            case 2: return this->src2;
+            case 3: return this->src3;
+        }
+        return nullptr;
+    }
+    
+    void dump(bool nl = true) override;
 private:
-    InstrType type = InstrType::None;
+    InstrType instrType = InstrType::None;
+    bool voidInstr = false;
+    Value *src1 = nullptr;
+    Value *src2 = nullptr;
+    Value *src3 = nullptr;
 };

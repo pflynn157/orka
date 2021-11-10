@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0.0)
 project(orka_llir)
 
 set(SRC
+    debug.cpp
     main.cpp
 )
 

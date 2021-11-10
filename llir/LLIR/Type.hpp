@@ -21,6 +21,8 @@ public:
     LLIRType getType() {
         return this->type;
     }
+    
+    std::string toString();
 private:
     LLIRType type;
 };
@@ -32,7 +34,28 @@ public:
         this->argTypes = argTypes;
     }
     
+    explicit FunctionType(Type *retType) {
+        this->retType = retType;
+    }
+    
+    Type *getReturnType() {
+        return retType;
+    }
+    
+    std::vector<Type *> getArgTypes() {
+        return argTypes;
+    }
 private:
     Type *retType;
     std::vector<Type *> argTypes;
+};
+
+class VoidType : public Type {
+public:
+    explicit VoidType() : Type(LLIRType::Void) {}
+};
+
+class I32Type : public Type {
+public:
+    explicit I32Type() : Type(LLIRType::I32) {}
 };
