@@ -20,7 +20,9 @@ enum class AMD64_Instr {
 enum class AMD64_Operand {
     None,
     Const32,
-    Reg32
+    Reg32,
+    Reg64,
+    Mem
 };
 
 enum class AMD64_R32 {
@@ -28,6 +30,16 @@ enum class AMD64_R32 {
     EBX,
     ECX,
     EDX
+};
+
+enum class AMD64_R64 {
+    RAX,
+    RBX,
+    RCX,
+    RDX,
+    
+    RBP,
+    RSP
 };
 
 //
@@ -184,7 +196,7 @@ private:
 };
 
 //
-// Represents a register
+// Represents a 32-bit register
 //
 class AMD64Reg32 : public AMD64Operand {
 public:
@@ -197,4 +209,55 @@ public:
     }
 private:
     AMD64_R32 regType;
+};
+
+//
+// Represents a 64-bit register
+//
+class AMD64Reg64 : public AMD64Operand {
+public:
+    explicit AMD64Reg64(AMD64_R64 regType) : AMD64Operand(AMD64_Operand::Reg64) {
+        this->regType = regType;
+    }
+    
+    AMD64_R64 getRegType() {
+        return this->regType;
+    }
+private:
+    AMD64_R64 regType;
+};
+
+//
+// Represents a memory location
+//
+class AMD64Mem : public AMD64Operand {
+public:
+    explicit AMD64Mem(AMD64Operand *offset, int size) : AMD64Operand(AMD64_Operand::Mem) {
+        this->base = new AMD64Reg64(AMD64_R64::RBP);
+        this->offset = offset;
+        this->size = size;
+    }
+    
+    explicit AMD64Mem(AMD64Operand *base, AMD64Operand *offset, int size) : AMD64Operand(AMD64_Operand::Mem) {
+        this->base = base;
+        this->offset = offset;
+        this->size = size;
+    }
+    
+    AMD64Operand *getBase() {
+        return base;
+    }
+    
+    AMD64Operand *getOffset() {
+        return offset;
+    }
+    
+    bool isAddOffset() {
+        return addOffset;
+    }
+private:
+    AMD64Operand *base = nullptr;
+    AMD64Operand *offset = nullptr;
+    int size = 32;
+    bool addOffset = false;
 };

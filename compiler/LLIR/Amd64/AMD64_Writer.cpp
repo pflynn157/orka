@@ -77,5 +77,27 @@ void AMD64Writer::writeOperand(AMD64Operand *op) {
                 case AMD64_R32::EDX: writer << "edx"; break;
             }
         } break;
+        
+        case AMD64_Operand::Reg64: {
+            AMD64Reg64 *reg64 = static_cast<AMD64Reg64 *>(op);
+            switch (reg64->getRegType()) {
+                case AMD64_R64::RAX: writer << "rax"; break;
+                case AMD64_R64::RBX: writer << "rbx"; break;
+                case AMD64_R64::RCX: writer << "rcx"; break;
+                case AMD64_R64::RDX: writer << "rdx"; break;
+                case AMD64_R64::RBP: writer << "rbp"; break;
+                case AMD64_R64::RSP: writer << "rsp"; break;
+            }
+        } break;
+        
+        case AMD64_Operand::Mem: {
+            AMD64Mem *mem = static_cast<AMD64Mem *>(op);
+            writer << "[";
+            writeOperand(mem->getBase());
+            if (mem->isAddOffset()) writer << "+";
+            else writer << "-";
+            writeOperand(mem->getOffset());
+            writer << "]";
+        } break;
     }
 }
