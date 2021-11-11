@@ -12,7 +12,7 @@ endif()
 
 option(BUILD_GUI "Build GUI components")
 
-include_directories(frontend compiler llir)
+include_directories(frontend compiler/LLIR compiler/LLVM)
 include_directories(ide/src ide/lib)
 
 include_directories(${LLVM_INCLUDE_DIRS})
@@ -22,7 +22,6 @@ add_definitions(${LLVM_DEFINITIONS})
 add_subdirectory(frontend)
 add_subdirectory(compiler)
 add_subdirectory(src)
-add_subdirectory(llir)
 
 if (BUILD_GUI)
     set(CMAKE_AUTOMOC ON)

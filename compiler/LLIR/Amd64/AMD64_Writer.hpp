@@ -13,6 +13,7 @@ public:
     void write();
 protected:
     void writeFunc(AMD64Instr *instr);
+    void writeOperand(AMD64Operand *op);
 private:
     std::ofstream writer;
     AMD64File *file = nullptr;

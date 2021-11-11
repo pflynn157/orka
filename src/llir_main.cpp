@@ -47,6 +47,18 @@ int main(int argc, char **argv) {
     AMD64Function *func = new AMD64Function("main", 0);
     file->addText(func);
     
+    AMD64Reg32 *r1 = new AMD64Reg32(AMD64_R32::EAX);
+    AMD64Const32 *const1 = new AMD64Const32(10);
+    AMD64Mov *mov = new AMD64Mov(r1, const1);
+    file->addText(mov);
+    
+    AMD64Const32 *const2 = new AMD64Const32(30);
+    AMD64Add *addX86 = new AMD64Add(r1, const2);
+    file->addText(addX86);
+    
+    AMD64Ret *retX86 = new AMD64Ret;
+    file->addText(retX86);
+    
     AMD64Writer *writer = new AMD64Writer(file);
     writer->write();
     

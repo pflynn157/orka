@@ -3,9 +3,7 @@ project(orka_llir)
 
 set(SRC
     debug.cpp
-    main.cpp
-    
     Amd64/AMD64_Writer.cpp
 )
 
-add_executable(llir ${SRC})
+add_library(occompiler_llir STATIC ${SRC})
