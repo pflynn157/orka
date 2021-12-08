@@ -16,8 +16,9 @@ fi
 sudo cp build/occ_start.o $LIB_INSTALL
 sudo cp build/liborka_corelib.a /usr/lib
 sudo cp build/stdlib/liborka.so /usr/lib
+sudo cp build/lib/clib/liborka_clib.so /usr/lib
 
-sudo cp -r stdlib/include/* $INCLUDE_INSTALL
+sudo cp -r lib/base/stdlib/include/* $INCLUDE_INSTALL
 
 sudo ldconfig
 

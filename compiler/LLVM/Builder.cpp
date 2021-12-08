@@ -108,7 +108,11 @@ void Compiler::link() {
     cmd += "/tmp/" + cflags.name + ".o -o " + cflags.name;
     cmd += " -dynamic-linker /lib64/ld-linux-x86-64.so.2 ";
     //cmd += "-lc";
-    cmd += "-lorka -lorka_corelib";
+    if (cflags.clib) {
+        cmd += "-lorka_clib";
+    } else {
+        cmd += "-lorka -lorka_corelib";
+    }
     system(cmd.c_str());
 }
 

@@ -20,6 +20,7 @@ using namespace llvm;
 struct CFlags {
     std::string name;
     bool nvptx;
+    bool clib;
 };
 
 class Compiler {

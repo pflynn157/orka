@@ -85,6 +85,7 @@ int main(int argc, char **argv) {
     CFlags flags;
     flags.name = "a.out";
     flags.nvptx = false;
+    flags.clib = false;
     
     // Other flags
     std::string input = "";
@@ -109,6 +110,8 @@ int main(int argc, char **argv) {
         } else if (arg == "--emit-nvptx") {
             emitNVPTX = true;
             flags.nvptx = true;
+        } else if (arg == "--clib") {
+            flags.clib = true;
         } else if (arg == "-o") {
             flags.name = argv[i+1];
             i += 1;
