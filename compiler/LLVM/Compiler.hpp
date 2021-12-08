@@ -59,6 +59,7 @@ private:
     std::unique_ptr<IRBuilder<>> builder;
     Function *currentFunc;
     DataType currentFuncType = DataType::Void;
+    std::string funcTypeStruct = "";
     
     // The array types
     StructType *i8ArrayType;
@@ -69,6 +70,7 @@ private:
     // The user-defined structure table
     std::map<std::string, StructType*> structTable;
     std::map<std::string, std::string> structVarTable;
+    std::map<std::string, std::vector<Type *>> structElementTypeTable;
     
     // Symbol table
     std::map<std::string, AllocaInst *> symtable;

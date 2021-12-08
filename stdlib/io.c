@@ -7,6 +7,8 @@ extern int stringcmp(const char *l1, const char *l2);
 // Needed for the floating point stuff
 int precision = 6;
 
+void __stack_chk_fail() {}
+
 void printInt(int num)
 {
     // For some reason, weird things happen with just 0

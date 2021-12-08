@@ -25,6 +25,8 @@ void Compiler::compileFunction(AstGlobalStatement *global) {
     //    funcType = PointerType::getUnqual(funcType);
     //}
     currentFuncType = astFunc->getDataType();
+    if (currentFuncType == DataType::Struct)
+        funcTypeStruct = astFunc->getDataTypeName();
     
     if (astVarArgs.size() == 0) {
         FT = FunctionType::get(funcType, false);
@@ -138,7 +140,8 @@ void Compiler::compileReturnStatement(AstStatement *stmt) {
     } else if (stmt->getExpressionCount() == 1) {
         Value *val = compileValue(stmt->getExpressions().at(0), currentFuncType);
         if (currentFuncType == DataType::Struct) {
-            Value *ld = builder->CreateLoad(val);
+            StructType *type = structTable[funcTypeStruct];
+            Value *ld = builder->CreateLoad(type, val);
             builder->CreateRet(ld);
         } else {
             builder->CreateRet(val);

@@ -189,7 +189,7 @@ void Compiler::compileForStatement(AstStatement *stmt) {
     builder->CreateBr(loopCmp);
     builder->SetInsertPoint(loopCmp);
     
-    Value *indexVal = builder->CreateLoad(indexVar);
+    Value *indexVal = builder->CreateLoad(Type::getInt32Ty(*context), indexVar);
     Value *endVal = compileValue(loop->getEndBound());
     Value *cond = builder->CreateICmpSLT(indexVal, endVal);
     builder->CreateCondBr(cond, loopBlock, loopEnd);
@@ -197,7 +197,7 @@ void Compiler::compileForStatement(AstStatement *stmt) {
     // Loop increment
     builder->SetInsertPoint(loopInc);
     
-    indexVal = builder->CreateLoad(indexVar);
+    indexVal = builder->CreateLoad(Type::getInt32Ty(*context), indexVar);
     Value *incVal = compileValue(loop->getStep());
     indexVal = builder->CreateAdd(indexVal, incVal);
     builder->CreateStore(indexVal, indexVar);
@@ -253,6 +253,7 @@ void Compiler::compileForAllStatement(AstStatement *stmt) {
     std::string indexName = loop->getIndex()->getValue();
     DataType indexType1 = ptrTable[arrayName];
     
+    StructType *arrayType = static_cast<StructType *>(translateType(DataType::Array, indexType1));
     Type *indexType = translateType(indexType1);
     AllocaInst *indexVar = builder->CreateAlloca(indexType);
     symtable[indexName] = indexVar;
@@ -263,8 +264,8 @@ void Compiler::compileForAllStatement(AstStatement *stmt) {
     
     // The size value
     AllocaInst *arrayPtr = symtable[arrayName];
-    Value *sizePtr = builder->CreateStructGEP(arrayPtr, 1);
-    Value *sizeVal = builder->CreateLoad(sizePtr);
+    Value *sizePtr = builder->CreateStructGEP(arrayType, arrayPtr, 1);
+    Value *sizeVal = builder->CreateLoad(Type::getInt32Ty(*context), sizePtr);
     
     ///
     // Create the loop comparison
@@ -272,7 +273,7 @@ void Compiler::compileForAllStatement(AstStatement *stmt) {
     builder->CreateBr(loopCmp);
     builder->SetInsertPoint(loopCmp);
     
-    Value *inductionVarVal = builder->CreateLoad(inductionVar);
+    Value *inductionVarVal = builder->CreateLoad(Type::getInt32Ty(*context), inductionVar);
     Value *cond = builder->CreateICmpSLT(inductionVarVal, sizeVal);
     builder->CreateCondBr(cond, loopLoad, loopEnd);
     
@@ -281,7 +282,7 @@ void Compiler::compileForAllStatement(AstStatement *stmt) {
     //
     builder->SetInsertPoint(loopInc);
     
-    inductionVarVal = builder->CreateLoad(inductionVar);
+    inductionVarVal = builder->CreateLoad(Type::getInt32Ty(*context), inductionVar);
     inductionVarVal = builder->CreateAdd(inductionVarVal, builder->getInt32(1));
     builder->CreateStore(inductionVarVal, inductionVar);
     
@@ -292,12 +293,12 @@ void Compiler::compileForAllStatement(AstStatement *stmt) {
     //
     builder->SetInsertPoint(loopLoad);
     
-    inductionVarVal = builder->CreateLoad(inductionVar);
+    inductionVarVal = builder->CreateLoad(Type::getInt32Ty(*context), inductionVar);
     
-    Value *arrayStructPtr = builder->CreateStructGEP(arrayPtr, 0);
-    Value *arrayLoad = builder->CreateLoad(arrayStructPtr);
-    Value *ep = builder->CreateGEP(arrayLoad, inductionVarVal);
-    Value *epLd = builder->CreateLoad(ep);
+    Value *arrayStructPtr = builder->CreateStructGEP(arrayType, arrayPtr, 0);
+    Value *arrayLoad = builder->CreateLoad(arrayType->getElementType(0), arrayStructPtr);
+    Value *ep = builder->CreateGEP(indexType, arrayLoad, inductionVarVal);
+    Value *epLd = builder->CreateLoad(indexType, ep);
     builder->CreateStore(epLd, indexVar);
     
     builder->CreateBr(loopBody);
