@@ -8,3 +8,4 @@ set(SRC
 )
 
 add_library(orka_clib SHARED ${SRC})
+add_library(orka_clib2 SHARED ${SRC})

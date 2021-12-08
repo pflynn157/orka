@@ -86,6 +86,7 @@ int main(int argc, char **argv) {
     flags.name = "a.out";
     flags.nvptx = false;
     flags.clib = false;
+    flags.local_clib = false;
     
     // Other flags
     std::string input = "";
@@ -112,6 +113,8 @@ int main(int argc, char **argv) {
             flags.nvptx = true;
         } else if (arg == "--clib") {
             flags.clib = true;
+        } else if (arg == "--clib-local") {
+            flags.local_clib = true;
         } else if (arg == "-o") {
             flags.name = argv[i+1];
             i += 1;

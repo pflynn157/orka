@@ -93,7 +93,7 @@ void Compiler::assemble() {
     std::string cmd = "as /tmp/" + cflags.name + ".asm -o /tmp/" + cflags.name + ".o";
     system(cmd.c_str());
 }
-
+#include <iostream>
 // Link
 // TODO: Same as above...
 // Also... We shouldn't be using GCC to link
@@ -109,7 +109,9 @@ void Compiler::link() {
     cmd += " -dynamic-linker /lib64/ld-linux-x86-64.so.2 ";
     //cmd += "-lc";
     if (cflags.clib) {
-        cmd += "-lorka_clib";
+        cmd += "-lorka_clib -lc";
+    } else if (cflags.local_clib) {
+        cmd += "-L./lib/clib -lorka_clib2 -lc";
     } else {
         cmd += "-lorka -lorka_corelib";
     }
