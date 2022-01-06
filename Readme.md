@@ -6,7 +6,7 @@ Note that this is not ready for heavy production use. It's mainly meant as a lea
 
 ### The Language
 
-For full language documenation, see here: [https://patrickflynn.co/orka-language](https://patrickflynn.co/orka-language/). Language features include:
+For full language documenation, see here: [https://patrickflynn.xyz/orka-language](https://patrickflynn.xyz/orka-language/). Language features include:
 
 * i8, i16, i32, i64, char, string, float, and bool data types
 * Arrays (all dynamically allocated on the heap)
